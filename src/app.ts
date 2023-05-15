@@ -167,6 +167,8 @@ async function run() {
     console.log(
       `Name: ${oracleName}, Address: ${oracleAddress}. Description: ${oracleDescription}`,
     );
+    const latestRoundData = await serviceSdk.latestRoundData(oracleName);
+    console.log('latestRoundData: ', latestRoundData);
   }
 }
 

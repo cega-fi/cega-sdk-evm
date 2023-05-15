@@ -261,7 +261,7 @@ export default class CegaEthSDK {
 
   async getRoundData(oracleName: string, roundId: number): Promise<OracleRoundDataResp> {
     const oracle = await this.loadOracleContract(oracleName);
-    const roundData = oracle.getRoundData(roundId);
+    const roundData = await oracle.getRoundData(roundId);
     return {
       roundId: ethers.BigNumber.from(roundData.roundId).toNumber(),
       answer: ethers.BigNumber.from(roundData.answer),
@@ -273,7 +273,7 @@ export default class CegaEthSDK {
 
   async latestRoundData(oracleName: string): Promise<OracleRoundDataResp> {
     const oracle = await this.loadOracleContract(oracleName);
-    const roundData = oracle.latestRoundData();
+    const roundData = await oracle.latestRoundData();
     return {
       roundId: ethers.BigNumber.from(roundData.roundId).toNumber(),
       answer: ethers.BigNumber.from(roundData.answer),
