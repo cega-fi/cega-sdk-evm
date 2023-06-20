@@ -740,6 +740,7 @@ export default class CegaEthSDK {
     const { results }: ContractCallResults = await multicall.call(contractCallContext);
 
     const metadatasByVaultAddress = results.vaultMetadataList.callsReturnContext
+      .filter((x) => x.returnValues.length > 0)
       .map((x) => {
         // const productNameLeverageTuple = x.reference.split(nameTypeDelimiter)[0];
         const fcnVaultMetadataArray = multicallProcessReturnContext(x) as FCNVaultMetadata[];
