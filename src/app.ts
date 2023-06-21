@@ -24,7 +24,7 @@ const config = {
     gasStation: new EthereumAlchemyGasStation(process.env.ETH_ALCHEMY_API_KEY || ''),
   },
   arbitrum: {
-    RPC_URL: process.env.ARBITRUM_ALCHEMY_RPC_URL,
+    RPC_URL: process.env.ARBITRUM_RPC_URL,
     cegaStateAddress: '0x4a2ecDe314080D37d4654cf0eb7DBe6d1BC89211' as types.EvmAddress,
     usdcAddress: '0xaf88d065e77c8cC2239327C5EDb3A432268e5831' as types.EvmAddress, // native USDC
     gasStation: new ArbitrumAlchemyGasStation(process.env.ARBITRUM_ALCHEMY_API_KEY || ''),
