@@ -696,7 +696,9 @@ export default class CegaEthSDK {
 
     const { results }: ContractCallResults = await multicall.call(contractCallContext);
 
+    // filter out multicalls that return an empty array of vaultMetadatas
     const metadatasByVaultAddress = results.vaultMetadataList.callsReturnContext
+      .filter((x) => x.returnValues.length > 0)
       .map((x) => {
         // const productNameLeverageTuple = x.reference.split(nameTypeDelimiter)[0];
         const fcnVaultMetadataArray = multicallProcessReturnContext(x) as FCNVaultMetadata[];
@@ -739,7 +741,9 @@ export default class CegaEthSDK {
 
     const { results }: ContractCallResults = await multicall.call(contractCallContext);
 
+    // filter out multicalls that return an empty array of vaultMetadatas
     const metadatasByVaultAddress = results.vaultMetadataList.callsReturnContext
+      .filter((x) => x.returnValues.length > 0)
       .map((x) => {
         // const productNameLeverageTuple = x.reference.split(nameTypeDelimiter)[0];
         const fcnVaultMetadataArray = multicallProcessReturnContext(x) as FCNVaultMetadata[];
