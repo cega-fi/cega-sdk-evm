@@ -4,11 +4,17 @@
 import * as dotenv from 'dotenv';
 
 import { ethers } from 'ethers';
-import { CegaEthSDK, EthereumAlchemyGasStation, PolygonGasStation, types } from '.';
+import {
+  CegaEthSDK,
+  EthereumAlchemyGasStation,
+  ArbitrumAlchemyGasStation,
+  PolygonGasStation,
+  types,
+} from '.';
 
 dotenv.config();
 
-const CURRENT_NETWORK = 'ethereum';
+const CURRENT_NETWORK = 'arbitrum';
 
 const config = {
   ethereum: {
@@ -16,6 +22,12 @@ const config = {
     cegaStateAddress: '0x0730AA138062D8Cc54510aa939b533ba7c30f26B' as types.EvmAddress,
     usdcAddress: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48' as types.EvmAddress,
     gasStation: new EthereumAlchemyGasStation(process.env.ETH_ALCHEMY_API_KEY || ''),
+  },
+  arbitrum: {
+    RPC_URL: process.env.ARBITRUM_RPC_URL,
+    cegaStateAddress: '0x4a2ecDe314080D37d4654cf0eb7DBe6d1BC89211' as types.EvmAddress,
+    usdcAddress: '0xaf88d065e77c8cC2239327C5EDb3A432268e5831' as types.EvmAddress, // native USDC
+    gasStation: new ArbitrumAlchemyGasStation(process.env.ARBITRUM_ALCHEMY_API_KEY || ''),
   },
 };
 
@@ -52,9 +64,10 @@ async function run() {
     operatorAdmin: ${operatorAdminSigner.address},
     traderAdmin: ${traderAdminSigner.address},
     serviceAdmin: ${serviceAdminSigner.address},
+    RPC URL: ${RPC_URL}
   `);
 
-  const lovLeverages = [2, 3];
+  const lovLeverages = [1, 2, 3, 4, 5];
 
   const productNames = await programSdk.getProductNames();
   const allProductAddresses = await programSdk.getAllProductAddresses(productNames);

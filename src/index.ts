@@ -4,6 +4,7 @@ import {
   EthereumAlchemyGasStation,
   EthereumEtherscanGasStation,
   PolygonGasStation,
+  ArbitrumAlchemyGasStation,
 } from './GasStation';
 
 import * as types from './types';
@@ -14,5 +15,6 @@ export {
   EthereumAlchemyGasStation,
   EthereumEtherscanGasStation,
   PolygonGasStation,
+  ArbitrumAlchemyGasStation,
   types,
 };
