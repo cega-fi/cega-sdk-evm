@@ -4,13 +4,7 @@
 import * as dotenv from 'dotenv';
 
 import { ethers } from 'ethers';
-import {
-  CegaEthSDK,
-  EthereumAlchemyGasStation,
-  ArbitrumAlchemyGasStation,
-  PolygonGasStation,
-  types,
-} from '.';
+import { CegaEthSDK, EthereumAlchemyGasStation, PolygonGasStation, types, GasStation } from '.';
 
 dotenv.config();
 
@@ -27,7 +21,7 @@ const config = {
     RPC_URL: process.env.ARBITRUM_RPC_URL,
     cegaStateAddress: '0x4a2ecDe314080D37d4654cf0eb7DBe6d1BC89211' as types.EvmAddress,
     usdcAddress: '0xaf88d065e77c8cC2239327C5EDb3A432268e5831' as types.EvmAddress, // native USDC
-    gasStation: new ArbitrumAlchemyGasStation(process.env.ARBITRUM_ALCHEMY_API_KEY || ''),
+    gasStation: null,
   },
 };
 
@@ -54,10 +48,10 @@ async function run() {
   const traderAdminSigner = new ethers.Wallet(ADMIN_ACCOUNTS.traderAdminPk, provider);
   const serviceAdminSigner = new ethers.Wallet(ADMIN_ACCOUNTS.serviceAdminPk, provider);
 
-  const programSdk = new CegaEthSDK(cegaStateAddress, gasStation, provider, programAdminSigner);
-  const operatorSdk = new CegaEthSDK(cegaStateAddress, gasStation, provider, operatorAdminSigner);
-  const traderSdk = new CegaEthSDK(cegaStateAddress, gasStation, provider, traderAdminSigner);
-  const serviceSdk = new CegaEthSDK(cegaStateAddress, gasStation, provider, serviceAdminSigner);
+  const programSdk = new CegaEthSDK(cegaStateAddress, provider, gasStation, programAdminSigner);
+  const operatorSdk = new CegaEthSDK(cegaStateAddress, provider, gasStation, operatorAdminSigner);
+  const traderSdk = new CegaEthSDK(cegaStateAddress, provider, gasStation, traderAdminSigner);
+  const serviceSdk = new CegaEthSDK(cegaStateAddress, provider, gasStation, serviceAdminSigner);
   console.log(`
   *** CegaState: ${cegaStateAddress},
     programAdmin: ${programAdminSigner.address},
