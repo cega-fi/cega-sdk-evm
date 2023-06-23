@@ -1299,9 +1299,11 @@ export default class CegaEthSDK {
     amount: ethers.BigNumber,
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
+    console.log('cp1');
     const product = await this.loadProductContract(productName);
     const asset: EvmAddress = await product.asset();
     const erc20Contract = new ethers.Contract(asset, Erc20Abi.abi, this._signer);
+    return erc20Contract.approve(product.address, amount);
     return erc20Contract.approve(product.address, amount, {
       ...(await this._gasStation.getGasOraclePrices()),
       ...overrides,

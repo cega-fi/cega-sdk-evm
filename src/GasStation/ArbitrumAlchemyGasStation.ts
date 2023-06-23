@@ -6,12 +6,15 @@ async function fetchAlchemy(apiKey: string) {
   const response = await axios({
     url: `https://arb-mainnet.g.alchemy.com/v2/${apiKey}`,
     method: 'POST',
-    headers: { accept: 'application/json', 'content-type': 'application/json' },
-    data: { id: 1, jsonrpc: '2.0' },
+    headers: {
+      accept: 'application/json',
+      'content-type': 'application/json',
+    },
+    data: { id: 1, jsonrpc: '2.0', method: 'eth_gasPrice' },
   });
   const { result } = response.data;
   return {
-    maxPriorityFeePerGas: parseInt(result, 16),
+    gasPrice: parseInt(result, 16),
   };
 }
 
@@ -27,7 +30,7 @@ export class ArbitrumAlchemyGasStation extends GasStation {
     const alchemyResult = await fetchAlchemy(this.apiKey);
 
     this._cacheLastValue = {
-      maxPriorityFeePerGas: alchemyResult.maxPriorityFeePerGas,
+      gasPrice: alchemyResult.gasPrice,
     };
   }
 }
