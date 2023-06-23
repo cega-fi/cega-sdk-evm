@@ -1283,6 +1283,7 @@ export default class CegaEthSDK {
     productName: string,
     ownerAddress: EvmAddress | null = null,
   ): Promise<ethers.BigNumber> {
+    console.log('get asset allowance');
     if (!(ownerAddress || this._signer)) {
       throw new Error('No owner present');
     }
@@ -1299,15 +1300,15 @@ export default class CegaEthSDK {
     amount: ethers.BigNumber,
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
-    console.log('cp1');
+    console.log('approve asset');
     const product = await this.loadProductContract(productName);
     const asset: EvmAddress = await product.asset();
     const erc20Contract = new ethers.Contract(asset, Erc20Abi.abi, this._signer);
     return erc20Contract.approve(product.address, amount);
-    return erc20Contract.approve(product.address, amount, {
-      ...(await this._gasStation.getGasOraclePrices()),
-      ...overrides,
-    });
+    // return erc20Contract.approve(product.address, amount, {
+    //   ...(await this._gasStation.getGasOraclePrices()),
+    //   ...overrides,
+    // });
   }
 
   async increaseAssetAllowanceToProduct(
@@ -1315,15 +1316,17 @@ export default class CegaEthSDK {
     amount: ethers.BigNumber,
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
+    console.log('increase asset allowance');
     // NOTE: not all ERC20 tokens have `increaseAllowance` function
     // https://ethereum.stackexchange.com/questions/122634/difference-between-approve-and-increaseallowance-in-erc20-contract
     const product = await this.loadProductContract(productName);
     const asset: EvmAddress = await product.asset();
     const erc20Contract = new ethers.Contract(asset, Erc20Abi.abi, this._signer);
-    return erc20Contract.increaseAllowance(product.address, amount, {
-      ...(await this._gasStation.getGasOraclePrices()),
-      ...overrides,
-    });
+    return erc20Contract.increaseAllowance(product.address, amount);
+    // return erc20Contract.increaseAllowance(product.address, amount, {
+    //   ...(await this._gasStation.getGasOraclePrices()),
+    //   ...overrides,
+    // });
   }
 
   async addToDepositQueueFcn(
@@ -1345,11 +1348,13 @@ export default class CegaEthSDK {
     leverage: number,
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
+    console.log('add deposit queue lov');
     const product = await this.loadProductContract(productName);
-    return product.addToDepositQueue(leverage, amount, {
-      ...(await this._gasStation.getGasOraclePrices()),
-      ...overrides,
-    });
+    return product.addToDepositQueue(leverage, amount);
+    // return product.addToDepositQueue(leverage, amount, {
+    //   ...(await this._gasStation.getGasOraclePrices()),
+    //   ...overrides,
+    // });
   }
 
   async processDepositQueue(
