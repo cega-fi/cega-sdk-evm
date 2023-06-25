@@ -135,7 +135,9 @@ export default class CegaEvmSDK {
 
     this._cegaStateAddress = cegaStateAddress;
 
-    this.cache = defaultCache;
+    this.cache = {
+      ...defaultCache,
+    };
   }
 
   setProvider(provider: ethers.providers.Provider) {
@@ -151,7 +153,9 @@ export default class CegaEvmSDK {
   }
 
   resetCache(): void {
-    this.cache = defaultCache;
+    this.cache = {
+      ...defaultCache,
+    };
   }
 
   logCache(): SDKCache {
