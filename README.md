@@ -35,12 +35,12 @@ A gas station determines how we set fees for each transaction, specifically arou
 
 You can also create your own custom gas station and use that when initializing the SDK.
 
-### Getting started with CegaEthSDK
+### Getting started with CegaEvmSDK
 
 ```tsx
-import { GasStation, CegaEthSDK } from '@cega-fi/cega-sdk-evm';
+import { GasStation, CegaEvmSDK } from '@cega-fi/cega-sdk-evm';
 
-const sdk = new CegaEthSDK(
+const sdk = new CegaEvmSDK(
   '0x0730AA138062D8Cc54510aa939b533ba7c30f26B',
   new GasStation(), // or new EthereumEtherscanGasStation(apiKey), etc.
   provider,

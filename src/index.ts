@@ -1,4 +1,4 @@
-import CegaEthSDK from './sdk';
+import CegaEvmSDK from './sdk';
 import {
   GasStation,
   EthereumAlchemyGasStation,
@@ -10,7 +10,7 @@ import {
 import * as types from './types';
 
 export {
-  CegaEthSDK,
+  CegaEvmSDK,
   GasStation,
   EthereumAlchemyGasStation,
   EthereumEtherscanGasStation,

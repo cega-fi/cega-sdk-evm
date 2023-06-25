@@ -5,7 +5,7 @@ import * as dotenv from 'dotenv';
 
 import { ethers } from 'ethers';
 import {
-  CegaEthSDK,
+  CegaEvmSDK,
   EthereumAlchemyGasStation,
   ArbitrumAlchemyGasStation,
   PolygonGasStation,
@@ -54,10 +54,10 @@ async function run() {
   const traderAdminSigner = new ethers.Wallet(ADMIN_ACCOUNTS.traderAdminPk, provider);
   const serviceAdminSigner = new ethers.Wallet(ADMIN_ACCOUNTS.serviceAdminPk, provider);
 
-  const programSdk = new CegaEthSDK(cegaStateAddress, gasStation, provider, programAdminSigner);
-  const operatorSdk = new CegaEthSDK(cegaStateAddress, gasStation, provider, operatorAdminSigner);
-  const traderSdk = new CegaEthSDK(cegaStateAddress, gasStation, provider, traderAdminSigner);
-  const serviceSdk = new CegaEthSDK(cegaStateAddress, gasStation, provider, serviceAdminSigner);
+  const programSdk = new CegaEvmSDK(cegaStateAddress, gasStation, provider, programAdminSigner);
+  const operatorSdk = new CegaEvmSDK(cegaStateAddress, gasStation, provider, operatorAdminSigner);
+  const traderSdk = new CegaEvmSDK(cegaStateAddress, gasStation, provider, traderAdminSigner);
+  const serviceSdk = new CegaEvmSDK(cegaStateAddress, gasStation, provider, serviceAdminSigner);
   console.log(`
   *** CegaState: ${cegaStateAddress},
     programAdmin: ${programAdminSigner.address},

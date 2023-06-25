@@ -111,7 +111,7 @@ function multicallProcessReturnContext(r: any) {
   return returnVal;
 }
 
-export default class CegaEthSDK {
+export default class CegaEvmSDK {
   private _provider: ethers.providers.Provider;
 
   private _signer: ethers.Signer | undefined;
