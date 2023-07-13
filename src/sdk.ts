@@ -214,7 +214,7 @@ export default class CegaEvmSDK {
     return oracle.description();
   }
 
-  async getOracleDecimals(oracleName: string): Promise<string> {
+  async getOracleDecimals(oracleName: string): Promise<number> {
     const oracle = await this.loadOracleContract(oracleName);
     return oracle.decimals();
   }
