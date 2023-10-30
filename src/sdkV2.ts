@@ -86,4 +86,15 @@ export default class CegaEvmSDKV2 {
       },
     );
   }
+
+  async bulkOpenVaultDepositsDcs(
+    vaultAddresses: EvmAddress[],
+    overrides: TxOverrides = {},
+  ): Promise<ethers.providers.TransactionResponse> {
+    const cegaEntry = this.loadCegaEntry();
+    return cegaEntry.bulkOpenDCSVaultsDeposits(vaultAddresses, {
+      ...(await this._gasStation.getGasOraclePrices()),
+      ...overrides,
+    });
+  }
 }
