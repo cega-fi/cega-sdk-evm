@@ -1,7 +1,7 @@
 import { ethers } from 'ethers';
 import * as dotenv from 'dotenv';
-import CegaEvmSDK from './sdk';
-import { GasStation } from './GasStation';
+import CegaEvmSDK from '../sdk';
+import { GasStation } from '../GasStation';
 
 dotenv.config();
 
