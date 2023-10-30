@@ -2,6 +2,7 @@ import { ethers } from 'ethers';
 import { EvmAddress, TxOverrides } from './types';
 import { GasStation } from './GasStation';
 
+import Erc20Abi from './abi/ERC20.json';
 import IDCSEntryAbi from './abiV2/IDCSEntry.json';
 
 export default class CegaEvmSDKV2 {
@@ -43,6 +44,22 @@ export default class CegaEvmSDKV2 {
       IDCSEntryAbi.abi,
       this._signer || this._provider,
     );
+  }
+
+  async approveDepositDcs(
+    amount: ethers.BigNumber,
+    asset: EvmAddress,
+    overrides: TxOverrides = {},
+  ): Promise<ethers.providers.TransactionResponse> {
+    if (asset === ethers.constants.AddressZero) {
+      throw new Error('Invalid asset address');
+    }
+
+    const erc20Contract = new ethers.Contract(asset, Erc20Abi.abi, this._signer);
+    return erc20Contract.approve(this._cegaEntryAddress, amount, {
+      ...(await this._gasStation.getGasOraclePrices()),
+      ...overrides,
+    });
   }
 
   async addToDepositQueueDcs(
