@@ -1,4 +1,5 @@
 import CegaEvmSDK from './sdk';
+import CegaEvmSDKV2 from './sdkV2';
 import {
   GasStation,
   EthereumAlchemyGasStation,
@@ -17,4 +18,5 @@ export {
   PolygonGasStation,
   ArbitrumAlchemyGasStation,
   types,
+  CegaEvmSDKV2,
 };
