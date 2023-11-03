@@ -46,6 +46,24 @@ export default class CegaEvmSDKV2 {
     );
   }
 
+  async getProductDcs(productId: ethers.BigNumberish) {
+    const cegaEntry = this.loadCegaEntry();
+    return cegaEntry.getDCSProduct(productId);
+  }
+
+  async getLatestProductIdDcs() {
+    const cegaEntry = this.loadCegaEntry();
+    return cegaEntry.getDCSLatestProductId();
+  }
+
+  async setIsDepositQueueOpenDcs(
+    productId: ethers.BigNumberish,
+    isOpen: boolean,
+  ): Promise<ethers.providers.TransactionResponse> {
+    const cegaEntry = this.loadCegaEntry();
+    return cegaEntry.setDCSIsDepositQueueOpen(isOpen, productId);
+  }
+
   async approveDepositDcs(
     amount: ethers.BigNumber,
     asset: EvmAddress,
@@ -73,18 +91,11 @@ export default class CegaEvmSDKV2 {
     }
 
     const cegaEntry = this.loadCegaEntry();
-    return cegaEntry.addToDCSDepositQueue(
-      productId,
-      amount,
-      await this._signer.getAddress(),
-      {
-        value: asset === ethers.constants.AddressZero ? amount : 0,
-      },
-      {
-        ...(await this._gasStation.getGasOraclePrices()),
-        ...overrides,
-      },
-    );
+    return cegaEntry.addToDCSDepositQueue(productId, amount, await this._signer.getAddress(), {
+      ...(await this._gasStation.getGasOraclePrices()),
+      ...overrides,
+      value: asset === ethers.constants.AddressZero ? amount : 0,
+    });
   }
 
   async bulkOpenVaultDepositsDcs(

@@ -2,7 +2,7 @@
 import * as dotenv from 'dotenv';
 
 import { ethers } from 'ethers';
-import { CegaEvmSDKV2, EthereumAlchemyGasStation, ArbitrumAlchemyGasStation, types } from '..';
+import { CegaEvmSDKV2, EthereumAlchemyGasStation, types, GasStation } from '..';
 
 dotenv.config();
 
@@ -14,8 +14,8 @@ const config = {
   },
   arbitrum: {
     RPC_URL: process.env.ARBITRUM_RPC_URL,
-    cegaEntryAddress: '0x4a2ecDe314080D37d4654cf0eb7DBe6d1BC89211' as types.EvmAddress,
-    gasStation: new ArbitrumAlchemyGasStation(process.env.ARBITRUM_ALCHEMY_API_KEY || ''),
+    cegaEntryAddress: '0x10a5524f7c4e2fc62a1106e77cb8a53026bca252' as types.EvmAddress,
+    gasStation: new GasStation(),
   },
 };
 
@@ -36,8 +36,25 @@ async function addDeposits() {
 
   const sdk = new CegaEvmSDKV2(cegaEntryAddress, gasStation, provider, userSigner);
 
+  console.log('loaded sdk for add deposit');
+  const id = await sdk.getLatestProductIdDcs();
+  console.log('latest id: ', id);
+  const product = await sdk.getProductDcs(2);
+  console.log('got dcs product');
+  console.log(product);
+  // const product2 = await sdk.getProductDcs(2);
+  // console.log(product2);
+  // const product3 = await sdk.getProductDcs(3);
+  // console.log(product3);
+
+  // open deposit queue
+  // await sdk.setIsDepositQueueOpenDcs(2, true);
+
   // Deposit Ethereum
-  // await sdk.addToDepositQueueDcs()
+  const amount = ethers.utils.parseUnits('0.001', 18);
+  console.log('amount: ', amount.toString());
+  const txResponse = await sdk.addToDepositQueueDcs(2, amount);
+  console.log(txResponse.hash);
 
   // Deposit ERC20
   // await sdk.approveDepositDcs()
