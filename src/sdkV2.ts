@@ -108,4 +108,18 @@ export default class CegaEvmSDKV2 {
       ...overrides,
     });
   }
+
+  async bulkSettleVaultsDcs(
+    vaultAddresses: EvmAddress[],
+  ): Promise<ethers.providers.TransactionResponse> {
+    const cegaEntry = this.loadCegaEntry();
+    return cegaEntry.bulkSettleDCSVaults(vaultAddresses);
+  }
+
+  async bulkStartTradesDcs(
+    vaultAddresses: EvmAddress[],
+  ): Promise<ethers.providers.TransactionResponse> {
+    const cegaEntry = this.loadCegaEntry();
+    return cegaEntry.bulkStartDCSTrades(vaultAddresses);
+  }
 }
