@@ -117,4 +117,11 @@ export default class CegaEvmSDKV2 {
     const cegaEntry = this.loadCegaEntry();
     return cegaEntry.bulkStartDCSTrades(vaultAddresses);
   }
+
+  async submitDisputeDcs(
+    vaultAddresses: EvmAddress[],
+  ): Promise<ethers.providers.TransactionResponse> {
+    const cegaEntry = this.loadCegaEntry();
+    return cegaEntry.submitDCSDispute(vaultAddresses);
+  }
 }
