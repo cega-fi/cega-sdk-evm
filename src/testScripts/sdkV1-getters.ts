@@ -10,7 +10,7 @@ import {
   ArbitrumAlchemyGasStation,
   PolygonGasStation,
   types,
-} from '.';
+} from '..';
 
 dotenv.config();
 
