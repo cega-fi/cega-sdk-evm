@@ -116,7 +116,7 @@ export default class CegaEvmSDKV2 {
    * TRADING METHODS
    */
 
-  async bulkOpenVaultsDepositsDcs(
+  async bulkOpenVaultDepositsDcs(
     vaultAddresses: EvmAddress[],
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
