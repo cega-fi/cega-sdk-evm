@@ -54,7 +54,7 @@ async function addDeposits() {
   await sdk.setIsDepositQueueOpenDcs(1, true);
   // Deposit ERC20
   const amountUsdc = ethers.utils.parseUnits('0.1', 6);
-  const approveTx = await sdk.approveDepositDcs(amountUsdc, config.arbitrum.usdcAddress);
+  const approveTx = await sdk.approveErc20ForCegaEntry(amountUsdc, config.arbitrum.usdcAddress);
   const approveResponse = await approveTx.wait();
   console.log('approve USDC: ', approveResponse.transactionHash);
   const depositTx = await sdk.addToDepositQueueDcs(1, amountUsdc, config.arbitrum.usdcAddress);

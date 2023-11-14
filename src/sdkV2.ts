@@ -59,7 +59,7 @@ export default class CegaEvmSDKV2 {
     return cegaEntry.setDCSIsDepositQueueOpen(isOpen, productId);
   }
 
-  async approveDepositDcs(
+  async approveErc20ForCegaEntry(
     amount: ethers.BigNumber,
     asset: EvmAddress,
     overrides: TxOverrides = {},
@@ -102,6 +102,50 @@ export default class CegaEvmSDKV2 {
       ...(await this._gasStation.getGasOraclePrices()),
       ...overrides,
     });
+  }
+
+  async addToWithdrawalQueueDcs(
+    vaultAddress: EvmAddress,
+    sharesAmount: ethers.BigNumber,
+    nextProductId: ethers.BigNumberish = 0,
+    overrides: TxOverrides = {},
+  ): Promise<ethers.providers.TransactionResponse> {
+    if (!this._signer) {
+      throw new Error('Signer not defined');
+    }
+
+    const cegaEntry = this.loadCegaEntry();
+    return cegaEntry.addToDCSWithdrawalQueue(
+      vaultAddress,
+      sharesAmount,
+      nextProductId,
+      await this._signer.getAddress(),
+      {
+        ...(await this._gasStation.getGasOraclePrices()),
+        ...overrides,
+      },
+    );
+  }
+
+  async addToWithdrawalQueueDcsProxy(
+    vaultAddress: EvmAddress,
+    sharesAmount: ethers.BigNumber,
+    overrides: TxOverrides = {},
+  ): Promise<ethers.providers.TransactionResponse> {
+    if (!this._signer) {
+      throw new Error('Signer not defined');
+    }
+
+    const cegaEntry = this.loadCegaEntry();
+    return cegaEntry.addToDCSWithdrawalQueueWithProxy(
+      vaultAddress,
+      sharesAmount,
+      await this._signer.getAddress(),
+      {
+        ...(await this._gasStation.getGasOraclePrices()),
+        ...overrides,
+      },
+    );
   }
 
   async bulkSettleVaultsDcs(

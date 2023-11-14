@@ -203,9 +203,9 @@
         },
         {
           "indexed": false,
-          "internalType": "uint256",
+          "internalType": "uint16",
           "name": "value",
-          "type": "uint256"
+          "type": "uint16"
         }
       ],
       "name": "ManagementFeeUpdated",
@@ -222,9 +222,9 @@
         },
         {
           "indexed": false,
-          "internalType": "uint256",
+          "internalType": "uint128",
           "name": "maxDepositAmountLimit",
-          "type": "uint256"
+          "type": "uint128"
         }
       ],
       "name": "MaxDepositAmountLimitUpdated",
@@ -241,9 +241,9 @@
         },
         {
           "indexed": false,
-          "internalType": "uint256",
+          "internalType": "uint128",
           "name": "minDepositAmount",
-          "type": "uint256"
+          "type": "uint128"
         }
       ],
       "name": "MinDepositAmountUpdated",
@@ -260,9 +260,9 @@
         },
         {
           "indexed": false,
-          "internalType": "uint256",
+          "internalType": "uint128",
           "name": "minWithdrawalAmount",
-          "type": "uint256"
+          "type": "uint128"
         }
       ],
       "name": "MinWithdrawalAmountUpdated",
@@ -313,12 +313,6 @@
           "internalType": "string",
           "name": "_tokenName",
           "type": "string"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "_vaultStartDate",
-          "type": "uint256"
         }
       ],
       "name": "VaultCreated",
@@ -400,6 +394,12 @@
           "internalType": "uint32",
           "name": "nextProductId",
           "type": "uint32"
+        },
+        {
+          "indexed": false,
+          "internalType": "bool",
+          "name": "withProxy",
+          "type": "bool"
         }
       ],
       "name": "WithdrawalQueued",
@@ -416,9 +416,9 @@
         },
         {
           "indexed": false,
-          "internalType": "uint256",
+          "internalType": "uint16",
           "name": "value",
-          "type": "uint256"
+          "type": "uint16"
         }
       ],
       "name": "YieldFeeUpdated",
@@ -466,6 +466,24 @@
         }
       ],
       "name": "addToDCSWithdrawalQueue",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "sharesAmount",
+          "type": "uint256"
+        }
+      ],
+      "name": "addToDCSWithdrawalQueueWithProxy",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -621,9 +639,9 @@
       "name": "calculateDCSLateFee",
       "outputs": [
         {
-          "internalType": "uint256",
+          "internalType": "uint128",
           "name": "",
-          "type": "uint256"
+          "type": "uint128"
         }
       ],
       "stateMutability": "view",
@@ -640,9 +658,9 @@
       "name": "calculateDCSVaultFinalPayoff",
       "outputs": [
         {
-          "internalType": "uint256",
+          "internalType": "uint128",
           "name": "",
-          "type": "uint256"
+          "type": "uint128"
         }
       ],
       "stateMutability": "view",
@@ -716,9 +734,9 @@
       "name": "convertToAssets",
       "outputs": [
         {
-          "internalType": "uint256",
+          "internalType": "uint128",
           "name": "",
-          "type": "uint256"
+          "type": "uint128"
         }
       ],
       "stateMutability": "view",
@@ -732,9 +750,9 @@
           "type": "address"
         },
         {
-          "internalType": "uint256",
+          "internalType": "uint128",
           "name": "assets",
-          "type": "uint256"
+          "type": "uint128"
         }
       ],
       "name": "convertToShares",
@@ -850,11 +868,6 @@
           "internalType": "string",
           "name": "_tokenSymbol",
           "type": "string"
-        },
-        {
-          "internalType": "uint256",
-          "name": "_vaultStartDate",
-          "type": "uint256"
         }
       ],
       "name": "createDCSVault",
@@ -886,9 +899,9 @@
           "type": "uint40"
         },
         {
-          "internalType": "uint256",
+          "internalType": "uint16",
           "name": "_aprBps",
-          "type": "uint256"
+          "type": "uint16"
         },
         {
           "internalType": "enum IOracleEntry.DataSource",
@@ -912,9 +925,9 @@
       "name": "getDCSCouponPayment",
       "outputs": [
         {
-          "internalType": "uint256",
+          "internalType": "uint128",
           "name": "",
-          "type": "uint256"
+          "type": "uint128"
         }
       ],
       "stateMutability": "view",
@@ -975,16 +988,6 @@
         {
           "components": [
             {
-              "internalType": "uint32",
-              "name": "id",
-              "type": "uint32"
-            },
-            {
-              "internalType": "bool",
-              "name": "isDepositQueueOpen",
-              "type": "bool"
-            },
-            {
               "internalType": "uint128",
               "name": "maxDepositAmountLimit",
               "type": "uint128"
@@ -1005,19 +1008,29 @@
               "type": "uint128"
             },
             {
-              "internalType": "address[]",
-              "name": "vaults",
-              "type": "address[]"
-            },
-            {
-              "internalType": "enum DCSOptionType",
-              "name": "dcsOptionType",
-              "type": "uint8"
-            },
-            {
               "internalType": "address",
               "name": "quoteAssetAddress",
               "type": "address"
+            },
+            {
+              "internalType": "uint40",
+              "name": "tenorInSeconds",
+              "type": "uint40"
+            },
+            {
+              "internalType": "uint32",
+              "name": "id",
+              "type": "uint32"
+            },
+            {
+              "internalType": "uint16",
+              "name": "lateFeeBps",
+              "type": "uint16"
+            },
+            {
+              "internalType": "uint8",
+              "name": "daysToStartLateFees",
+              "type": "uint8"
             },
             {
               "internalType": "address",
@@ -1025,9 +1038,9 @@
               "type": "address"
             },
             {
-              "internalType": "uint8",
-              "name": "daysToStartLateFees",
-              "type": "uint8"
+              "internalType": "uint16",
+              "name": "strikeBarrierBps",
+              "type": "uint16"
             },
             {
               "internalType": "uint8",
@@ -1040,24 +1053,24 @@
               "type": "uint8"
             },
             {
-              "internalType": "uint16",
-              "name": "lateFeeBps",
-              "type": "uint16"
-            },
-            {
-              "internalType": "uint16",
-              "name": "strikeBarrierBps",
-              "type": "uint16"
-            },
-            {
-              "internalType": "uint40",
-              "name": "tenorInSeconds",
-              "type": "uint40"
-            },
-            {
               "internalType": "uint8",
               "name": "disputePeriodInHours",
               "type": "uint8"
+            },
+            {
+              "internalType": "enum DCSOptionType",
+              "name": "dcsOptionType",
+              "type": "uint8"
+            },
+            {
+              "internalType": "bool",
+              "name": "isDepositQueueOpen",
+              "type": "bool"
+            },
+            {
+              "internalType": "address[]",
+              "name": "vaults",
+              "type": "address[]"
             }
           ],
           "internalType": "struct DCSProduct",
@@ -1100,6 +1113,26 @@
         {
           "components": [
             {
+              "internalType": "uint128",
+              "name": "initialSpotPrice",
+              "type": "uint128"
+            },
+            {
+              "internalType": "uint128",
+              "name": "strikePrice",
+              "type": "uint128"
+            },
+            {
+              "internalType": "uint128",
+              "name": "totalYield",
+              "type": "uint128"
+            },
+            {
+              "internalType": "uint16",
+              "name": "aprBps",
+              "type": "uint16"
+            },
+            {
               "internalType": "enum SettlementStatus",
               "name": "settlementStatus",
               "type": "uint8"
@@ -1108,26 +1141,6 @@
               "internalType": "bool",
               "name": "isPayoffInDepositAsset",
               "type": "bool"
-            },
-            {
-              "internalType": "uint256",
-              "name": "aprBps",
-              "type": "uint256"
-            },
-            {
-              "internalType": "uint256",
-              "name": "initialSpotPrice",
-              "type": "uint256"
-            },
-            {
-              "internalType": "uint256",
-              "name": "strikePrice",
-              "type": "uint256"
-            },
-            {
-              "internalType": "uint256",
-              "name": "totalYield",
-              "type": "uint256"
             }
           ],
           "internalType": "struct DCSVault",
@@ -1169,6 +1182,11 @@
           "internalType": "uint256[]",
           "name": "amounts",
           "type": "uint256[]"
+        },
+        {
+          "internalType": "bool[]",
+          "name": "withProxy",
+          "type": "bool[]"
         },
         {
           "internalType": "uint256",
@@ -1225,17 +1243,17 @@
           "type": "address"
         },
         {
-          "internalType": "uint64",
+          "internalType": "uint40",
           "name": "timestamp",
-          "type": "uint64"
+          "type": "uint40"
         }
       ],
       "name": "getOraclePriceOverride",
       "outputs": [
         {
-          "internalType": "uint256",
+          "internalType": "uint128",
           "name": "",
-          "type": "uint256"
+          "type": "uint128"
         }
       ],
       "stateMutability": "view",
@@ -1254,29 +1272,29 @@
         {
           "components": [
             {
+              "internalType": "uint128",
+              "name": "totalAssets",
+              "type": "uint128"
+            },
+            {
+              "internalType": "uint64",
+              "name": "auctionWinnerTokenId",
+              "type": "uint64"
+            },
+            {
+              "internalType": "uint16",
+              "name": "yieldFeeBps",
+              "type": "uint16"
+            },
+            {
+              "internalType": "uint16",
+              "name": "managementFeeBps",
+              "type": "uint16"
+            },
+            {
               "internalType": "uint32",
               "name": "productId",
               "type": "uint32"
-            },
-            {
-              "internalType": "uint256",
-              "name": "yieldFeeBps",
-              "type": "uint256"
-            },
-            {
-              "internalType": "uint256",
-              "name": "managementFeeBps",
-              "type": "uint256"
-            },
-            {
-              "internalType": "uint256",
-              "name": "vaultStartDate",
-              "type": "uint256"
-            },
-            {
-              "internalType": "uint40",
-              "name": "tradeStartDate",
-              "type": "uint40"
             },
             {
               "internalType": "address",
@@ -1284,24 +1302,14 @@
               "type": "address"
             },
             {
-              "internalType": "address",
-              "name": "underlyingAsset",
-              "type": "address"
-            },
-            {
-              "internalType": "uint256",
-              "name": "totalAssets",
-              "type": "uint256"
+              "internalType": "uint40",
+              "name": "tradeStartDate",
+              "type": "uint40"
             },
             {
               "internalType": "enum VaultStatus",
               "name": "vaultStatus",
               "type": "uint8"
-            },
-            {
-              "internalType": "uint256",
-              "name": "auctionWinnerTokenId",
-              "type": "uint256"
             },
             {
               "internalType": "enum IOracleEntry.DataSource",
@@ -1312,6 +1320,11 @@
               "internalType": "bool",
               "name": "isInDispute",
               "type": "bool"
+            },
+            {
+              "internalType": "address",
+              "name": "underlyingAsset",
+              "type": "address"
             }
           ],
           "internalType": "struct Vault",
@@ -1381,14 +1394,14 @@
           "type": "address"
         },
         {
-          "internalType": "uint64",
+          "internalType": "uint40",
           "name": "timestamp",
-          "type": "uint64"
+          "type": "uint40"
         },
         {
-          "internalType": "uint256",
+          "internalType": "uint128",
           "name": "newPrice",
-          "type": "uint256"
+          "type": "uint128"
         }
       ],
       "name": "overrideOraclePrice",
@@ -1440,9 +1453,9 @@
           "type": "address"
         },
         {
-          "internalType": "uint256",
+          "internalType": "uint128",
           "name": "newPrice",
-          "type": "uint256"
+          "type": "uint128"
         }
       ],
       "name": "processTradeDispute",
@@ -1507,9 +1520,9 @@
           "type": "address"
         },
         {
-          "internalType": "uint256",
+          "internalType": "uint16",
           "name": "value",
-          "type": "uint256"
+          "type": "uint16"
         }
       ],
       "name": "setDCSManagementFee",
@@ -1597,9 +1610,9 @@
           "type": "address"
         },
         {
-          "internalType": "uint256",
+          "internalType": "uint16",
           "name": "value",
-          "type": "uint256"
+          "type": "uint16"
         }
       ],
       "name": "setDCSYieldFee",
