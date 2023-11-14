@@ -143,3 +143,8 @@ export interface TxOverrides {
   maxFeePerGas?: number;
   maxPriorityFeePerGas?: number;
 }
+
+export enum OracleDataSourceDcs {
+  None,
+  Pyth,
+}

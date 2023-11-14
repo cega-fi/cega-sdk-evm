@@ -66,9 +66,6 @@ async function bulkActions() {
   const traderSigner = new ethers.Wallet(ADMIN_ACCOUNTS.traderAdminPk, provider);
 
   const sdk = new CegaEvmSDKV2(cegaEntryAddress, gasStation, provider, traderSigner);
-
-  // Bulk Open Vault Deposits
-  await sdk.bulkOpenVaultDepositsDcs([]);
 }
 
 async function main() {
