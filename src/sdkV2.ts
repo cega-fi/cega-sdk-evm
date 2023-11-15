@@ -15,11 +15,11 @@ export default class CegaEvmSDKV2 {
 
   private _cegaEntryAddress: EvmAddress;
 
-  private _cegaProxyAddress: EvmAddress;
+  private _cegaWrappingProxyAddress: EvmAddress;
 
   constructor(
     cegaEntryAddress: EvmAddress,
-    cegaProxyAddress: EvmAddress,
+    cegaWrappingProxyAddress: EvmAddress,
     gasStation: GasStation,
     provider: ethers.providers.Provider,
     signer: ethers.Signer | undefined = undefined,
@@ -28,7 +28,7 @@ export default class CegaEvmSDKV2 {
     this._signer = signer;
     this._gasStation = gasStation;
     this._cegaEntryAddress = cegaEntryAddress;
-    this._cegaProxyAddress = cegaProxyAddress;
+    this._cegaWrappingProxyAddress = cegaWrappingProxyAddress;
   }
 
   setProvider(provider: ethers.providers.Provider) {
@@ -51,13 +51,13 @@ export default class CegaEvmSDKV2 {
     );
   }
 
-  setCegaProxyAddress(cegaProxyAddress: EvmAddress) {
-    this._cegaProxyAddress = cegaProxyAddress;
+  setCegaWrappingProxyAddress(cegaWrappingProxyAddress: EvmAddress) {
+    this._cegaWrappingProxyAddress = cegaWrappingProxyAddress;
   }
 
   loadCegaProxy(): ethers.Contract {
     return new ethers.Contract(
-      this._cegaProxyAddress,
+      this._cegaWrappingProxyAddress,
       IWrappingProxyAbi.abi,
       this._signer || this._provider,
     );
@@ -79,6 +79,18 @@ export default class CegaEvmSDKV2 {
   /**
    * USER FACING METHODS
    */
+
+  async approveErc20(
+    amount: ethers.BigNumber,
+    asset: EvmAddress,
+    withWrappingProxy: boolean,
+    overrides: TxOverrides = {},
+  ) {
+    if (withWrappingProxy) {
+      return this.approveErc20ForCegaProxy(amount, asset, overrides);
+    }
+    return this.approveErc20ForCegaEntry(amount, asset, overrides);
+  }
 
   async approveErc20ForCegaEntry(
     amount: ethers.BigNumber,
@@ -106,7 +118,7 @@ export default class CegaEvmSDKV2 {
     }
 
     const erc20Contract = new ethers.Contract(asset, Erc20Abi.abi, this._signer);
-    return erc20Contract.approve(this._cegaProxyAddress, amount, {
+    return erc20Contract.approve(this._cegaWrappingProxyAddress, amount, {
       ...(await this._gasStation.getGasOraclePrices()),
       ...overrides,
     });
@@ -115,7 +127,7 @@ export default class CegaEvmSDKV2 {
   async addToDepositQueueDcs(
     productId: ethers.BigNumberish,
     amount: ethers.BigNumber,
-    withProxy: boolean,
+    withWrappingProxy: boolean,
     asset: EvmAddress = ethers.constants.AddressZero,
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
@@ -123,7 +135,7 @@ export default class CegaEvmSDKV2 {
       throw new Error('Signer not defined');
     }
 
-    if (withProxy) {
+    if (withWrappingProxy) {
       return this.addToDepositQueueDcsProxy(productId, amount, overrides);
     }
 
@@ -158,11 +170,16 @@ export default class CegaEvmSDKV2 {
   async addToWithdrawalQueueDcs(
     vaultAddress: EvmAddress,
     sharesAmount: ethers.BigNumber,
+    withWrappingProxy: boolean,
     nextProductId: ethers.BigNumberish = 0,
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     if (!this._signer) {
       throw new Error('Signer not defined');
+    }
+
+    if (withWrappingProxy) {
+      return this.addToWithdrawalQueueDcsProxy(vaultAddress, sharesAmount, overrides);
     }
 
     const cegaEntry = this.loadCegaEntry();
