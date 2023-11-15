@@ -111,11 +111,16 @@ export default class CegaEvmSDKV2 {
   async addToDepositQueueDcs(
     productId: ethers.BigNumberish,
     amount: ethers.BigNumber,
+    withProxy: boolean,
     asset: EvmAddress = ethers.constants.AddressZero,
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     if (!this._signer) {
       throw new Error('Signer not defined');
+    }
+
+    if (withProxy) {
+      return this.addToDepositQueueDcsProxy(productId, amount, overrides);
     }
 
     const cegaEntry = this.loadCegaEntry();
