@@ -59,6 +59,10 @@ export default class CegaEvmSDKV2 {
     return cegaEntry.setDCSIsDepositQueueOpen(isOpen, productId);
   }
 
+  /**
+   * USER FACING METHODS
+   */
+
   async approveDepositDcs(
     amount: ethers.BigNumber,
     asset: EvmAddress,
@@ -93,27 +97,8 @@ export default class CegaEvmSDKV2 {
     });
   }
 
-  async bulkSettleVaultsDcs(
-    vaultAddresses: EvmAddress[],
-  ): Promise<ethers.providers.TransactionResponse> {
-    const cegaEntry = this.loadCegaEntry();
-    return cegaEntry.bulkSettleDCSVaults(vaultAddresses);
-  }
-
-  async bulkStartTradesDcs(
-    vaultAddresses: EvmAddress[],
-  ): Promise<ethers.providers.TransactionResponse> {
-    const cegaEntry = this.loadCegaEntry();
-    return cegaEntry.bulkStartDCSTrades(vaultAddresses);
-  }
-
-  async submitDispute(vaultAddress: EvmAddress): Promise<ethers.providers.TransactionResponse> {
-    const cegaEntry = this.loadCegaEntry();
-    return cegaEntry.submitDispute(vaultAddress);
-  }
-
   /**
-   * TRADING METHODS
+   * CEGA TRADING METHODS
    */
 
   async bulkOpenVaultDepositsDcs(
@@ -147,10 +132,6 @@ export default class CegaEvmSDKV2 {
     oracleDataSource: OracleDataSourceDcs,
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
-    if (!this._signer) {
-      throw new Error('Signer not defined');
-    }
-
     const cegaEntry = this.loadCegaEntry();
     return cegaEntry.endDCSAuction(
       vaultAddress,
@@ -162,6 +143,24 @@ export default class CegaEvmSDKV2 {
         ...overrides,
       },
     );
+  }
+
+  /**
+   * MARKET MAKER METHODS
+   */
+
+  async bulkStartTradesDcs(
+    vaultAddresses: EvmAddress[],
+  ): Promise<ethers.providers.TransactionResponse> {
+    const cegaEntry = this.loadCegaEntry();
+    return cegaEntry.bulkStartDCSTrades(vaultAddresses);
+  }
+
+  async bulkSettleVaultsDcs(
+    vaultAddresses: EvmAddress[],
+  ): Promise<ethers.providers.TransactionResponse> {
+    const cegaEntry = this.loadCegaEntry();
+    return cegaEntry.bulkSettleDCSVaults(vaultAddresses);
   }
 
   /**
@@ -206,6 +205,11 @@ export default class CegaEvmSDKV2 {
    * DISPUTE METHODS
    */
 
+  async submitDispute(vaultAddress: EvmAddress): Promise<ethers.providers.TransactionResponse> {
+    const cegaEntry = this.loadCegaEntry();
+    return cegaEntry.submitDispute(vaultAddress);
+  }
+
   async processTradeDisputeDcs(
     vaultAddress: EvmAddress,
     newPrice: ethers.BigNumber,
@@ -233,7 +237,6 @@ export default class CegaEvmSDKV2 {
     });
   }
 
-  // checkDCSSettlementDefault
   async bulkCheckSettlementDefaultDcs(
     vaultAddresses: EvmAddress[],
     overrides: TxOverrides = {},
@@ -245,7 +248,6 @@ export default class CegaEvmSDKV2 {
     });
   }
 
-  // checkDCSTradeExpiry
   async bulkCheckTradeExpiryDcs(
     vaultAddresses: EvmAddress[],
     overrides: TxOverrides = {},
