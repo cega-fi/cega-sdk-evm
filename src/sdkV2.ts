@@ -1,5 +1,5 @@
 import { ethers } from 'ethers';
-import { EvmAddress, TxOverrides } from './types';
+import { EvmAddress, OracleDataSourceDcs, TxOverrides } from './types';
 import { GasStation } from './GasStation';
 
 import Erc20Abi from './abi/ERC20.json';
@@ -76,6 +76,10 @@ export default class CegaEvmSDKV2 {
     return cegaEntry.setDCSIsDepositQueueOpen(isOpen, productId);
   }
 
+  /**
+   * USER FACING METHODS
+   */
+
   async approveErc20ForCegaEntry(
     amount: ethers.BigNumber,
     asset: EvmAddress,
@@ -151,17 +155,6 @@ export default class CegaEvmSDKV2 {
     );
   }
 
-  async bulkOpenVaultDepositsDcs(
-    vaultAddresses: EvmAddress[],
-    overrides: TxOverrides = {},
-  ): Promise<ethers.providers.TransactionResponse> {
-    const cegaEntry = this.loadCegaEntry();
-    return cegaEntry.bulkOpenDCSVaultsDeposits(vaultAddresses, {
-      ...(await this._gasStation.getGasOraclePrices()),
-      ...overrides,
-    });
-  }
-
   async addToWithdrawalQueueDcs(
     vaultAddress: EvmAddress,
     sharesAmount: ethers.BigNumber,
@@ -206,12 +199,57 @@ export default class CegaEvmSDKV2 {
     );
   }
 
-  async bulkSettleVaultsDcs(
+  /**
+   * CEGA TRADING METHODS
+   */
+
+  async bulkOpenVaultDepositsDcs(
     vaultAddresses: EvmAddress[],
+    overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = this.loadCegaEntry();
-    return cegaEntry.bulkSettleDCSVaults(vaultAddresses);
+    return cegaEntry.bulkOpenDCSVaultsDeposits(vaultAddresses, {
+      ...(await this._gasStation.getGasOraclePrices()),
+      ...overrides,
+    });
   }
+
+  async bulkProcessDepositQueuesDcs(
+    vaultAddresses: EvmAddress[],
+    maxProcessCount: ethers.BigNumber,
+    overrides: TxOverrides = {},
+  ): Promise<ethers.providers.TransactionResponse> {
+    const cegaEntry = this.loadCegaEntry();
+    return cegaEntry.bulkProcessDCSDepositQueues(vaultAddresses, maxProcessCount, {
+      ...(await this._gasStation.getGasOraclePrices()),
+      ...overrides,
+    });
+  }
+
+  async endAuctionDcs(
+    vaultAddress: EvmAddress,
+    auctionWinner: EvmAddress,
+    tradeStartDate: ethers.BigNumber,
+    aprBps: ethers.BigNumber,
+    oracleDataSource: OracleDataSourceDcs,
+    overrides: TxOverrides = {},
+  ): Promise<ethers.providers.TransactionResponse> {
+    const cegaEntry = this.loadCegaEntry();
+    return cegaEntry.endDCSAuction(
+      vaultAddress,
+      auctionWinner,
+      tradeStartDate,
+      aprBps,
+      oracleDataSource,
+      {
+        ...overrides,
+      },
+    );
+  }
+
+  /**
+   * MARKET MAKER METHODS
+   */
 
   async bulkStartTradesDcs(
     vaultAddresses: EvmAddress[],
@@ -220,8 +258,106 @@ export default class CegaEvmSDKV2 {
     return cegaEntry.bulkStartDCSTrades(vaultAddresses);
   }
 
+  async bulkSettleVaultsDcs(
+    vaultAddresses: EvmAddress[],
+  ): Promise<ethers.providers.TransactionResponse> {
+    const cegaEntry = this.loadCegaEntry();
+    return cegaEntry.bulkSettleDCSVaults(vaultAddresses);
+  }
+
+  /**
+   * CEGA SETTLEMENT METHODS
+   */
+
+  async bulkCollectFeesDcs(
+    vaultAddresses: EvmAddress[],
+    overrides: TxOverrides = {},
+  ): Promise<ethers.providers.TransactionResponse> {
+    const cegaEntry = this.loadCegaEntry();
+    return cegaEntry.bulkCollectDCSFees(vaultAddresses, {
+      ...(await this._gasStation.getGasOraclePrices()),
+      ...overrides,
+    });
+  }
+
+  async bulkProcessWithdrawalQueuesDcs(
+    vaultAddresses: EvmAddress[],
+    maxProcessCount: ethers.BigNumber,
+    overrides: TxOverrides = {},
+  ): Promise<ethers.providers.TransactionResponse> {
+    const cegaEntry = this.loadCegaEntry();
+    return cegaEntry.bulkProcessDCSWithdrawalQueues(vaultAddresses, maxProcessCount, {
+      ...(await this._gasStation.getGasOraclePrices()),
+      ...overrides,
+    });
+  }
+
+  async bulkRolloverVaultsDcs(
+    vaultAddresses: EvmAddress[],
+    overrides: TxOverrides = {},
+  ): Promise<ethers.providers.TransactionResponse> {
+    const cegaEntry = this.loadCegaEntry();
+    return cegaEntry.bulkRolloverDCSVaults(vaultAddresses, {
+      ...(await this._gasStation.getGasOraclePrices()),
+      ...overrides,
+    });
+  }
+
+  /**
+   * DISPUTE METHODS
+   */
+
   async submitDispute(vaultAddress: EvmAddress): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = this.loadCegaEntry();
     return cegaEntry.submitDispute(vaultAddress);
+  }
+
+  async processTradeDisputeDcs(
+    vaultAddress: EvmAddress,
+    newPrice: ethers.BigNumber,
+    overrides: TxOverrides = {},
+  ): Promise<ethers.providers.TransactionResponse> {
+    const cegaEntry = this.loadCegaEntry();
+    return cegaEntry.processTradeDispute(vaultAddress, newPrice, {
+      ...(await this._gasStation.getGasOraclePrices()),
+      ...overrides,
+    });
+  }
+
+  /**
+   * CRANK METHODS
+   */
+
+  async bulkCheckAuctionDefaultDcs(
+    vaultAddresses: EvmAddress[],
+    overrides: TxOverrides = {},
+  ): Promise<ethers.BigNumber> {
+    const cegaEntry = this.loadCegaEntry();
+    return cegaEntry.bulkCheckDCSAuctionDefault(vaultAddresses, {
+      ...(await this._gasStation.getGasOraclePrices()),
+      ...overrides,
+    });
+  }
+
+  async bulkCheckSettlementDefaultDcs(
+    vaultAddresses: EvmAddress[],
+    overrides: TxOverrides = {},
+  ): Promise<ethers.BigNumber> {
+    const cegaEntry = this.loadCegaEntry();
+    return cegaEntry.bulkCheckDCSSettlementDefault(vaultAddresses, {
+      ...(await this._gasStation.getGasOraclePrices()),
+      ...overrides,
+    });
+  }
+
+  async bulkCheckTradeExpiryDcs(
+    vaultAddresses: EvmAddress[],
+    overrides: TxOverrides = {},
+  ): Promise<ethers.BigNumber> {
+    const cegaEntry = this.loadCegaEntry();
+    return cegaEntry.bulkCheckDCSTradesExpiry(vaultAddresses, {
+      ...(await this._gasStation.getGasOraclePrices()),
+      ...overrides,
+    });
   }
 }
