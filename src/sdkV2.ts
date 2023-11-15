@@ -164,7 +164,7 @@ export default class CegaEvmSDKV2 {
   }
 
   /**
-   * SETTLEMENT METHODS
+   * CEGA SETTLEMENT METHODS
    */
 
   async bulkCollectFeesDcs(
