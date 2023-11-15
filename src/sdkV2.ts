@@ -4,6 +4,7 @@ import { GasStation } from './GasStation';
 
 import Erc20Abi from './abi/ERC20.json';
 import IDCSEntryAbi from './abiV2/IDCSEntry.json';
+import IWrappingProxyAbi from './abiV2/IWrappingProxy.json';
 
 export default class CegaEvmSDKV2 {
   private _provider: ethers.providers.Provider;
@@ -14,8 +15,11 @@ export default class CegaEvmSDKV2 {
 
   private _cegaEntryAddress: EvmAddress;
 
+  private _cegaProxyAddress: EvmAddress;
+
   constructor(
     cegaEntryAddress: EvmAddress,
+    cegaProxyAddress: EvmAddress,
     gasStation: GasStation,
     provider: ethers.providers.Provider,
     signer: ethers.Signer | undefined = undefined,
@@ -24,6 +28,7 @@ export default class CegaEvmSDKV2 {
     this._signer = signer;
     this._gasStation = gasStation;
     this._cegaEntryAddress = cegaEntryAddress;
+    this._cegaProxyAddress = cegaProxyAddress;
   }
 
   setProvider(provider: ethers.providers.Provider) {
@@ -42,6 +47,18 @@ export default class CegaEvmSDKV2 {
     return new ethers.Contract(
       this._cegaEntryAddress,
       IDCSEntryAbi.abi,
+      this._signer || this._provider,
+    );
+  }
+
+  setCegaProxyAddress(cegaProxyAddress: EvmAddress) {
+    this._cegaProxyAddress = cegaProxyAddress;
+  }
+
+  loadCegaProxy(): ethers.Contract {
+    return new ethers.Contract(
+      this._cegaProxyAddress,
+      IWrappingProxyAbi.abi,
       this._signer || this._provider,
     );
   }
@@ -75,6 +92,22 @@ export default class CegaEvmSDKV2 {
     });
   }
 
+  async approveErc20ForCegaProxy(
+    amount: ethers.BigNumber,
+    asset: EvmAddress,
+    overrides: TxOverrides = {},
+  ): Promise<ethers.providers.TransactionResponse> {
+    if (asset === ethers.constants.AddressZero) {
+      throw new Error('Invalid asset address');
+    }
+
+    const erc20Contract = new ethers.Contract(asset, Erc20Abi.abi, this._signer);
+    return erc20Contract.approve(this._cegaProxyAddress, amount, {
+      ...(await this._gasStation.getGasOraclePrices()),
+      ...overrides,
+    });
+  }
+
   async addToDepositQueueDcs(
     productId: ethers.BigNumberish,
     amount: ethers.BigNumber,
@@ -91,6 +124,26 @@ export default class CegaEvmSDKV2 {
       ...overrides,
       value: asset === ethers.constants.AddressZero ? amount : 0,
     });
+  }
+
+  async addToDepositQueueDcsProxy(
+    productId: ethers.BigNumberish,
+    amount: ethers.BigNumber,
+    overrides: TxOverrides = {},
+  ): Promise<ethers.providers.TransactionResponse> {
+    if (!this._signer) {
+      throw new Error('Signer not defined');
+    }
+    const proxyEntry = this.loadCegaProxy();
+    return proxyEntry.wrapAndAddToDCSDepositQueue(
+      productId,
+      amount,
+      await this._signer.getAddress(),
+      {
+        ...(await this._gasStation.getGasOraclePrices()),
+        ...overrides,
+      },
+    );
   }
 
   async bulkOpenVaultDepositsDcs(
