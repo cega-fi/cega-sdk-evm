@@ -55,7 +55,7 @@ export default class CegaEvmSDKV2 {
     this._cegaWrappingProxyAddress = cegaWrappingProxyAddress;
   }
 
-  loadCegaProxy(): ethers.Contract {
+  loadCegaWrappingProxy(): ethers.Contract {
     return new ethers.Contract(
       this._cegaWrappingProxyAddress,
       IWrappingProxyAbi.abi,
@@ -155,7 +155,7 @@ export default class CegaEvmSDKV2 {
     if (!this._signer) {
       throw new Error('Signer not defined');
     }
-    const proxyEntry = this.loadCegaProxy();
+    const proxyEntry = this.loadCegaWrappingProxy();
     return proxyEntry.wrapAndAddToDCSDepositQueue(
       productId,
       amount,
