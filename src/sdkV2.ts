@@ -246,16 +246,18 @@ export default class CegaEvmSDKV2 {
   async endAuctionDcs(
     vaultAddress: EvmAddress,
     auctionWinner: EvmAddress,
-    tradeStartDate: ethers.BigNumber,
-    aprBps: ethers.BigNumber,
+    tradeStartDate: Date,
+    aprBps: number,
     oracleDataSource: OracleDataSourceDcs,
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = this.loadCegaEntry();
+    const tradeStartInSeconds = Math.floor(tradeStartDate.getTime() / 1000);
+
     return cegaEntry.endDCSAuction(
       vaultAddress,
       auctionWinner,
-      tradeStartDate,
+      tradeStartInSeconds,
       aprBps,
       oracleDataSource,
       {
@@ -348,7 +350,7 @@ export default class CegaEvmSDKV2 {
   async bulkCheckAuctionDefaultDcs(
     vaultAddresses: EvmAddress[],
     overrides: TxOverrides = {},
-  ): Promise<ethers.BigNumber> {
+  ): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = this.loadCegaEntry();
     return cegaEntry.bulkCheckDCSAuctionDefault(vaultAddresses, {
       ...(await this._gasStation.getGasOraclePrices()),
@@ -359,7 +361,7 @@ export default class CegaEvmSDKV2 {
   async bulkCheckSettlementDefaultDcs(
     vaultAddresses: EvmAddress[],
     overrides: TxOverrides = {},
-  ): Promise<ethers.BigNumber> {
+  ): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = this.loadCegaEntry();
     return cegaEntry.bulkCheckDCSSettlementDefault(vaultAddresses, {
       ...(await this._gasStation.getGasOraclePrices()),
@@ -370,7 +372,7 @@ export default class CegaEvmSDKV2 {
   async bulkCheckTradeExpiryDcs(
     vaultAddresses: EvmAddress[],
     overrides: TxOverrides = {},
-  ): Promise<ethers.BigNumber> {
+  ): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = this.loadCegaEntry();
     return cegaEntry.bulkCheckDCSTradesExpiry(vaultAddresses, {
       ...(await this._gasStation.getGasOraclePrices()),
