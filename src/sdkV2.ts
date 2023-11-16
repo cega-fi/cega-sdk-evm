@@ -92,7 +92,7 @@ export default class CegaEvmSDKV2 {
     return this.approveErc20ForCegaEntry(amount, asset, overrides);
   }
 
-  async approveErc20ForCegaEntry(
+  private async approveErc20ForCegaEntry(
     amount: ethers.BigNumber,
     asset: EvmAddress,
     overrides: TxOverrides = {},
@@ -108,7 +108,7 @@ export default class CegaEvmSDKV2 {
     });
   }
 
-  async approveErc20ForCegaProxy(
+  private async approveErc20ForCegaProxy(
     amount: ethers.BigNumber,
     asset: EvmAddress,
     overrides: TxOverrides = {},
@@ -147,7 +147,7 @@ export default class CegaEvmSDKV2 {
     });
   }
 
-  async addToDepositQueueDcsProxy(
+  private async addToDepositQueueDcsProxy(
     productId: ethers.BigNumberish,
     amount: ethers.BigNumber,
     overrides: TxOverrides = {},
@@ -194,7 +194,7 @@ export default class CegaEvmSDKV2 {
     );
   }
 
-  async addToWithdrawalQueueDcsProxy(
+  private async addToWithdrawalQueueDcsProxy(
     vaultAddress: EvmAddress,
     sharesAmount: ethers.BigNumber,
     overrides: TxOverrides = {},
