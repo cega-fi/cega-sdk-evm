@@ -46,26 +46,26 @@ async function addDeposits() {
     userSigner,
   );
 
-  // const product = await sdk.getProductDcs(2);
-  // const product2 = await sdk.getProductDcs(2);
-  // const product3 = await sdk.getProductDcs(3);
+  // const product = await sdk.dcsGetProduct(2);
+  // const product2 = await sdk.dcsGetProduct(2);
+  // const product3 = await sdk.dcsGetProduct(3);
 
   // open deposit queue
-  // await sdk.setIsDepositQueueOpenDcs(2, true);
+  // await sdk.dcsSetIsDepositQueueOpen(2, true);
 
   // Deposit Ethereum
   // const amount = ethers.utils.parseUnits('0.001', 18);
-  // const txResponse = await sdk.addToDepositQueueDcs(2, amount);
+  // const txResponse = await sdk.dcsAddToDepositQueue(2, amount, false);
   // console.log('Ethereum Deposit: ', txResponse.hash);
 
   // open deposit queue
-  await sdk.setIsDepositQueueOpenDcs(1, true);
+  await sdk.dcsSetIsDepositQueueOpen(1, true);
   // Deposit ERC20
   const amountUsdc = ethers.utils.parseUnits('0.1', 6);
-  const approveTx = await sdk.approveErc20ForCegaEntry(amountUsdc, config.arbitrum.usdcAddress);
+  const approveTx = await sdk.approveErc20(amountUsdc, config.arbitrum.usdcAddress, false);
   const approveResponse = await approveTx.wait();
   console.log('approve USDC: ', approveResponse.transactionHash);
-  const depositTx = await sdk.addToDepositQueueDcs(
+  const depositTx = await sdk.dcsAddToDepositQueue(
     1,
     amountUsdc,
     false,
@@ -87,7 +87,7 @@ async function bulkActions() {
   );
 
   // Bulk Open Vault Deposits
-  await sdk.bulkOpenVaultDepositsDcs([]);
+  await sdk.dcsBulkOpenVaultDeposits([]);
 }
 
 async function main() {
