@@ -63,12 +63,12 @@ export default class CegaEvmSDKV2 {
     );
   }
 
-  async getProductDcs(productId: ethers.BigNumberish) {
+  async dcsGetProduct(productId: ethers.BigNumberish) {
     const cegaEntry = this.loadCegaEntry();
     return cegaEntry.getDCSProduct(productId);
   }
 
-  async setIsDepositQueueOpenDcs(
+  async dcsSetIsDepositQueueOpen(
     productId: ethers.BigNumberish,
     isOpen: boolean,
   ): Promise<ethers.providers.TransactionResponse> {
@@ -92,7 +92,7 @@ export default class CegaEvmSDKV2 {
     return this.approveErc20ForCegaEntry(amount, asset, overrides);
   }
 
-  async approveErc20ForCegaEntry(
+  private async approveErc20ForCegaEntry(
     amount: ethers.BigNumber,
     asset: EvmAddress,
     overrides: TxOverrides = {},
@@ -108,7 +108,7 @@ export default class CegaEvmSDKV2 {
     });
   }
 
-  async approveErc20ForCegaProxy(
+  private async approveErc20ForCegaProxy(
     amount: ethers.BigNumber,
     asset: EvmAddress,
     overrides: TxOverrides = {},
@@ -124,7 +124,7 @@ export default class CegaEvmSDKV2 {
     });
   }
 
-  async addToDepositQueueDcs(
+  async dcsAddToDepositQueue(
     productId: ethers.BigNumberish,
     amount: ethers.BigNumber,
     withWrappingProxy: boolean,
@@ -136,7 +136,7 @@ export default class CegaEvmSDKV2 {
     }
 
     if (withWrappingProxy) {
-      return this.addToDepositQueueDcsProxy(productId, amount, overrides);
+      return this.dcsAddToDepositQueueProxy(productId, amount, overrides);
     }
 
     const cegaEntry = this.loadCegaEntry();
@@ -147,7 +147,7 @@ export default class CegaEvmSDKV2 {
     });
   }
 
-  async addToDepositQueueDcsProxy(
+  private async dcsAddToDepositQueueProxy(
     productId: ethers.BigNumberish,
     amount: ethers.BigNumber,
     overrides: TxOverrides = {},
@@ -167,34 +167,25 @@ export default class CegaEvmSDKV2 {
     );
   }
 
-  async addToWithdrawalQueueDcs(
+  async dcsAddToWithdrawalQueue(
     vaultAddress: EvmAddress,
     sharesAmount: ethers.BigNumber,
     withWrappingProxy: boolean,
     nextProductId: ethers.BigNumberish = 0,
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
-    if (!this._signer) {
-      throw new Error('Signer not defined');
-    }
-
     if (withWrappingProxy) {
-      return this.addToWithdrawalQueueDcsProxy(vaultAddress, sharesAmount, overrides);
+      return this.dcsAddToWithdrawalQueueProxy(vaultAddress, sharesAmount, overrides);
     }
 
     const cegaEntry = this.loadCegaEntry();
-    return cegaEntry.addToDCSWithdrawalQueue(
-      vaultAddress,
-      sharesAmount,
-      nextProductId,
-      {
-        ...(await this._gasStation.getGasOraclePrices()),
-        ...overrides,
-      },
-    );
+    return cegaEntry.addToDCSWithdrawalQueue(vaultAddress, sharesAmount, nextProductId, {
+      ...(await this._gasStation.getGasOraclePrices()),
+      ...overrides,
+    });
   }
 
-  async addToWithdrawalQueueDcsProxy(
+  private async dcsAddToWithdrawalQueueProxy(
     vaultAddress: EvmAddress,
     sharesAmount: ethers.BigNumber,
     overrides: TxOverrides = {},
@@ -219,7 +210,7 @@ export default class CegaEvmSDKV2 {
    * CEGA TRADING METHODS
    */
 
-  async bulkOpenVaultDepositsDcs(
+  async dcsBulkOpenVaultDeposits(
     vaultAddresses: EvmAddress[],
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
@@ -230,7 +221,7 @@ export default class CegaEvmSDKV2 {
     });
   }
 
-  async bulkProcessDepositQueuesDcs(
+  async dcsBulkProcessDepositQueues(
     vaultAddresses: EvmAddress[],
     maxProcessCount: ethers.BigNumber,
     overrides: TxOverrides = {},
@@ -242,7 +233,7 @@ export default class CegaEvmSDKV2 {
     });
   }
 
-  async endAuctionDcs(
+  async dcsEndAuction(
     vaultAddress: EvmAddress,
     auctionWinner: EvmAddress,
     tradeStartDate: Date,
@@ -269,14 +260,14 @@ export default class CegaEvmSDKV2 {
    * MARKET MAKER METHODS
    */
 
-  async bulkStartTradesDcs(
+  async dcsBulkStartTrades(
     vaultAddresses: EvmAddress[],
   ): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = this.loadCegaEntry();
     return cegaEntry.bulkStartDCSTrades(vaultAddresses);
   }
 
-  async bulkSettleVaultsDcs(
+  async dcsBulkSettleVaults(
     vaultAddresses: EvmAddress[],
   ): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = this.loadCegaEntry();
@@ -287,7 +278,7 @@ export default class CegaEvmSDKV2 {
    * CEGA SETTLEMENT METHODS
    */
 
-  async bulkCollectFeesDcs(
+  async dcsBulkCollectFees(
     vaultAddresses: EvmAddress[],
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
@@ -298,7 +289,7 @@ export default class CegaEvmSDKV2 {
     });
   }
 
-  async bulkProcessWithdrawalQueuesDcs(
+  async dcsBulkProcessWithdrawalQueues(
     vaultAddresses: EvmAddress[],
     maxProcessCount: ethers.BigNumber,
     overrides: TxOverrides = {},
@@ -310,7 +301,7 @@ export default class CegaEvmSDKV2 {
     });
   }
 
-  async bulkRolloverVaultsDcs(
+  async dcsBulkRolloverVaults(
     vaultAddresses: EvmAddress[],
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
@@ -330,7 +321,7 @@ export default class CegaEvmSDKV2 {
     return cegaEntry.submitDispute(vaultAddress);
   }
 
-  async processTradeDisputeDcs(
+  async dcsProcessTradeDispute(
     vaultAddress: EvmAddress,
     newPrice: ethers.BigNumber,
     overrides: TxOverrides = {},
@@ -346,7 +337,7 @@ export default class CegaEvmSDKV2 {
    * CRANK METHODS
    */
 
-  async bulkCheckAuctionDefaultDcs(
+  async dcsBulkCheckAuctionDefault(
     vaultAddresses: EvmAddress[],
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
@@ -357,7 +348,7 @@ export default class CegaEvmSDKV2 {
     });
   }
 
-  async bulkCheckSettlementDefaultDcs(
+  async dcsBulkCheckSettlementDefault(
     vaultAddresses: EvmAddress[],
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
@@ -368,7 +359,7 @@ export default class CegaEvmSDKV2 {
     });
   }
 
-  async bulkCheckTradeExpiryDcs(
+  async dcsBulkCheckTradeExpiry(
     vaultAddresses: EvmAddress[],
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
