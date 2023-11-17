@@ -174,24 +174,15 @@ export default class CegaEvmSDKV2 {
     nextProductId: ethers.BigNumberish = 0,
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
-    if (!this._signer) {
-      throw new Error('Signer not defined');
-    }
-
     if (withWrappingProxy) {
       return this.dcsAddToWithdrawalQueueProxy(vaultAddress, sharesAmount, overrides);
     }
 
     const cegaEntry = this.loadCegaEntry();
-    return cegaEntry.addToDCSWithdrawalQueue(
-      vaultAddress,
-      sharesAmount,
-      nextProductId,
-      {
-        ...(await this._gasStation.getGasOraclePrices()),
-        ...overrides,
-      },
-    );
+    return cegaEntry.addToDCSWithdrawalQueue(vaultAddress, sharesAmount, nextProductId, {
+      ...(await this._gasStation.getGasOraclePrices()),
+      ...overrides,
+    });
   }
 
   private async dcsAddToWithdrawalQueueProxy(
