@@ -187,7 +187,6 @@ export default class CegaEvmSDKV2 {
       vaultAddress,
       sharesAmount,
       nextProductId,
-      await this._signer.getAddress(),
       {
         ...(await this._gasStation.getGasOraclePrices()),
         ...overrides,
