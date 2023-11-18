@@ -5,6 +5,7 @@ import { GasStation } from './GasStation';
 import Erc20Abi from './abi/ERC20.json';
 import IDCSEntryAbi from './abiV2/IDCSEntry.json';
 import IWrappingProxyAbi from './abiV2/IWrappingProxy.json';
+import Chains, { IChainConfig, isValidChain } from './config/chains';
 
 export default class CegaEvmSDKV2 {
   private _provider: ethers.providers.Provider;
@@ -41,6 +42,15 @@ export default class CegaEvmSDKV2 {
 
   setCegaEntryAddress(cegaEntryAddress: EvmAddress) {
     this._cegaEntryAddress = cegaEntryAddress;
+  }
+
+  async getChainConfig(): Promise<IChainConfig> {
+    const { chainId } = await this._provider.getNetwork();
+    if (!isValidChain(chainId)) {
+      throw new Error('Unsupported Chain ID');
+    }
+    const chainConfig = Chains[chainId];
+    return chainConfig;
   }
 
   loadCegaEntry(): ethers.Contract {
@@ -80,13 +90,13 @@ export default class CegaEvmSDKV2 {
    * USER FACING METHODS
    */
 
-  async approveErc20(
-    amount: ethers.BigNumber,
-    asset: EvmAddress,
-    withWrappingProxy: boolean,
-    overrides: TxOverrides = {},
-  ) {
-    if (withWrappingProxy) {
+  async approveErc20(amount: ethers.BigNumber, asset: EvmAddress, overrides: TxOverrides = {}) {
+    if (asset === ethers.constants.AddressZero) {
+      throw new Error('Invalid asset address');
+    }
+
+    const chainConfig = await this.getChainConfig();
+    if (chainConfig.name === 'ethereum-mainnet' && asset === chainConfig.tokens.stETH) {
       return this.approveErc20ForCegaProxy(amount, asset, overrides);
     }
     return this.approveErc20ForCegaEntry(amount, asset, overrides);
@@ -97,10 +107,6 @@ export default class CegaEvmSDKV2 {
     asset: EvmAddress,
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
-    if (asset === ethers.constants.AddressZero) {
-      throw new Error('Invalid asset address');
-    }
-
     const erc20Contract = new ethers.Contract(asset, Erc20Abi.abi, this._signer);
     return erc20Contract.approve(this._cegaEntryAddress, amount, {
       ...(await this._gasStation.getGasOraclePrices()),
@@ -113,10 +119,6 @@ export default class CegaEvmSDKV2 {
     asset: EvmAddress,
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
-    if (asset === ethers.constants.AddressZero) {
-      throw new Error('Invalid asset address');
-    }
-
     const erc20Contract = new ethers.Contract(asset, Erc20Abi.abi, this._signer);
     return erc20Contract.approve(this._cegaWrappingProxyAddress, amount, {
       ...(await this._gasStation.getGasOraclePrices()),
@@ -127,7 +129,6 @@ export default class CegaEvmSDKV2 {
   async dcsAddToDepositQueue(
     productId: ethers.BigNumberish,
     amount: ethers.BigNumber,
-    withWrappingProxy: boolean,
     asset: EvmAddress = ethers.constants.AddressZero,
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
@@ -135,7 +136,8 @@ export default class CegaEvmSDKV2 {
       throw new Error('Signer not defined');
     }
 
-    if (withWrappingProxy) {
+    const chainConfig = await this.getChainConfig();
+    if (chainConfig.name === 'ethereum-mainnet' && asset === chainConfig.tokens.stETH) {
       return this.dcsAddToDepositQueueProxy(productId, amount, overrides);
     }
 
