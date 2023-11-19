@@ -59,6 +59,15 @@ export enum VaultStatus {
   Zombie,
 }
 
+export enum SettlementStatus {
+  NotAuctioned,
+  Auctioned,
+  InitialPremiumPaid,
+  AwaitingSettlement,
+  Settled,
+  Defaulted,
+}
+
 export interface FCNVaultMetadata {
   vaultStart: Date;
   tradeDate: Date | null;
