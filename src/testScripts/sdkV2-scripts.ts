@@ -74,9 +74,9 @@ async function addDeposits(network: 'ethereum' | 'arbitrum') {
   const usdcProductId = 2;
   // await sdk.dcsSetIsDepositQueueOpen(usdcProductId, true);
   amount = ethers.utils.parseUnits('0.1', 6);
-  txResponse = await sdk.approveErc20(amount, config.usdcAddress);
+  txResponse = await sdk.increaseAllowanceErc20(amount, config.usdcAddress);
   txReceipt = await txResponse.wait();
-  console.log('approve USDC: ', txReceipt.transactionHash);
+  console.log('increaseAllowance USDC: ', txReceipt.transactionHash);
   txResponse = await sdk.dcsAddToDepositQueue(usdcProductId, amount, config.usdcAddress);
   console.log('deposit USDC: ', txResponse.hash);
 
@@ -84,9 +84,9 @@ async function addDeposits(network: 'ethereum' | 'arbitrum') {
   const stethProductId = 3; // wrapped steth actually
   // await sdk.dcsSetIsDepositQueueOpen(stethProductId, true);
   amount = ethers.utils.parseUnits('0.00005', 18);
-  txResponse = await sdk.approveErc20(amount, config.stEth);
+  txResponse = await sdk.increaseAllowanceErc20(amount, config.stEth);
   txReceipt = await txResponse.wait();
-  console.log('approve stETH: ', txReceipt.transactionHash);
+  console.log('increaseAllowance stETH: ', txReceipt.transactionHash);
   txResponse = await sdk.dcsAddToDepositQueue(stethProductId, amount, config.stEth);
   console.log('deposit stETH: ', txResponse.hash);
 }

@@ -90,37 +90,41 @@ export default class CegaEvmSDKV2 {
    * USER FACING METHODS
    */
 
-  async approveErc20(amount: ethers.BigNumber, asset: EvmAddress, overrides: TxOverrides = {}) {
+  async increaseAllowanceErc20(
+    amount: ethers.BigNumber,
+    asset: EvmAddress,
+    overrides: TxOverrides = {},
+  ) {
     if (asset === ethers.constants.AddressZero) {
       throw new Error('Invalid asset address');
     }
 
     const chainConfig = await this.getChainConfig();
     if (chainConfig.name === 'ethereum-mainnet' && asset === chainConfig.tokens.stETH) {
-      return this.approveErc20ForCegaProxy(amount, asset, overrides);
+      return this.increaseAllowanceErc20ForCegaProxy(amount, asset, overrides);
     }
-    return this.approveErc20ForCegaEntry(amount, asset, overrides);
+    return this.increaseAllowanceErc20ForCegaEntry(amount, asset, overrides);
   }
 
-  private async approveErc20ForCegaEntry(
+  private async increaseAllowanceErc20ForCegaEntry(
     amount: ethers.BigNumber,
     asset: EvmAddress,
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     const erc20Contract = new ethers.Contract(asset, Erc20Abi.abi, this._signer);
-    return erc20Contract.approve(this._cegaEntryAddress, amount, {
+    return erc20Contract.increaseAllowance(this._cegaEntryAddress, amount, {
       ...(await this._gasStation.getGasOraclePrices()),
       ...overrides,
     });
   }
 
-  private async approveErc20ForCegaProxy(
+  private async increaseAllowanceErc20ForCegaProxy(
     amount: ethers.BigNumber,
     asset: EvmAddress,
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     const erc20Contract = new ethers.Contract(asset, Erc20Abi.abi, this._signer);
-    return erc20Contract.approve(this._cegaWrappingProxyAddress, amount, {
+    return erc20Contract.increaseAllowance(this._cegaWrappingProxyAddress, amount, {
       ...(await this._gasStation.getGasOraclePrices()),
       ...overrides,
     });
