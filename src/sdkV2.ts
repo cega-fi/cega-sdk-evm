@@ -340,7 +340,7 @@ export default class CegaEvmSDKV2 {
    */
 
   async dcsCreateVault(
-    productId: number,
+    productId: ethers.BigNumberish,
     tokenName: string,
     tokenSymbol: string,
     overrides: TxOverrides = {},
