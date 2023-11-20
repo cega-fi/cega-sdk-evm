@@ -336,6 +336,23 @@ export default class CegaEvmSDKV2 {
   }
 
   /**
+   * OTHER PERMISSIONED METHODS
+   */
+
+  async dcsCreateVault(
+    productId: number,
+    tokenName: string,
+    tokenSymbol: string,
+    overrides: TxOverrides = {},
+  ): Promise<ethers.providers.TransactionResponse> {
+    const cegaEntry = this.loadCegaEntry();
+    return cegaEntry.createDCSVault(productId, tokenName, tokenSymbol, {
+      ...(await this._gasStation.getGasOraclePrices()),
+      ...overrides,
+    });
+  }
+
+  /**
    * CRANK METHODS
    */
 
