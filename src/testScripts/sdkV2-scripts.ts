@@ -17,16 +17,14 @@ const ADMIN_ACCOUNTS = {
 const CONFIGS = {
   ethereum: {
     RPC_URL: process.env.ETH_RPC_URL,
-    cegaEntryAddress: '0x6891F6594Ec545077561Cc4Fa79a861db2cfBA9D' as types.EvmAddress,
-    cegaWrappingProxyAddress: '0xd940d163b1C29F8a8bFc7dd6300a94fF47AaDECB' as types.EvmAddress,
+    addressManager: '0x6ec805317630c17C0d76eca448c19966d4856edd' as types.EvmAddress,
     usdcAddress: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48' as types.EvmAddress,
     stEth: '0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84' as types.EvmAddress,
     gasStation: new EthereumAlchemyGasStation(process.env.ETH_ALCHEMY_API_KEY || ''),
   },
   arbitrum: {
     RPC_URL: process.env.ARBITRUM_RPC_URL,
-    cegaEntryAddress: '0xb50dfbdd7d6aef83426b148a4f60c8fd33fd3033' as types.EvmAddress,
-    cegaWrappingProxyAddress: '' as types.EvmAddress,
+    addressManager: '0x2A5E51a320D8f2d891d8D86bE04F66e68867d921' as types.EvmAddress,
     usdcAddress: '0xaf88d065e77c8cC2239327C5EDb3A432268e5831' as types.EvmAddress,
     stEth: '' as types.EvmAddress,
     gasStation: new GasStation(),
@@ -40,13 +38,7 @@ async function addDeposits(network: 'ethereum' | 'arbitrum') {
   const provider = new ethers.providers.JsonRpcProvider(config.RPC_URL);
   const userSigner = new ethers.Wallet(ADMIN_ACCOUNTS.userPk, provider);
 
-  const sdk = new CegaEvmSDKV2(
-    config.cegaEntryAddress,
-    config.cegaWrappingProxyAddress,
-    config.gasStation,
-    provider,
-    userSigner,
-  );
+  const sdk = new CegaEvmSDKV2(config.addressManager, config.gasStation, provider, userSigner);
 
   // const product = await sdk.dcsGetProduct(1);
   // console.log(product);
@@ -96,13 +88,7 @@ async function bulkActions(network: 'ethereum' | 'arbitrum') {
   const provider = new ethers.providers.JsonRpcProvider(config.RPC_URL);
   const traderSigner = new ethers.Wallet(ADMIN_ACCOUNTS.traderAdminPk, provider);
 
-  const sdk = new CegaEvmSDKV2(
-    config.cegaEntryAddress,
-    config.cegaWrappingProxyAddress,
-    config.gasStation,
-    provider,
-    traderSigner,
-  );
+  const sdk = new CegaEvmSDKV2(config.addressManager, config.gasStation, provider, traderSigner);
 
   // Bulk Open Vault Deposits
   await sdk.dcsBulkOpenVaultDeposits([]);
