@@ -47,13 +47,24 @@ export interface Withdrawal {
   amountShares: ethers.BigNumber;
 }
 
-export enum VaultStatus {
+export enum VaultStatusV1 {
   DepositsClosed,
   DepositsOpen,
   NotTraded,
   Traded,
   TradeExpired,
   PayoffCalculated,
+  FeesCollected,
+  WithdrawalQueueProcessed,
+  Zombie,
+}
+
+export enum VaultStatusV2 {
+  DepositsClosed,
+  DepositsOpen,
+  NotTraded,
+  Traded,
+  TradeExpired,
   FeesCollected,
   WithdrawalQueueProcessed,
   Zombie,

@@ -7,7 +7,7 @@ import {
   OptionBarrier,
   OracleRoundData,
   OracleRoundDataResp,
-  VaultStatus,
+  VaultStatusV1,
   SDKCache,
   ProductInfo,
   ProductAddressByName,
@@ -1249,7 +1249,7 @@ export default class CegaEvmSDK {
   async setVaultStatus(
     productName: string,
     vaultAddress: EvmAddress,
-    vaultStatus: VaultStatus,
+    vaultStatus: VaultStatusV1,
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     const product = await this.loadProductContract(productName);
