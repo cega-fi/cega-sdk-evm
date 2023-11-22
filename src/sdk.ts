@@ -73,7 +73,7 @@ function multicallProcessReturnContext(r: any) {
           optionBarriersCount: ethers.BigNumber.from(structArray[11]).toNumber(),
           leverage: ethers.BigNumber.from(structArray[12]).toNumber(),
           vaultAddress: structArray[13],
-          vaultStatusV1: structArray[14],
+          vaultStatus: structArray[14],
           isKnockedIn: structArray[15],
           optionBarriers: (structArray[16] || []).map(
             (optionBarrierStructArray: any[]) =>
@@ -1246,14 +1246,14 @@ export default class CegaEvmSDK {
     });
   }
 
-  async setVaultStatusV1(
+  async setVaultStatus(
     productName: string,
     vaultAddress: EvmAddress,
-    vaultStatusV1: VaultStatusV1,
+    vaultStatus: VaultStatusV1,
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     const product = await this.loadProductContract(productName);
-    return product.setVaultStatusV1(vaultAddress, vaultStatusV1, {
+    return product.setVaultStatus(vaultAddress, vaultStatus, {
       ...(await this._gasStation.getGasOraclePrices()),
       ...overrides,
     });
