@@ -14,12 +14,9 @@ export default class CegaEvmSDKV2 {
 
   private _gasStation: GasStation;
 
-  private _cegaEntryAddress: EvmAddress;
-
   private _addressManagerAddress: EvmAddress;
 
   constructor(
-    cegaEntryAddress: EvmAddress,
     addressManager: EvmAddress,
     gasStation: GasStation,
     provider: ethers.providers.Provider,
@@ -28,7 +25,6 @@ export default class CegaEvmSDKV2 {
     this._provider = provider;
     this._signer = signer;
     this._gasStation = gasStation;
-    this._cegaEntryAddress = cegaEntryAddress;
     this._addressManagerAddress = addressManager;
   }
 
@@ -38,10 +34,6 @@ export default class CegaEvmSDKV2 {
 
   setSigner(signer: ethers.Signer) {
     this._signer = signer;
-  }
-
-  setCegaEntryAddress(cegaEntryAddress: EvmAddress) {
-    this._cegaEntryAddress = cegaEntryAddress;
   }
 
   setAddressManagerAddress(addressManagerAddress: EvmAddress) {
@@ -57,20 +49,18 @@ export default class CegaEvmSDKV2 {
     return chainConfig;
   }
 
-  loadCegaEntry(): ethers.Contract {
-    return new ethers.Contract(
-      this._cegaEntryAddress,
-      IDCSEntryAbi.abi,
-      this._signer || this._provider,
-    );
-  }
-
   loadAddressManager(): ethers.Contract {
     return new ethers.Contract(
       this._addressManagerAddress,
       IDCSEntryAbi.abi,
       this._signer || this._provider,
     );
+  }
+
+  async loadCegaEntry(): Promise<ethers.Contract> {
+    const addressManager = this.loadAddressManager();
+    const cegaEntryAddress = await addressManager.getCegaEntry();
+    return new ethers.Contract(cegaEntryAddress, IDCSEntryAbi.abi, this._signer || this._provider);
   }
 
   async loadCegaWrappingProxy(): Promise<ethers.Contract> {
@@ -97,7 +87,7 @@ export default class CegaEvmSDKV2 {
   }
 
   async dcsGetProduct(productId: ethers.BigNumberish) {
-    const cegaEntry = this.loadCegaEntry();
+    const cegaEntry = await await this.loadCegaEntry();
     return cegaEntry.getDCSProduct(productId);
   }
 
@@ -105,7 +95,7 @@ export default class CegaEvmSDKV2 {
     productId: ethers.BigNumberish,
     isOpen: boolean,
   ): Promise<ethers.providers.TransactionResponse> {
-    const cegaEntry = this.loadCegaEntry();
+    const cegaEntry = await this.loadCegaEntry();
     return cegaEntry.setDCSIsDepositQueueOpen(isOpen, productId);
   }
 
@@ -134,8 +124,10 @@ export default class CegaEvmSDKV2 {
     asset: EvmAddress,
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
+    const addressManager = this.loadAddressManager();
+    const cegaEntryAddress = await addressManager.getCegaEntry();
     const erc20Contract = new ethers.Contract(asset, Erc20Abi.abi, this._signer);
-    return erc20Contract.increaseAllowance(this._cegaEntryAddress, amount, {
+    return erc20Contract.increaseAllowance(cegaEntryAddress, amount, {
       ...(await this._gasStation.getGasOraclePrices()),
       ...overrides,
     });
@@ -173,7 +165,7 @@ export default class CegaEvmSDKV2 {
       return this.dcsAddToDepositQueueProxy(productId, amount, overrides);
     }
 
-    const cegaEntry = this.loadCegaEntry();
+    const cegaEntry = await this.loadCegaEntry();
     return cegaEntry.addToDCSDepositQueue(productId, amount, await this._signer.getAddress(), {
       ...(await this._gasStation.getGasOraclePrices()),
       ...overrides,
@@ -212,7 +204,7 @@ export default class CegaEvmSDKV2 {
       return this.dcsAddToWithdrawalQueueProxy(vaultAddress, sharesAmount, overrides);
     }
 
-    const cegaEntry = this.loadCegaEntry();
+    const cegaEntry = await this.loadCegaEntry();
     return cegaEntry.addToDCSWithdrawalQueue(vaultAddress, sharesAmount, nextProductId, {
       ...(await this._gasStation.getGasOraclePrices()),
       ...overrides,
@@ -228,7 +220,7 @@ export default class CegaEvmSDKV2 {
       throw new Error('Signer not defined');
     }
 
-    const cegaEntry = this.loadCegaEntry();
+    const cegaEntry = await this.loadCegaEntry();
     return cegaEntry.addToDCSWithdrawalQueueWithProxy(
       vaultAddress,
       sharesAmount,
@@ -248,7 +240,7 @@ export default class CegaEvmSDKV2 {
     vaultAddresses: EvmAddress[],
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
-    const cegaEntry = this.loadCegaEntry();
+    const cegaEntry = await this.loadCegaEntry();
     return cegaEntry.bulkOpenDCSVaultsDeposits(vaultAddresses, {
       ...(await this._gasStation.getGasOraclePrices()),
       ...overrides,
@@ -260,7 +252,7 @@ export default class CegaEvmSDKV2 {
     maxProcessCount: ethers.BigNumber,
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
-    const cegaEntry = this.loadCegaEntry();
+    const cegaEntry = await this.loadCegaEntry();
     return cegaEntry.bulkProcessDCSDepositQueues(vaultAddresses, maxProcessCount, {
       ...(await this._gasStation.getGasOraclePrices()),
       ...overrides,
@@ -275,7 +267,7 @@ export default class CegaEvmSDKV2 {
     oracleDataSource: OracleDataSourceDcs,
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
-    const cegaEntry = this.loadCegaEntry();
+    const cegaEntry = await this.loadCegaEntry();
     const tradeStartInSeconds = Math.floor(tradeStartDate.getTime() / 1000);
 
     return cegaEntry.endDCSAuction(
@@ -297,14 +289,14 @@ export default class CegaEvmSDKV2 {
   async dcsBulkStartTrades(
     vaultAddresses: EvmAddress[],
   ): Promise<ethers.providers.TransactionResponse> {
-    const cegaEntry = this.loadCegaEntry();
+    const cegaEntry = await this.loadCegaEntry();
     return cegaEntry.bulkStartDCSTrades(vaultAddresses);
   }
 
   async dcsBulkSettleVaults(
     vaultAddresses: EvmAddress[],
   ): Promise<ethers.providers.TransactionResponse> {
-    const cegaEntry = this.loadCegaEntry();
+    const cegaEntry = await this.loadCegaEntry();
     return cegaEntry.bulkSettleDCSVaults(vaultAddresses);
   }
 
@@ -316,7 +308,7 @@ export default class CegaEvmSDKV2 {
     vaultAddresses: EvmAddress[],
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
-    const cegaEntry = this.loadCegaEntry();
+    const cegaEntry = await this.loadCegaEntry();
     return cegaEntry.bulkCollectDCSFees(vaultAddresses, {
       ...(await this._gasStation.getGasOraclePrices()),
       ...overrides,
@@ -328,7 +320,7 @@ export default class CegaEvmSDKV2 {
     maxProcessCount: ethers.BigNumber,
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
-    const cegaEntry = this.loadCegaEntry();
+    const cegaEntry = await this.loadCegaEntry();
     return cegaEntry.bulkProcessDCSWithdrawalQueues(vaultAddresses, maxProcessCount, {
       ...(await this._gasStation.getGasOraclePrices()),
       ...overrides,
@@ -339,7 +331,7 @@ export default class CegaEvmSDKV2 {
     vaultAddresses: EvmAddress[],
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
-    const cegaEntry = this.loadCegaEntry();
+    const cegaEntry = await this.loadCegaEntry();
     return cegaEntry.bulkRolloverDCSVaults(vaultAddresses, {
       ...(await this._gasStation.getGasOraclePrices()),
       ...overrides,
@@ -351,7 +343,7 @@ export default class CegaEvmSDKV2 {
    */
 
   async submitDispute(vaultAddress: EvmAddress): Promise<ethers.providers.TransactionResponse> {
-    const cegaEntry = this.loadCegaEntry();
+    const cegaEntry = await this.loadCegaEntry();
     return cegaEntry.submitDispute(vaultAddress);
   }
 
@@ -360,7 +352,7 @@ export default class CegaEvmSDKV2 {
     newPrice: ethers.BigNumber,
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
-    const cegaEntry = this.loadCegaEntry();
+    const cegaEntry = await this.loadCegaEntry();
     return cegaEntry.processTradeDispute(vaultAddress, newPrice, {
       ...(await this._gasStation.getGasOraclePrices()),
       ...overrides,
@@ -377,7 +369,7 @@ export default class CegaEvmSDKV2 {
     tokenSymbol: string,
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
-    const cegaEntry = this.loadCegaEntry();
+    const cegaEntry = await this.loadCegaEntry();
     return cegaEntry.createDCSVault(productId, tokenName, tokenSymbol, {
       ...(await this._gasStation.getGasOraclePrices()),
       ...overrides,
@@ -392,7 +384,7 @@ export default class CegaEvmSDKV2 {
     vaultAddresses: EvmAddress[],
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
-    const cegaEntry = this.loadCegaEntry();
+    const cegaEntry = await this.loadCegaEntry();
     return cegaEntry.bulkCheckDCSAuctionDefault(vaultAddresses, {
       ...(await this._gasStation.getGasOraclePrices()),
       ...overrides,
@@ -403,7 +395,7 @@ export default class CegaEvmSDKV2 {
     vaultAddresses: EvmAddress[],
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
-    const cegaEntry = this.loadCegaEntry();
+    const cegaEntry = await this.loadCegaEntry();
     return cegaEntry.bulkCheckDCSSettlementDefault(vaultAddresses, {
       ...(await this._gasStation.getGasOraclePrices()),
       ...overrides,
@@ -414,7 +406,7 @@ export default class CegaEvmSDKV2 {
     vaultAddresses: EvmAddress[],
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
-    const cegaEntry = this.loadCegaEntry();
+    const cegaEntry = await this.loadCegaEntry();
     return cegaEntry.bulkCheckDCSTradesExpiry(vaultAddresses, {
       ...(await this._gasStation.getGasOraclePrices()),
       ...overrides,

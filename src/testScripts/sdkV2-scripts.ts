@@ -17,7 +17,6 @@ const ADMIN_ACCOUNTS = {
 const CONFIGS = {
   ethereum: {
     RPC_URL: process.env.ETH_RPC_URL,
-    cegaEntryAddress: '0x6891F6594Ec545077561Cc4Fa79a861db2cfBA9D' as types.EvmAddress,
     addressManager: '' as types.EvmAddress,
     usdcAddress: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48' as types.EvmAddress,
     stEth: '0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84' as types.EvmAddress,
@@ -25,7 +24,6 @@ const CONFIGS = {
   },
   arbitrum: {
     RPC_URL: process.env.ARBITRUM_RPC_URL,
-    cegaEntryAddress: '0xb50dfbdd7d6aef83426b148a4f60c8fd33fd3033' as types.EvmAddress,
     addressManager: '' as types.EvmAddress,
     usdcAddress: '0xaf88d065e77c8cC2239327C5EDb3A432268e5831' as types.EvmAddress,
     stEth: '' as types.EvmAddress,
@@ -40,13 +38,7 @@ async function addDeposits(network: 'ethereum' | 'arbitrum') {
   const provider = new ethers.providers.JsonRpcProvider(config.RPC_URL);
   const userSigner = new ethers.Wallet(ADMIN_ACCOUNTS.userPk, provider);
 
-  const sdk = new CegaEvmSDKV2(
-    config.cegaEntryAddress,
-    config.addressManager,
-    config.gasStation,
-    provider,
-    userSigner,
-  );
+  const sdk = new CegaEvmSDKV2(config.addressManager, config.gasStation, provider, userSigner);
 
   // const product = await sdk.dcsGetProduct(1);
   // console.log(product);
@@ -96,13 +88,7 @@ async function bulkActions(network: 'ethereum' | 'arbitrum') {
   const provider = new ethers.providers.JsonRpcProvider(config.RPC_URL);
   const traderSigner = new ethers.Wallet(ADMIN_ACCOUNTS.traderAdminPk, provider);
 
-  const sdk = new CegaEvmSDKV2(
-    config.cegaEntryAddress,
-    config.addressManager,
-    config.gasStation,
-    provider,
-    traderSigner,
-  );
+  const sdk = new CegaEvmSDKV2(config.addressManager, config.gasStation, provider, traderSigner);
 
   // Bulk Open Vault Deposits
   await sdk.dcsBulkOpenVaultDeposits([]);
