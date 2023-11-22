@@ -16,14 +16,11 @@ export default class CegaEvmSDKV2 {
 
   private _cegaEntryAddress: EvmAddress;
 
-  private _cegaWrappingProxyAddress: EvmAddress;
-
-  private _oracleEntryAddress: EvmAddress;
+  private _addressManagerAddress: EvmAddress;
 
   constructor(
     cegaEntryAddress: EvmAddress,
-    cegaWrappingProxyAddress: EvmAddress,
-    oracleEntryAddress: EvmAddress,
+    addressManager: EvmAddress,
     gasStation: GasStation,
     provider: ethers.providers.Provider,
     signer: ethers.Signer | undefined = undefined,
@@ -32,8 +29,7 @@ export default class CegaEvmSDKV2 {
     this._signer = signer;
     this._gasStation = gasStation;
     this._cegaEntryAddress = cegaEntryAddress;
-    this._cegaWrappingProxyAddress = cegaWrappingProxyAddress;
-    this._oracleEntryAddress = oracleEntryAddress;
+    this._addressManagerAddress = addressManager;
   }
 
   setProvider(provider: ethers.providers.Provider) {
@@ -48,16 +44,8 @@ export default class CegaEvmSDKV2 {
     this._cegaEntryAddress = cegaEntryAddress;
   }
 
-  setOracleEntryAddress(oracleEntryAddress: EvmAddress) {
-    this._oracleEntryAddress = oracleEntryAddress;
-  }
-
-  loadOracleEntry(): ethers.Contract {
-    return new ethers.Contract(
-      this._oracleEntryAddress,
-      IDCSEntryAbi.abi,
-      this._signer || this._provider,
-    );
+  setAddressManagerAddress(addressManagerAddress: EvmAddress) {
+    this._addressManagerAddress = addressManagerAddress;
   }
 
   async getChainConfig(): Promise<IChainConfig> {
@@ -77,14 +65,31 @@ export default class CegaEvmSDKV2 {
     );
   }
 
-  setCegaWrappingProxyAddress(cegaWrappingProxyAddress: EvmAddress) {
-    this._cegaWrappingProxyAddress = cegaWrappingProxyAddress;
+  loadAddressManager(): ethers.Contract {
+    return new ethers.Contract(
+      this._addressManagerAddress,
+      IDCSEntryAbi.abi,
+      this._signer || this._provider,
+    );
   }
 
-  loadCegaWrappingProxy(): ethers.Contract {
+  async loadCegaWrappingProxy(): Promise<ethers.Contract> {
+    const addressManager = this.loadAddressManager();
+    const chainConfig = await this.getChainConfig();
+    const cegaWrappingProxyAddress = addressManager.getAssetWrappingProxy(chainConfig.tokens.stETH);
     return new ethers.Contract(
-      this._cegaWrappingProxyAddress,
+      cegaWrappingProxyAddress,
       IWrappingProxyAbi.abi,
+      this._signer || this._provider,
+    );
+  }
+
+  loadOracleEntry(): ethers.Contract {
+    const addressManager = this.loadAddressManager();
+    const oracleEntryAddress = addressManager.getCegaOracle();
+    return new ethers.Contract(
+      oracleEntryAddress,
+      IDCSEntryAbi.abi,
       this._signer || this._provider,
     );
   }
@@ -139,8 +144,11 @@ export default class CegaEvmSDKV2 {
     asset: EvmAddress,
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
+    const addressManager = this.loadAddressManager();
+    const chainConfig = await this.getChainConfig();
+    const cegaWrappingProxyAddress = addressManager.getAssetWrappingProxy(chainConfig.tokens.stETH);
     const erc20Contract = new ethers.Contract(asset, Erc20Abi.abi, this._signer);
-    return erc20Contract.increaseAllowance(this._cegaWrappingProxyAddress, amount, {
+    return erc20Contract.increaseAllowance(cegaWrappingProxyAddress, amount, {
       ...(await this._gasStation.getGasOraclePrices()),
       ...overrides,
     });
@@ -177,7 +185,7 @@ export default class CegaEvmSDKV2 {
     if (!this._signer) {
       throw new Error('Signer not defined');
     }
-    const proxyEntry = this.loadCegaWrappingProxy();
+    const proxyEntry = await this.loadCegaWrappingProxy();
     return proxyEntry.wrapAndAddToDCSDepositQueue(
       productId,
       amount,

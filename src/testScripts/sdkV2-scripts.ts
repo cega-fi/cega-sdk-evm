@@ -18,8 +18,7 @@ const CONFIGS = {
   ethereum: {
     RPC_URL: process.env.ETH_RPC_URL,
     cegaEntryAddress: '0x6891F6594Ec545077561Cc4Fa79a861db2cfBA9D' as types.EvmAddress,
-    cegaWrappingProxyAddress: '0xd940d163b1C29F8a8bFc7dd6300a94fF47AaDECB' as types.EvmAddress,
-    oracleEntryAddress: '' as types.EvmAddress,
+    addressManager: '' as types.EvmAddress,
     usdcAddress: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48' as types.EvmAddress,
     stEth: '0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84' as types.EvmAddress,
     gasStation: new EthereumAlchemyGasStation(process.env.ETH_ALCHEMY_API_KEY || ''),
@@ -27,8 +26,7 @@ const CONFIGS = {
   arbitrum: {
     RPC_URL: process.env.ARBITRUM_RPC_URL,
     cegaEntryAddress: '0xb50dfbdd7d6aef83426b148a4f60c8fd33fd3033' as types.EvmAddress,
-    cegaWrappingProxyAddress: '' as types.EvmAddress,
-    oracleEntryAddress: '' as types.EvmAddress,
+    addressManager: '' as types.EvmAddress,
     usdcAddress: '0xaf88d065e77c8cC2239327C5EDb3A432268e5831' as types.EvmAddress,
     stEth: '' as types.EvmAddress,
     gasStation: new GasStation(),
@@ -44,8 +42,7 @@ async function addDeposits(network: 'ethereum' | 'arbitrum') {
 
   const sdk = new CegaEvmSDKV2(
     config.cegaEntryAddress,
-    config.cegaWrappingProxyAddress,
-    config.oracleEntryAddress,
+    config.addressManager,
     config.gasStation,
     provider,
     userSigner,
@@ -101,8 +98,7 @@ async function bulkActions(network: 'ethereum' | 'arbitrum') {
 
   const sdk = new CegaEvmSDKV2(
     config.cegaEntryAddress,
-    config.cegaWrappingProxyAddress,
-    config.oracleEntryAddress,
+    config.addressManager,
     config.gasStation,
     provider,
     traderSigner,

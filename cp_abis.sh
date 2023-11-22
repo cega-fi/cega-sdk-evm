@@ -28,5 +28,6 @@ mkdir -p "${path_to_abis_v2}"
 cp "${path_to_cega_eth_v2}/cega-strategies/dcs/interfaces/IDCSEntry.sol/IDCSEntry.json" ${path_to_abis_v2}
 cp "${path_to_cega_eth_v2}/proxies/interfaces/IWrappingProxy.sol/IWrappingProxy.json" ${path_to_abis_v2}
 cp "${path_to_cega_eth_v2}/oracle-entry/OracleEntry.sol/OracleEntry.json" ${path_to_abis_v2}
+cp "${path_to_cega_eth_v2}/aux/AddressManager.sol/AddressManager.json" ${path_to_abis_v2}
 
 echo "Completed copying ABIs for v2"
