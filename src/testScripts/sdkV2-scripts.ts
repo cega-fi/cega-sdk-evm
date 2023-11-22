@@ -17,14 +17,14 @@ const ADMIN_ACCOUNTS = {
 const CONFIGS = {
   ethereum: {
     RPC_URL: process.env.ETH_RPC_URL,
-    addressManager: '' as types.EvmAddress,
+    addressManager: '0x6ec805317630c17C0d76eca448c19966d4856edd' as types.EvmAddress,
     usdcAddress: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48' as types.EvmAddress,
     stEth: '0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84' as types.EvmAddress,
     gasStation: new EthereumAlchemyGasStation(process.env.ETH_ALCHEMY_API_KEY || ''),
   },
   arbitrum: {
     RPC_URL: process.env.ARBITRUM_RPC_URL,
-    addressManager: '' as types.EvmAddress,
+    addressManager: '0x2A5E51a320D8f2d891d8D86bE04F66e68867d921' as types.EvmAddress,
     usdcAddress: '0xaf88d065e77c8cC2239327C5EDb3A432268e5831' as types.EvmAddress,
     stEth: '' as types.EvmAddress,
     gasStation: new GasStation(),

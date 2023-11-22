@@ -4,7 +4,9 @@ import { GasStation } from './GasStation';
 
 import Erc20Abi from './abi/ERC20.json';
 import IDCSEntryAbi from './abiV2/IDCSEntry.json';
+import AddressManagerAbi from './abiV2/AddressManager.json';
 import IWrappingProxyAbi from './abiV2/IWrappingProxy.json';
+import OracleEntryAbi from './abiV2/OracleEntry.json';
 import Chains, { IChainConfig, isValidChain } from './config/chains';
 
 export default class CegaEvmSDKV2 {
@@ -52,7 +54,7 @@ export default class CegaEvmSDKV2 {
   loadAddressManager(): ethers.Contract {
     return new ethers.Contract(
       this._addressManagerAddress,
-      IDCSEntryAbi.abi,
+      AddressManagerAbi.abi,
       this._signer || this._provider,
     );
   }
@@ -81,13 +83,13 @@ export default class CegaEvmSDKV2 {
     const oracleEntryAddress = await addressManager.getCegaOracle();
     return new ethers.Contract(
       oracleEntryAddress,
-      IDCSEntryAbi.abi,
+      OracleEntryAbi.abi,
       this._signer || this._provider,
     );
   }
 
   async dcsGetProduct(productId: ethers.BigNumberish) {
-    const cegaEntry = await await this.loadCegaEntry();
+    const cegaEntry = await this.loadCegaEntry();
     return cegaEntry.getDCSProduct(productId);
   }
 
@@ -124,10 +126,9 @@ export default class CegaEvmSDKV2 {
     asset: EvmAddress,
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
-    const addressManager = this.loadAddressManager();
-    const cegaEntryAddress = await addressManager.getCegaEntry();
+    const cegaEntry = await this.loadCegaEntry();
     const erc20Contract = new ethers.Contract(asset, Erc20Abi.abi, this._signer);
-    return erc20Contract.increaseAllowance(cegaEntryAddress, amount, {
+    return erc20Contract.increaseAllowance(cegaEntry.address, amount, {
       ...(await this._gasStation.getGasOraclePrices()),
       ...overrides,
     });
@@ -138,13 +139,9 @@ export default class CegaEvmSDKV2 {
     asset: EvmAddress,
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
-    const addressManager = this.loadAddressManager();
-    const chainConfig = await this.getChainConfig();
-    const cegaWrappingProxyAddress = await addressManager.getAssetWrappingProxy(
-      chainConfig.tokens.stETH,
-    );
+    const cegaWrappingProxy = await this.loadCegaWrappingProxy();
     const erc20Contract = new ethers.Contract(asset, Erc20Abi.abi, this._signer);
-    return erc20Contract.increaseAllowance(cegaWrappingProxyAddress, amount, {
+    return erc20Contract.increaseAllowance(cegaWrappingProxy.address, amount, {
       ...(await this._gasStation.getGasOraclePrices()),
       ...overrides,
     });
