@@ -94,7 +94,7 @@ export interface FCNVaultMetadata {
   optionBarriersCount: number;
   leverage: number;
   vaultAddress: EvmAddress;
-  vaultStatus: VaultStatus;
+  vaultStatus: VaultStatusV1;
   isKnockedIn: boolean;
   optionBarriers: OptionBarrier[];
 }
