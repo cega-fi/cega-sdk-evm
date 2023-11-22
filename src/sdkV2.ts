@@ -76,7 +76,9 @@ export default class CegaEvmSDKV2 {
   async loadCegaWrappingProxy(): Promise<ethers.Contract> {
     const addressManager = this.loadAddressManager();
     const chainConfig = await this.getChainConfig();
-    const cegaWrappingProxyAddress = addressManager.getAssetWrappingProxy(chainConfig.tokens.stETH);
+    const cegaWrappingProxyAddress = await addressManager.getAssetWrappingProxy(
+      chainConfig.tokens.stETH,
+    );
     return new ethers.Contract(
       cegaWrappingProxyAddress,
       IWrappingProxyAbi.abi,
@@ -84,9 +86,9 @@ export default class CegaEvmSDKV2 {
     );
   }
 
-  loadOracleEntry(): ethers.Contract {
+  async loadOracleEntry(): Promise<ethers.Contract> {
     const addressManager = this.loadAddressManager();
-    const oracleEntryAddress = addressManager.getCegaOracle();
+    const oracleEntryAddress = await addressManager.getCegaOracle();
     return new ethers.Contract(
       oracleEntryAddress,
       IDCSEntryAbi.abi,
@@ -146,7 +148,9 @@ export default class CegaEvmSDKV2 {
   ): Promise<ethers.providers.TransactionResponse> {
     const addressManager = this.loadAddressManager();
     const chainConfig = await this.getChainConfig();
-    const cegaWrappingProxyAddress = addressManager.getAssetWrappingProxy(chainConfig.tokens.stETH);
+    const cegaWrappingProxyAddress = await addressManager.getAssetWrappingProxy(
+      chainConfig.tokens.stETH,
+    );
     const erc20Contract = new ethers.Contract(asset, Erc20Abi.abi, this._signer);
     return erc20Contract.increaseAllowance(cegaWrappingProxyAddress, amount, {
       ...(await this._gasStation.getGasOraclePrices()),
@@ -427,7 +431,7 @@ export default class CegaEvmSDKV2 {
     timestamp: number,
     oracleDataSource: OracleDataSourceDcs,
   ): Promise<ethers.BigNumber> {
-    const oracleEntry = this.loadOracleEntry();
+    const oracleEntry = await this.loadOracleEntry();
     return oracleEntry.getPrice(baseAsset, quoteAsset, timestamp, oracleDataSource);
   }
 }
