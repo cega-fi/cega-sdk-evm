@@ -339,9 +339,15 @@ export default class CegaEvmSDKV2 {
    * DISPUTE METHODS
    */
 
-  async submitDispute(vaultAddress: EvmAddress): Promise<ethers.providers.TransactionResponse> {
+  async submitDispute(
+    vaultAddress: EvmAddress,
+    overrides: TxOverrides = {},
+  ): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = await this.loadCegaEntry();
-    return cegaEntry.submitDispute(vaultAddress);
+    return cegaEntry.submitDispute(vaultAddress, {
+      ...(await this._gasStation.getGasOraclePrices()),
+      ...overrides,
+    });
   }
 
   async dcsProcessTradeDispute(
