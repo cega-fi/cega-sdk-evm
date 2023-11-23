@@ -96,9 +96,13 @@ export default class CegaEvmSDKV2 {
   async dcsSetIsDepositQueueOpen(
     productId: ethers.BigNumberish,
     isOpen: boolean,
+    overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = await this.loadCegaEntry();
-    return cegaEntry.setDCSIsDepositQueueOpen(isOpen, productId);
+    return cegaEntry.setDCSIsDepositQueueOpen(isOpen, productId, {
+      ...(await this._gasStation.getGasOraclePrices()),
+      ...overrides,
+    });
   }
 
   /**
@@ -229,6 +233,11 @@ export default class CegaEvmSDKV2 {
     );
   }
 
+  // TODO: add this method when new contracts are deployed
+  // async dcsWithdrawStuckAssets() {
+  //   return null;
+  // }
+
   /**
    * CEGA TRADING METHODS
    */
@@ -285,16 +294,24 @@ export default class CegaEvmSDKV2 {
 
   async dcsBulkStartTrades(
     vaultAddresses: EvmAddress[],
+    overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = await this.loadCegaEntry();
-    return cegaEntry.bulkStartDCSTrades(vaultAddresses);
+    return cegaEntry.bulkStartDCSTrades(vaultAddresses, {
+      ...(await this._gasStation.getGasOraclePrices()),
+      ...overrides,
+    });
   }
 
   async dcsBulkSettleVaults(
     vaultAddresses: EvmAddress[],
+    overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = await this.loadCegaEntry();
-    return cegaEntry.bulkSettleDCSVaults(vaultAddresses);
+    return cegaEntry.bulkSettleDCSVaults(vaultAddresses, {
+      ...(await this._gasStation.getGasOraclePrices()),
+      ...overrides,
+    });
   }
 
   /**
@@ -362,6 +379,15 @@ export default class CegaEvmSDKV2 {
     });
   }
 
+  async dcsGetOraclePriceOverride(
+    vaultAddress: EvmAddress,
+    overrideDateTime: Date,
+  ): Promise<ethers.BigNumber> {
+    const oracleEntry = await this.loadOracleEntry();
+    const overrideDateInSeconds = Math.floor(overrideDateTime.getTime() / 1000);
+    return oracleEntry.getOraclePriceOverride(vaultAddress, overrideDateInSeconds);
+  }
+
   /**
    * OTHER PERMISSIONED METHODS
    */
@@ -425,6 +451,7 @@ export default class CegaEvmSDKV2 {
     quoteAsset: EvmAddress,
     timestamp: number,
     oracleDataSource: OracleDataSourceDcs,
+    overrides: TxOverrides = {},
   ): Promise<ethers.BigNumber> {
     const oracleEntry = await this.loadOracleEntry();
     return oracleEntry.getPrice(baseAsset, quoteAsset, timestamp, oracleDataSource);
