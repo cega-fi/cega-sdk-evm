@@ -451,7 +451,6 @@ export default class CegaEvmSDKV2 {
     quoteAsset: EvmAddress,
     timestamp: number,
     oracleDataSource: OracleDataSourceDcs,
-    overrides: TxOverrides = {},
   ): Promise<ethers.BigNumber> {
     const oracleEntry = await this.loadOracleEntry();
     return oracleEntry.getPrice(baseAsset, quoteAsset, timestamp, oracleDataSource);
