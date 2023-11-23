@@ -383,9 +383,9 @@ export default class CegaEvmSDKV2 {
     vaultAddress: EvmAddress,
     overrideDateTime: Date,
   ): Promise<ethers.BigNumber> {
-    const oracleEntry = await this.loadOracleEntry();
+    const cegaEntry = await this.loadCegaEntry();
     const overrideDateInSeconds = Math.floor(overrideDateTime.getTime() / 1000);
-    return oracleEntry.getOraclePriceOverride(vaultAddress, overrideDateInSeconds);
+    return cegaEntry.getOraclePriceOverride(vaultAddress, overrideDateInSeconds);
   }
 
   /**
