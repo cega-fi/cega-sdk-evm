@@ -325,7 +325,7 @@ export default class CegaEvmSDKV2 {
 
   async dcsBulkStartTrades(
     vaultAddresses: EvmAddress[],
-    nativeAssetTransferSummedAmount = 0,
+    nativeAssetTransferSummedAmount?: ethers.BigNumber,
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = await this.loadCegaEntry();
@@ -338,7 +338,7 @@ export default class CegaEvmSDKV2 {
 
   async dcsBulkSettleVaults(
     vaultAddresses: EvmAddress[],
-    nativeAssetTransferSummedAmount = 0,
+    nativeAssetTransferSummedAmount?: ethers.BigNumber,
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = await this.loadCegaEntry();
