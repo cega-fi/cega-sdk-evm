@@ -332,7 +332,7 @@ export default class CegaEvmSDKV2 {
     return cegaEntry.dcsBulkStartTrades(vaultAddresses, {
       ...(await this._gasStation.getGasOraclePrices()),
       ...overrides,
-      value: nativeAssetTransferSummedAmount,
+      value: nativeAssetTransferSummedAmount ?? 0,
     });
   }
 
@@ -345,7 +345,7 @@ export default class CegaEvmSDKV2 {
     return cegaEntry.dcsBulkSettleVaults(vaultAddresses, {
       ...(await this._gasStation.getGasOraclePrices()),
       ...overrides,
-      value: nativeAssetTransferSummedAmount,
+      value: nativeAssetTransferSummedAmount ?? 0,
     });
   }
 
