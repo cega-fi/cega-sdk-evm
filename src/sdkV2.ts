@@ -103,7 +103,7 @@ export default class CegaEvmSDKV2 {
 
   async dcsGetProduct(productId: ethers.BigNumberish) {
     const cegaEntry = await this.loadCegaEntry();
-    return cegaEntry.dcsgetProduct(productId);
+    return cegaEntry.dcsGetProduct(productId);
   }
 
   async dcsSetIsDepositQueueOpen(
