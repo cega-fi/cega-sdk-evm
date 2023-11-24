@@ -5,6 +5,7 @@ import { GasStation } from './GasStation';
 import Erc20Abi from './abi/ERC20.json';
 import IDCSEntryAbi from './abiV2/IDCSEntry.json';
 import AddressManagerAbi from './abiV2/AddressManager.json';
+import TreasuryAbi from './abiV2/Treasury.json';
 import IWrappingProxyAbi from './abiV2/IWrappingProxy.json';
 import OracleEntryAbi from './abiV2/OracleEntry.json';
 import Chains, { IChainConfig, isValidChain } from './config/chains';
@@ -18,8 +19,11 @@ export default class CegaEvmSDKV2 {
 
   private _addressManagerAddress: EvmAddress;
 
+  private _treasuryAddress: EvmAddress;
+
   constructor(
     addressManager: EvmAddress,
+    treasuryAddress: EvmAddress,
     gasStation: GasStation,
     provider: ethers.providers.Provider,
     signer: ethers.Signer | undefined = undefined,
@@ -28,6 +32,7 @@ export default class CegaEvmSDKV2 {
     this._signer = signer;
     this._gasStation = gasStation;
     this._addressManagerAddress = addressManager;
+    this._treasuryAddress = treasuryAddress;
   }
 
   setProvider(provider: ethers.providers.Provider) {
@@ -84,6 +89,14 @@ export default class CegaEvmSDKV2 {
     return new ethers.Contract(
       oracleEntryAddress,
       OracleEntryAbi.abi,
+      this._signer || this._provider,
+    );
+  }
+
+  async loadTreasury(): Promise<ethers.Contract> {
+    return new ethers.Contract(
+      this._treasuryAddress,
+      TreasuryAbi.abi,
       this._signer || this._provider,
     );
   }
@@ -235,10 +248,28 @@ export default class CegaEvmSDKV2 {
     );
   }
 
-  // TODO: add this method when new contracts are deployed
-  // async dcsWithdrawStuckAssets() {
-  //   return null;
-  // }
+  /**
+   * Withdraws "stuck" funds from the Treasury
+   * This method must be called after withdraw queues are processed
+   * for native ETH underlying vaults, for non EOA wallet (eg. multisigs)
+   *
+   * @param asset - The address of asset to be withdrawn
+   * @param receiver - The address of the wallet to receive funds
+   * @returns Transaction response
+   */
+  async withdrawStuckAssets(
+    asset: EvmAddress,
+    overrides: TxOverrides = {},
+  ): Promise<ethers.providers.TransactionResponse> {
+    if (!this._signer) {
+      throw new Error('Signer not defined');
+    }
+    const treasury = await this.loadTreasury();
+    return treasury.withdrawStuckAssets(asset, await this._signer.getAddress(), {
+      ...(await this._gasStation.getGasOraclePrices()),
+      ...overrides,
+    });
+  }
 
   /**
    * CEGA TRADING METHODS

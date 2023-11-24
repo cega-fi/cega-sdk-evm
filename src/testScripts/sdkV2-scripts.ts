@@ -31,7 +31,7 @@ const CONFIGS = {
   },
 };
 
-const CURRENT_NETWORK = 'arbitrumya';
+const CURRENT_NETWORK = 'arbitrum';
 
 async function addDeposits(network: 'ethereum' | 'arbitrum') {
   const config = CONFIGS[network];
