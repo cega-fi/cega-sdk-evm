@@ -253,19 +253,17 @@ export default class CegaEvmSDKV2 {
    * for native ETH underlying vaults, for non EOA wallet (eg. multisigs)
    *
    * @param asset - The address of asset to be withdrawn
-   * @param receiver - The address of the wallet to receive funds
    * @returns Transaction response
    */
   async withdrawStuckAssets(
     asset: EvmAddress,
-    receiver: EvmAddress | null = null,
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
-    if (receiver === null && this._signer === undefined) {
+    if (!this._signer) {
       throw new Error('Signer not defined');
     }
     const treasury = await this.loadTreasury();
-    return treasury.withdrawStuckAssets(asset, receiver || (await this._signer?.getAddress()), {
+    return treasury.withdrawStuckAssets(asset, await this._signer.getAddress(), {
       ...(await this._gasStation.getGasOraclePrices()),
       ...overrides,
     });
