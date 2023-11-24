@@ -55,7 +55,7 @@ async function addDeposits(network: 'ethereum' | 'arbitrum') {
   const product3 = await sdk.dcsGetProduct(3);
   console.log(product3);
 
-  await sdk.dcsSetIsDepositQueueOpen(true, 1);
+  await sdk.dcsSetIsDepositQueueOpen(1, true);
 
   let amount;
   let txResponse;

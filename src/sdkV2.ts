@@ -107,8 +107,8 @@ export default class CegaEvmSDKV2 {
   }
 
   async dcsSetIsDepositQueueOpen(
-    isDepositQueueOpen: boolean,
     productId: ethers.BigNumberish,
+    isDepositQueueOpen: boolean,
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = await this.loadCegaEntry();
@@ -197,7 +197,6 @@ export default class CegaEvmSDKV2 {
       throw new Error('Signer not defined');
     }
     const proxyEntry = await this.loadCegaWrappingProxy();
-    // TODO: update also with dcs prefix?
     return proxyEntry.wrapAndAddToDCSDepositQueue(
       productId,
       amount,
@@ -259,13 +258,14 @@ export default class CegaEvmSDKV2 {
    */
   async withdrawStuckAssets(
     asset: EvmAddress,
+    receiver: EvmAddress | null = null,
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
-    if (!this._signer) {
+    if (receiver === null && this._signer === undefined) {
       throw new Error('Signer not defined');
     }
     const treasury = await this.loadTreasury();
-    return treasury.withdrawStuckAssets(asset, await this._signer.getAddress(), {
+    return treasury.withdrawStuckAssets(asset, receiver || (await this._signer?.getAddress()), {
       ...(await this._gasStation.getGasOraclePrices()),
       ...overrides,
     });
