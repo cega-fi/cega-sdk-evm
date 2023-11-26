@@ -30,5 +30,6 @@ cp "${path_to_cega_eth_v2}/proxies/interfaces/IWrappingProxy.sol/IWrappingProxy.
 cp "${path_to_cega_eth_v2}/oracle-entry/OracleEntry.sol/OracleEntry.json" ${path_to_abis_v2}
 cp "${path_to_cega_eth_v2}/aux/AddressManager.sol/AddressManager.json" ${path_to_abis_v2}
 cp "${path_to_cega_eth_v2}/treasuries/Treasury.sol/Treasury.json" ${path_to_abis_v2}
+cp "${path_to_cega_eth_v2}/oracle-entry/adapters/PythAdapter.sol/PythAdapter.json" ${path_to_abis_v2}
 
 echo "Completed copying ABIs for v2"

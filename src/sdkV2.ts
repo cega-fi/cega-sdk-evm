@@ -8,6 +8,7 @@ import AddressManagerAbi from './abiV2/AddressManager.json';
 import TreasuryAbi from './abiV2/Treasury.json';
 import IWrappingProxyAbi from './abiV2/IWrappingProxy.json';
 import OracleEntryAbi from './abiV2/OracleEntry.json';
+import PythAdapterAbi from './abiV2/PythAdapter.json';
 import Chains, { IChainConfig, isValidChain } from './config/chains';
 
 export default class CegaEvmSDKV2 {
@@ -21,9 +22,12 @@ export default class CegaEvmSDKV2 {
 
   private _treasuryAddress: EvmAddress;
 
+  private _pythAdapterAddress: EvmAddress;
+
   constructor(
     addressManager: EvmAddress,
     treasuryAddress: EvmAddress,
+    pythAdapterAddress: EvmAddress,
     gasStation: GasStation,
     provider: ethers.providers.Provider,
     signer: ethers.Signer | undefined = undefined,
@@ -33,6 +37,7 @@ export default class CegaEvmSDKV2 {
     this._gasStation = gasStation;
     this._addressManagerAddress = addressManager;
     this._treasuryAddress = treasuryAddress;
+    this._pythAdapterAddress = pythAdapterAddress;
   }
 
   setProvider(provider: ethers.providers.Provider) {
@@ -97,6 +102,14 @@ export default class CegaEvmSDKV2 {
     return new ethers.Contract(
       this._treasuryAddress,
       TreasuryAbi.abi,
+      this._signer || this._provider,
+    );
+  }
+
+  async loadPythAdapter(): Promise<ethers.Contract> {
+    return new ethers.Contract(
+      this._pythAdapterAddress,
+      PythAdapterAbi.abi,
       this._signer || this._provider,
     );
   }
@@ -489,5 +502,15 @@ export default class CegaEvmSDKV2 {
   ): Promise<ethers.BigNumber> {
     const oracleEntry = await this.loadOracleEntry();
     return oracleEntry.getPrice(baseAsset, quoteAsset, timestamp, oracleDataSource);
+  }
+
+  async pythUpdateAssetPrices(
+    timestamp: number,
+    assetAddresses: EvmAddress[],
+    updates: string,
+    fee: number,
+  ): Promise<ethers.providers.TransactionResponse> {
+    const pythAdapter = await this.loadPythAdapter();
+    return pythAdapter.updateAssetPrices(timestamp, assetAddresses, updates, { value: fee });
   }
 }
