@@ -114,22 +114,28 @@ export default class CegaEvmSDKV2 {
     );
   }
 
+  /**
+   * GETTER METHODS
+   */
+
   async dcsGetProduct(productId: ethers.BigNumberish) {
     const cegaEntry = await this.loadCegaEntry();
     return cegaEntry.dcsGetProduct(productId);
   }
 
-  async dcsSetIsDepositQueueOpen(
-    productId: ethers.BigNumberish,
-    isDepositQueueOpen: boolean,
-    overrides: TxOverrides = {},
-  ): Promise<ethers.providers.TransactionResponse> {
+  async getVault(vaultAddress: EvmAddress) {
     const cegaEntry = await this.loadCegaEntry();
+    return cegaEntry.getVault(vaultAddress);
+  }
 
-    return cegaEntry.dcsSetIsDepositQueueOpen(isDepositQueueOpen, productId, {
-      ...(await this._gasStation.getGasOraclePrices()),
-      ...overrides,
-    });
+  async dcsGetVault(vaultAddress: EvmAddress) {
+    const cegaEntry = await this.loadCegaEntry();
+    return cegaEntry.dcsGetVault(vaultAddress);
+  }
+
+  async getLatestProductId() {
+    const cegaEntry = await this.loadCegaEntry();
+    return cegaEntry.getLatestProductId();
   }
 
   /**
@@ -285,6 +291,19 @@ export default class CegaEvmSDKV2 {
   /**
    * CEGA TRADING METHODS
    */
+
+  async dcsSetIsDepositQueueOpen(
+    productId: ethers.BigNumberish,
+    isDepositQueueOpen: boolean,
+    overrides: TxOverrides = {},
+  ): Promise<ethers.providers.TransactionResponse> {
+    const cegaEntry = await this.loadCegaEntry();
+
+    return cegaEntry.dcsSetIsDepositQueueOpen(isDepositQueueOpen, productId, {
+      ...(await this._gasStation.getGasOraclePrices()),
+      ...overrides,
+    });
+  }
 
   async dcsBulkOpenVaultDeposits(
     vaultAddresses: EvmAddress[],
