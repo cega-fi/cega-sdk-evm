@@ -22,6 +22,7 @@ const CONFIGS = {
     usdcAddress: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48' as types.EvmAddress,
     stEth: '0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84' as types.EvmAddress,
     gasStation: new EthereumAlchemyGasStation(process.env.ETH_ALCHEMY_API_KEY || ''),
+    pythAdapterAddress: '0x3d5d2745db503C3B40dB49AD1023ad9ae7379979' as types.EvmAddress,
   },
   arbitrum: {
     RPC_URL: process.env.ARBITRUM_RPC_URL,
@@ -30,6 +31,7 @@ const CONFIGS = {
     usdcAddress: '0xaf88d065e77c8cC2239327C5EDb3A432268e5831' as types.EvmAddress,
     stEth: '' as types.EvmAddress,
     gasStation: new GasStation(),
+    pythAdapterAddress: '0xa872D1Fd6E84b65998745738E094B03b0d18447c' as types.EvmAddress,
   },
 };
 
@@ -101,6 +103,7 @@ async function bulkActions(network: 'ethereum' | 'arbitrum') {
     config.gasStation,
     provider,
     traderSigner,
+    config.pythAdapterAddress,
   );
 
   // Bulk Open Vault Deposits

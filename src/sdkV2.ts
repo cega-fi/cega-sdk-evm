@@ -1,4 +1,4 @@
-import { ethers } from 'ethers';
+import { BigNumberish, ethers } from 'ethers';
 import { EvmAddress, OracleDataSourceDcs, TxOverrides } from './types';
 import { GasStation } from './GasStation';
 
@@ -22,15 +22,15 @@ export default class CegaEvmSDKV2 {
 
   private _treasuryAddress: EvmAddress;
 
-  private _pythAdapterAddress: EvmAddress;
+  private _pythAdapterAddress: EvmAddress | undefined;
 
   constructor(
     addressManager: EvmAddress,
     treasuryAddress: EvmAddress,
-    pythAdapterAddress: EvmAddress,
     gasStation: GasStation,
     provider: ethers.providers.Provider,
     signer: ethers.Signer | undefined = undefined,
+    pythAdapterAddress: EvmAddress | undefined = undefined,
   ) {
     this._provider = provider;
     this._signer = signer;
@@ -524,12 +524,20 @@ export default class CegaEvmSDKV2 {
   }
 
   async pythUpdateAssetPrices(
-    timestamp: number,
+    timestamp: Date,
     assetAddresses: EvmAddress[],
-    updates: string,
-    fee: number,
+    updates: string[],
+    fee: BigNumberish,
   ): Promise<ethers.providers.TransactionResponse> {
+    if (!this._pythAdapterAddress) {
+      throw new Error('PythAdapterAddress not defined');
+    }
     const pythAdapter = await this.loadPythAdapter();
-    return pythAdapter.updateAssetPrices(timestamp, assetAddresses, updates, { value: fee });
+    return pythAdapter.updateAssetPrices(
+      Math.floor(timestamp.getTime() / 1000),
+      assetAddresses,
+      updates,
+      { value: fee },
+    );
   }
 }
