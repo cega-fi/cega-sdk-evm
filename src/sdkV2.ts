@@ -1,4 +1,4 @@
-import { ethers } from 'ethers';
+import { BigNumberish, ethers } from 'ethers';
 import { EvmAddress, OracleDataSourceDcs, TxOverrides } from './types';
 import { GasStation } from './GasStation';
 
@@ -8,6 +8,7 @@ import AddressManagerAbi from './abiV2/AddressManager.json';
 import TreasuryAbi from './abiV2/Treasury.json';
 import IWrappingProxyAbi from './abiV2/IWrappingProxy.json';
 import OracleEntryAbi from './abiV2/OracleEntry.json';
+import PythAdapterAbi from './abiV2/PythAdapter.json';
 import Chains, { IChainConfig, isValidChain } from './config/chains';
 
 export default class CegaEvmSDKV2 {
@@ -21,18 +22,22 @@ export default class CegaEvmSDKV2 {
 
   private _treasuryAddress: EvmAddress;
 
+  private _pythAdapterAddress: EvmAddress | undefined;
+
   constructor(
     addressManager: EvmAddress,
     treasuryAddress: EvmAddress,
     gasStation: GasStation,
     provider: ethers.providers.Provider,
     signer: ethers.Signer | undefined = undefined,
+    pythAdapterAddress: EvmAddress | undefined = undefined,
   ) {
     this._provider = provider;
     this._signer = signer;
     this._gasStation = gasStation;
     this._addressManagerAddress = addressManager;
     this._treasuryAddress = treasuryAddress;
+    this._pythAdapterAddress = pythAdapterAddress;
   }
 
   setProvider(provider: ethers.providers.Provider) {
@@ -101,22 +106,36 @@ export default class CegaEvmSDKV2 {
     );
   }
 
+  async loadPythAdapter(): Promise<ethers.Contract> {
+    return new ethers.Contract(
+      this._pythAdapterAddress,
+      PythAdapterAbi.abi,
+      this._signer || this._provider,
+    );
+  }
+
+  /**
+   * GETTER METHODS
+   */
+
   async dcsGetProduct(productId: ethers.BigNumberish) {
     const cegaEntry = await this.loadCegaEntry();
     return cegaEntry.dcsGetProduct(productId);
   }
 
-  async dcsSetIsDepositQueueOpen(
-    productId: ethers.BigNumberish,
-    isDepositQueueOpen: boolean,
-    overrides: TxOverrides = {},
-  ): Promise<ethers.providers.TransactionResponse> {
+  async getVault(vaultAddress: EvmAddress) {
     const cegaEntry = await this.loadCegaEntry();
+    return cegaEntry.getVault(vaultAddress);
+  }
 
-    return cegaEntry.dcsSetIsDepositQueueOpen(isDepositQueueOpen, productId, {
-      ...(await this._gasStation.getGasOraclePrices()),
-      ...overrides,
-    });
+  async dcsGetVault(vaultAddress: EvmAddress) {
+    const cegaEntry = await this.loadCegaEntry();
+    return cegaEntry.dcsGetVault(vaultAddress);
+  }
+
+  async getLatestProductId() {
+    const cegaEntry = await this.loadCegaEntry();
+    return cegaEntry.getLatestProductId();
   }
 
   /**
@@ -272,6 +291,19 @@ export default class CegaEvmSDKV2 {
   /**
    * CEGA TRADING METHODS
    */
+
+  async dcsSetIsDepositQueueOpen(
+    productId: ethers.BigNumberish,
+    isDepositQueueOpen: boolean,
+    overrides: TxOverrides = {},
+  ): Promise<ethers.providers.TransactionResponse> {
+    const cegaEntry = await this.loadCegaEntry();
+
+    return cegaEntry.dcsSetIsDepositQueueOpen(isDepositQueueOpen, productId, {
+      ...(await this._gasStation.getGasOraclePrices()),
+      ...overrides,
+    });
+  }
 
   async dcsBulkOpenVaultDeposits(
     vaultAddresses: EvmAddress[],
@@ -489,5 +521,23 @@ export default class CegaEvmSDKV2 {
   ): Promise<ethers.BigNumber> {
     const oracleEntry = await this.loadOracleEntry();
     return oracleEntry.getPrice(baseAsset, quoteAsset, timestamp, oracleDataSource);
+  }
+
+  async pythUpdateAssetPrices(
+    timestamp: Date,
+    assetAddresses: EvmAddress[],
+    updates: string[],
+    fee: BigNumberish,
+  ): Promise<ethers.providers.TransactionResponse> {
+    if (!this._pythAdapterAddress) {
+      throw new Error('PythAdapterAddress not defined');
+    }
+    const pythAdapter = await this.loadPythAdapter();
+    return pythAdapter.updateAssetPrices(
+      Math.floor(timestamp.getTime() / 1000),
+      assetAddresses,
+      updates,
+      { value: fee },
+    );
   }
 }
