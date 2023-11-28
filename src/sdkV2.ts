@@ -107,6 +107,9 @@ export default class CegaEvmSDKV2 {
   }
 
   async loadPythAdapter(): Promise<ethers.Contract> {
+    if (!this._pythAdapterAddress) {
+      throw new Error('PythAdapterAddress not defined');
+    }
     return new ethers.Contract(
       this._pythAdapterAddress,
       PythAdapterAbi.abi,
@@ -529,9 +532,6 @@ export default class CegaEvmSDKV2 {
     updates: string[],
     fee: BigNumberish,
   ): Promise<ethers.providers.TransactionResponse> {
-    if (!this._pythAdapterAddress) {
-      throw new Error('PythAdapterAddress not defined');
-    }
     const pythAdapter = await this.loadPythAdapter();
     return pythAdapter.updateAssetPrices(
       Math.floor(timestamp.getTime() / 1000),
