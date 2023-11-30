@@ -531,13 +531,14 @@ export default class CegaEvmSDKV2 {
     assetAddresses: EvmAddress[],
     updates: string[],
     fee: BigNumberish,
+    overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     const pythAdapter = await this.loadPythAdapter();
     return pythAdapter.updateAssetPrices(
       Math.floor(timestamp.getTime() / 1000),
       assetAddresses,
       updates,
-      { value: fee },
+      { value: fee, ...(await this._gasStation.getGasOraclePrices()), ...overrides },
     );
   }
 }
