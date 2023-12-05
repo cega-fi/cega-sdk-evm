@@ -475,6 +475,45 @@ export default class CegaEvmSDKV2 {
     });
   }
 
+  async dcsSetManagementFee(
+    vaultAddress: EvmAddress,
+    managementFeeBps: number,
+    overrides: TxOverrides = {},
+  ): Promise<ethers.providers.TransactionResponse> {
+    const cegaEntry = await this.loadCegaEntry();
+
+    return cegaEntry.dcsSetManagementFee(vaultAddress, managementFeeBps, {
+      ...(await this._gasStation.getGasOraclePrices()),
+      ...overrides,
+    });
+  }
+
+  async dcsSetYieldFee(
+    vaultAddress: EvmAddress,
+    yieldFeeBps: number,
+    overrides: TxOverrides = {},
+  ): Promise<ethers.providers.TransactionResponse> {
+    const cegaEntry = await this.loadCegaEntry();
+
+    return cegaEntry.dcsSetYieldFee(vaultAddress, yieldFeeBps, {
+      ...(await this._gasStation.getGasOraclePrices()),
+      ...overrides,
+    });
+  }
+
+  async dcsSetMaxUnderlyingAmount(
+    productId: ethers.BigNumberish,
+    maxUnderlyingAmount: ethers.BigNumberish,
+    overrides: TxOverrides = {},
+  ): Promise<ethers.providers.TransactionResponse> {
+    const cegaEntry = await this.loadCegaEntry();
+
+    return cegaEntry.dcsSetMaxUnderlyingAmount(maxUnderlyingAmount, productId, {
+      ...(await this._gasStation.getGasOraclePrices()),
+      ...overrides,
+    });
+  }
+
   /**
    * CRANK METHODS
    */
