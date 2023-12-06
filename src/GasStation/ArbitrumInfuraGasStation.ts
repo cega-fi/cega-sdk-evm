@@ -4,7 +4,7 @@ import { GasStation } from './GasStation';
 
 async function fetchInfura(apiKey: string) {
   const response = await axios({
-    url: `https://arbitrum.infura.io/v3/${apiKey}`,
+    url: `https://arbitrum-mainnet.infura.io/v3/${apiKey}`,
     method: 'POST',
     headers: { accept: 'application/json', 'content-type': 'application/json' },
     data: { id: 1, jsonrpc: '2.0', method: 'eth_maxPriorityFeePerGas' },
