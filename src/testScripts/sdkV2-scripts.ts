@@ -50,17 +50,18 @@ const CONFIGS: Record<string, any> = {
     usdcAddress: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48' as types.EvmAddress,
     stEth: '0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84' as types.EvmAddress,
     wsteth: '0x7f39C581F595B53c5cb19bD0b3f8dA6c935E2Ca0' as types.EvmAddress,
+    gasStation: new EthereumAlchemyGasStation(process.env.ETH_ALCHEMY_API_KEY || ''),
     pythAdapterAddress: '0x271AcA3E9b8Ed9F4F618875093bD75a7E1b3116C' as types.EvmAddress,
   },
   arbitrum: {
     RPC_URL: process.env.ARBITRUM_RPC_URL,
-    addressManager: '0x1DdF7C4C98a78b492bb4a2881358f183d94c9806' as types.EvmAddress,
-    treasuryAddress: '0x25b7A20B8E9B0676E596eDF4329d38459c3f9a87' as types.EvmAddress,
+    addressManager: '0x25b7A20B8E9B0676E596eDF4329d38459c3f9a87' as types.EvmAddress,
+    treasuryAddress: '0x475C4AF369B28997B25bd756eF92797AD3F69593' as types.EvmAddress,
     usdcAddress: '0xaf88d065e77c8cC2239327C5EDb3A432268e5831' as types.EvmAddress,
     stEth: '' as types.EvmAddress,
     wsteth: '0x5979D7b546E38E414F7E9822514be443A4800529' as types.EvmAddress,
     gasStation: new GasStation(),
-    pythAdapterAddress: '0x939D97719dd97930d8D4C3b899e091CC7458E0Df',
+    pythAdapterAddress: '0x939D97719dd97930d8D4C3b899e091CC7458E0Df' as types.EvmAddress,
   },
 };
 
@@ -81,7 +82,9 @@ async function setMaxUnderlyingAmount(
     signer,
   );
 
-  const tx = await sdk.dcsSetMaxUnderlyingAmount(productId, amount);
+  const tx = await sdk.dcsSetMaxUnderlyingAmount(productId, amount, {
+    gasLimit: network === NetworkType.ethereum ? 500000 : 1e7,
+  });
   console.log('networkName: ', network, ', productId: ', productId, ', tx: ', tx.hash);
   const txResponse = await tx.wait();
 }
