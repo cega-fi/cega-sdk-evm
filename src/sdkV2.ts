@@ -321,7 +321,7 @@ export default class CegaEvmSDKV2 {
 
   async dcsBulkProcessDepositQueues(
     vaultAddresses: EvmAddress[],
-    maxProcessCount: ethers.BigNumber,
+    maxProcessCount: ethers.BigNumberish,
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = await this.loadCegaEntry();
@@ -401,7 +401,7 @@ export default class CegaEvmSDKV2 {
 
   async dcsBulkProcessWithdrawalQueues(
     vaultAddresses: EvmAddress[],
-    maxProcessCount: ethers.BigNumber,
+    maxProcessCount: ethers.BigNumberish,
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = await this.loadCegaEntry();
@@ -559,7 +559,7 @@ export default class CegaEvmSDKV2 {
     baseAsset: EvmAddress,
     quoteAsset: EvmAddress,
     timestamp: number,
-    oracleDataSource: OracleDataSourceDcs,
+    oracleDataSource: OracleDataSourceDcs = OracleDataSourceDcs.Pyth,
   ): Promise<ethers.BigNumber> {
     const oracleEntry = await this.loadOracleEntry();
     return oracleEntry.getPrice(baseAsset, quoteAsset, timestamp, oracleDataSource);
