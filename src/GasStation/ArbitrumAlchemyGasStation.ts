@@ -7,7 +7,7 @@ async function fetchAlchemy(apiKey: string) {
     url: `https://arb-mainnet.g.alchemy.com/v2/${apiKey}`,
     method: 'POST',
     headers: { accept: 'application/json', 'content-type': 'application/json' },
-    data: { id: 1, jsonrpc: '2.0' },
+    data: { id: 1, jsonrpc: '2.0', method: 'eth_maxPriorityFeePerGas' },
   });
   const { result } = response.data;
   return {
