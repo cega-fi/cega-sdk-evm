@@ -136,6 +136,11 @@ export default class CegaEvmSDKV2 {
     return cegaEntry.dcsGetVault(vaultAddress);
   }
 
+  async dcsCalculateLateFee(vaultAddress: EvmAddress) {
+    const cegaEntry = await this.loadCegaEntry();
+    return cegaEntry.dcsCalculateLateFee(vaultAddress);
+  }
+
   async getLatestProductId() {
     const cegaEntry = await this.loadCegaEntry();
     return cegaEntry.getLatestProductId();
