@@ -163,7 +163,25 @@ export default class CegaEvmSDKV2 {
     if (chainConfig.name === 'ethereum-mainnet' && asset === chainConfig.tokens.stETH) {
       return this.increaseAllowanceErc20ForCegaProxy(amount, asset, overrides);
     }
+    // TODO: Once we have some deposits with USDT, we can move from increaseAllowance
+    // to just approve. Then we can rename this function and update the FE too
+    if (asset === chainConfig.tokens.USDT) {
+      return this.approveErc20ForCegaEntry(amount, asset, overrides)
+    }
     return this.increaseAllowanceErc20ForCegaEntry(amount, asset, overrides);
+  }
+
+  private async approveErc20ForCegaEntry(
+    amount: ethers.BigNumber,
+    asset: EvmAddress,
+    overrides: TxOverrides = {},
+  ): Promise<ethers.providers.TransactionResponse> {
+    const cegaEntry = await this.loadCegaEntry();
+    const erc20Contract = new ethers.Contract(asset, Erc20Abi.abi, this._signer);
+    return erc20Contract.approve(cegaEntry.address, amount, {
+      ...(await this._gasStation.getGasOraclePrices()),
+      ...overrides,
+    });
   }
 
   private async increaseAllowanceErc20ForCegaEntry(
