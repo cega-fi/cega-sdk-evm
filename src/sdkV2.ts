@@ -166,7 +166,7 @@ export default class CegaEvmSDKV2 {
     // TODO: Once we have some deposits with USDT, we can move from increaseAllowance
     // to just approve. Then we can rename this function and update the FE too
     if (asset === chainConfig.tokens.USDT) {
-      return this.approveErc20ForCegaEntry(amount, asset, overrides)
+      return this.approveErc20ForCegaEntry(amount, asset, overrides);
     }
     return this.increaseAllowanceErc20ForCegaEntry(amount, asset, overrides);
   }
