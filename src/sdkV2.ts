@@ -150,6 +150,27 @@ export default class CegaEvmSDKV2 {
    * USER FACING METHODS
    */
 
+  async getAssetAllowanceToCega(
+    asset: EvmAddress,
+    ownerAddress: EvmAddress | null = null,
+  ): Promise<ethers.BigNumber> {
+    if (!(ownerAddress || this._signer)) {
+      throw new Error('No owner present');
+    }
+    const ownerAddr = ownerAddress || (await this._signer?.getAddress());
+
+    const erc20Contract = new ethers.Contract(asset, Erc20Abi.abi, this._provider);
+
+    const chainConfig = await this.getChainConfig();
+    if (chainConfig.name === 'ethereum-mainnet' && asset === chainConfig.tokens.stETH) {
+      const cegaWrappingProxy = await this.loadCegaWrappingProxy();
+      return erc20Contract.allowance(ownerAddr, cegaWrappingProxy.address);
+    }
+
+    const cegaEntry = await this.loadCegaEntry();
+    return erc20Contract.allowance(ownerAddr, cegaEntry.address);
+  }
+
   async increaseAllowanceErc20(
     amount: ethers.BigNumber,
     asset: EvmAddress,
@@ -166,7 +187,7 @@ export default class CegaEvmSDKV2 {
     // TODO: Once we have some deposits with USDT, we can move from increaseAllowance
     // to just approve. Then we can rename this function and update the FE too
     if (asset === chainConfig.tokens.USDT) {
-      return this.approveErc20ForCegaEntry(amount, asset, overrides)
+      return this.approveErc20ForCegaEntry(amount, asset, overrides);
     }
     return this.increaseAllowanceErc20ForCegaEntry(amount, asset, overrides);
   }
