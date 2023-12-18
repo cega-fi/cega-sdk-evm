@@ -146,6 +146,11 @@ export default class CegaEvmSDKV2 {
     return cegaEntry.getLatestProductId();
   }
 
+  async getStrategyOfProduct(productId: ethers.BigNumberish) {
+    const cegaEntry = await this.loadCegaEntry();
+    return cegaEntry.getStrategyOfProduct(productId);
+  }
+
   /**
    * USER FACING METHODS
    */
