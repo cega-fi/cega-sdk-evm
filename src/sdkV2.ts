@@ -126,9 +126,9 @@ export default class CegaEvmSDKV2 {
     return cegaEntry.dcsGetProduct(productId);
   }
 
-  async dcsGetProductMetadata(productId: ethers.BigNumberish) {
+  async getProductMetadata(productId: ethers.BigNumberish) {
     const cegaEntry = await this.loadCegaEntry();
-    return cegaEntry.dcsGetProductMetadata(productId);
+    return cegaEntry.getProductMetadata(productId);
   }
 
   async getVault(vaultAddress: EvmAddress) {
