@@ -345,6 +345,11 @@ export default class CegaEvmSDKV2 {
     });
   }
 
+  async getStuckAssets(asset: EvmAddress, receiver: EvmAddress): Promise<ethers.BigNumber> {
+    const treasury = await this.loadTreasury();
+    return treasury.stuckAssets(asset, receiver);
+  }
+
   /**
    * CEGA TRADING METHODS
    */
