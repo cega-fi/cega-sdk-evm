@@ -156,6 +156,11 @@ export default class CegaEvmSDKV2 {
     return cegaEntry.getStrategyOfProduct(productId);
   }
 
+  async dcsIsWithdrawalPossible(vaultAddress: EvmAddress) {
+    const cegaEntry = await this.loadCegaEntry();
+    return cegaEntry.dcsIsWithdrawalPossible(vaultAddress);
+  }
+
   /**
    * USER FACING METHODS
    */

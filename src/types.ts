@@ -168,3 +168,8 @@ export enum OracleDataSourceDcs {
   None,
   Pyth,
 }
+
+export enum DCSOptionType {
+  BuyLow,
+  SellHigh,
+}
