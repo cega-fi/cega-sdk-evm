@@ -186,11 +186,27 @@ export default class CegaEvmSDKV2 {
     return erc20Contract.allowance(ownerAddr, cegaEntry.address);
   }
 
+  async approveErc20(
+    amount: ethers.BigNumber,
+    asset: EvmAddress,
+    overrides: TxOverrides = {},
+  ): Promise<ethers.providers.TransactionResponse> {
+    if (asset === ethers.constants.AddressZero) {
+      throw new Error('Invalid asset address');
+    }
+
+    const chainConfig = await this.getChainConfig();
+    if (chainConfig.name === 'ethereum-mainnet' && asset === chainConfig.tokens.stETH) {
+      return this.approveErc20ForCegaProxy(amount, asset, overrides);
+    }
+    return this.approveErc20ForCegaEntry(amount, asset, overrides);
+  }
+
   async increaseAllowanceErc20(
     amount: ethers.BigNumber,
     asset: EvmAddress,
     overrides: TxOverrides = {},
-  ) {
+  ): Promise<ethers.providers.TransactionResponse> {
     if (asset === ethers.constants.AddressZero) {
       throw new Error('Invalid asset address');
     }
@@ -215,6 +231,19 @@ export default class CegaEvmSDKV2 {
     const cegaEntry = await this.loadCegaEntry();
     const erc20Contract = new ethers.Contract(asset, Erc20Abi.abi, this._signer);
     return erc20Contract.approve(cegaEntry.address, amount, {
+      ...(await this._gasStation.getGasOraclePrices()),
+      ...overrides,
+    });
+  }
+
+  private async approveErc20ForCegaProxy(
+    amount: ethers.BigNumber,
+    asset: EvmAddress,
+    overrides: TxOverrides = {},
+  ): Promise<ethers.providers.TransactionResponse> {
+    const cegaWrappingProxy = await this.loadCegaWrappingProxy();
+    const erc20Contract = new ethers.Contract(asset, Erc20Abi.abi, this._signer);
+    return erc20Contract.approve(cegaWrappingProxy.address, amount, {
       ...(await this._gasStation.getGasOraclePrices()),
       ...overrides,
     });
