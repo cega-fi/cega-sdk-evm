@@ -17,25 +17,69 @@ const ADMIN_ACCOUNTS = {
 const CONFIGS = {
   ethereum: {
     RPC_URL: process.env.ETH_RPC_URL,
-    addressManager: '0xD40a37ADc14f73579A073DF353a2f6118CF313F4' as types.EvmAddress,
-    treasuryAddress: '0x13159257aE85276f30A7b3DD8f2fC724913265e0' as types.EvmAddress,
+    addressManager: '0x1DdF7C4C98a78b492bb4a2881358f183d94c9806' as types.EvmAddress,
+    treasuryAddress: '0xA8AB795731fbBFDd1Fbc57ca11e6f722e7783642' as types.EvmAddress,
     usdcAddress: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48' as types.EvmAddress,
     stEth: '0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84' as types.EvmAddress,
     gasStation: new EthereumAlchemyGasStation(process.env.ETH_ALCHEMY_API_KEY || ''),
-    pythAdapterAddress: '0x3d5d2745db503C3B40dB49AD1023ad9ae7379979' as types.EvmAddress,
+    // pythAdapterAddress: '0x3d5d2745db503C3B40dB49AD1023ad9ae7379979' as types.EvmAddress,
   },
   arbitrum: {
     RPC_URL: process.env.ARBITRUM_RPC_URL,
-    addressManager: '0x6E5679dCFE0113C0B335b4252046E268c4065a2d' as types.EvmAddress,
-    treasuryAddress: '0xf97E73aDfFDb2532C9b15Df52265093B1c27Fa23' as types.EvmAddress,
+    addressManager: '0x25b7A20B8E9B0676E596eDF4329d38459c3f9a87' as types.EvmAddress,
+    treasuryAddress: '0x475C4AF369B28997B25bd756eF92797AD3F69593' as types.EvmAddress,
     usdcAddress: '0xaf88d065e77c8cC2239327C5EDb3A432268e5831' as types.EvmAddress,
     stEth: '' as types.EvmAddress,
     gasStation: new GasStation(),
-    pythAdapterAddress: '0xa872D1Fd6E84b65998745738E094B03b0d18447c' as types.EvmAddress,
+    // pythAdapterAddress: '0xa872D1Fd6E84b65998745738E094B03b0d18447c' as types.EvmAddress,
   },
 };
 
 const CURRENT_NETWORK = 'arbitrum';
+
+const vaultsToSettle = {
+  ethereum: [],
+  arbitrum: [],
+};
+
+async function settleDcs(network: 'ethereum' | 'arbitrum') {
+  const config = CONFIGS[network];
+  const provider = new ethers.providers.JsonRpcProvider(config.RPC_URL);
+  const userSigner = new ethers.Wallet(ADMIN_ACCOUNTS.traderAdminPk, provider);
+
+  const sdk = new CegaEvmSDKV2(
+    config.addressManager,
+    config.treasuryAddress,
+    config.gasStation,
+    provider,
+    userSigner,
+  );
+
+  const txCollectFees = await sdk.dcsBulkCollectFees(vaultsToSettle[network], {
+    gasLimit: 10e6,
+  });
+  console.log('collect fees: starting', txCollectFees.hash);
+  const txCollectFeesResponse = await txCollectFees.wait();
+  console.log('collect fees: done');
+
+  const txProcessWithdrawals = await sdk.dcsBulkProcessWithdrawalQueues(
+    vaultsToSettle[network],
+    50,
+    {
+      gasLimit: 10e6,
+    },
+  );
+  console.log('process withdrawals: starting', txProcessWithdrawals.hash);
+  const txProcessWithdrawalsResponse = await txProcessWithdrawals.wait();
+  console.log('process withdrawals: done');
+
+  const txRollover = await sdk.dcsBulkRolloverVaults(vaultsToSettle[network], {
+    gasLimit: 10e6,
+  });
+  console.log('collect fees: starting', txRollover.hash);
+  const txRolloverResponse = await txRollover.wait();
+  console.log('collect fees: done');
+}
 
 async function addDeposits(network: 'ethereum' | 'arbitrum') {
   const config = CONFIGS[network];
@@ -111,8 +155,11 @@ async function bulkActions(network: 'ethereum' | 'arbitrum') {
 }
 
 async function main() {
-  await addDeposits(CURRENT_NETWORK);
+  // await addDeposits(CURRENT_NETWORK);
   // await bulkActions(CURRENT_NETWORK);
+
+  // settleDcs('ethereum');
+  await settleDcs('arbitrum');
 }
 
 main();
