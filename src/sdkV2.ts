@@ -11,33 +11,37 @@ import OracleEntryAbi from './abiV2/OracleEntry.json';
 import PythAdapterAbi from './abiV2/PythAdapter.json';
 import Chains, { IChainConfig, isValidChain } from './config/chains';
 
+interface ContractAddresses {
+  addressManager?: EvmAddress;
+  treasury?: EvmAddress;
+  pythAdapter?: EvmAddress;
+}
+
 export default class CegaEvmSDKV2 {
+  private _gasStation: GasStation;
+
   private _provider: ethers.providers.Provider;
 
   private _signer: ethers.Signer | undefined;
 
-  private _gasStation: GasStation;
+  private _addressManagerAddress: EvmAddress | undefined;
 
-  private _addressManagerAddress: EvmAddress;
-
-  private _treasuryAddress: EvmAddress;
+  private _treasuryAddress: EvmAddress | undefined;
 
   private _pythAdapterAddress: EvmAddress | undefined;
 
   constructor(
-    addressManager: EvmAddress,
-    treasuryAddress: EvmAddress,
     gasStation: GasStation,
     provider: ethers.providers.Provider,
+    contractAddresses: ContractAddresses = {},
     signer: ethers.Signer | undefined = undefined,
-    pythAdapterAddress: EvmAddress | undefined = undefined,
   ) {
     this._provider = provider;
     this._signer = signer;
     this._gasStation = gasStation;
-    this._addressManagerAddress = addressManager;
-    this._treasuryAddress = treasuryAddress;
-    this._pythAdapterAddress = pythAdapterAddress;
+    this._addressManagerAddress = contractAddresses.addressManager;
+    this._treasuryAddress = contractAddresses.treasury;
+    this._pythAdapterAddress = contractAddresses.pythAdapter;
   }
 
   setProvider(provider: ethers.providers.Provider) {
@@ -62,6 +66,9 @@ export default class CegaEvmSDKV2 {
   }
 
   loadAddressManager(): ethers.Contract {
+    if (!this._addressManagerAddress) {
+      throw new Error('AddressManagerAddress not defined');
+    }
     return new ethers.Contract(
       this._addressManagerAddress,
       AddressManagerAbi.abi,
@@ -99,6 +106,9 @@ export default class CegaEvmSDKV2 {
   }
 
   async loadTreasury(): Promise<ethers.Contract> {
+    if (!this._treasuryAddress) {
+      throw new Error('TreasuryAddress not defined');
+    }
     return new ethers.Contract(
       this._treasuryAddress,
       TreasuryAbi.abi,
