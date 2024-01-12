@@ -21,7 +21,8 @@
   ],
   "scripts": {
     "build": "tsc",
-    "dev": "ts-node ./src/testScripts/sdkV1-getters.ts",
+    "dev-sdkV1": "ts-node ./src/testScripts/sdkV1-getters.ts",
+    "dev-sdkV2": "ts-node ./src/testScripts/sdkV1-scripts.ts",
     "prepublishOnly": "npm run build",
     "start": "node ./dist/testScripts/sdkV1-getters.ts",
     "lint-fix": "npx prettier --write ."

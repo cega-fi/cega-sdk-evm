@@ -1,63 +1,36 @@
-# Cega SDK for EVM (Ethereum)
+# Cega SDK for EVM
 
 [![npm (tag)](https://img.shields.io/npm/v/@cega-fi/cega-sdk-evm)](https://www.npmjs.com/package/@cega-fi/cega-sdk-evm)
 [![npm bundle size (scoped version)](https://img.shields.io/bundlephobia/minzip/@cega-fi/cega-sdk-evm/latest.svg)](https://bundlephobia.com/result?p=@cega-fi/cega-sdk-evm@latest)
 
-### Introduction to Cega Smart Contracts
+### What is Cega?
 
-Cega has 3 core contracts:
+Cega is a decentralized exotic derivatives protocol. We build exotic options structured products for retail investors that generate superior yield and offer built-in protection against market downturns. Cega is developing new capabilities in tech, token contracts, and data modeling that will enable the next evolution of defi derivatives.
 
-1. CegaState
-2. Product contracts
-3. Vault contracts
+### What financial products does Cega offer investors?
 
-CegaState is the root contract that contains a list of all products that Cega offers. We currently have multiple types of Product contracts - FCNProduct & LOVProduct, and each product has multiple associated vaults, with different trading periods and with different leverage levels (for LOV).
+Cega offers 3 financial structures
 
-Some methods are dependent on the product contract type, specified with the suffix (Fcn, Lov), while most other methods are independent of product contract type.
+1. [Fixed Coupon Notes (Pure Options)](https://app.cega.fi/strategy/pure-options)
+2. [Fixed Coupon Notes (Bond + Options)](https://app.cega.fi/strategy/bond-and-options)
+3. [Dual Currency Swaps](https://app.cega.fi/strategy/dual-currency)
 
-### Cega State Address
+To get started investing, visit [app.cega.fi](app.cega.fi).
 
-The active CegaState address is: `0x0730AA138062D8Cc54510aa939b533ba7c30f26B`
+### What chains are live?
 
-### Audit report links
+We are live on Ethereum Mainnet and Arbitrum One Mainnet. If you're an L1 or L2 and intersted in working with us, please contact someone from our team!
 
-- [Ottersec 2023 Cega Security Audit - Ethereum](https://drive.google.com/file/d/1a0nYzQ41kZMFDxDDDOJua3V2UTK8v2jX/view?pli=1 'Ottersec 2023 Cega Security Audit - Ethereum')
-- [Zellic 2023 Cega Smart Contract Audit - Ethereum](https://drive.google.com/file/d/1qcNiP-5vQpqUqo4WzlNT6gsjzKSd8IqZ/view?pli=1 'Zellic 2023 Cega Smart Contract Audit - Ethereum')
+### Integration Documentation
 
-### Introduction to Gas Stations
+- To integrate with Fixed Coupon products, please use the v1 SDK. Documentation is availalble in `documentation/v1.md`
+- To integrate with Dual Currency Swap products, please use the v2 SDK. Documentation is availalble in `documentation/v2.md`
 
-A gas station determines how we set fees for each transaction, specifically around `maxPriorityFeePerGas`, `maxFeePerGas`, `gasPrice`, etc. We have a few default GasStations available in the repository:
+### V1 Contract Audit Reports
 
-- GasStation (default)
-- EthereumAlchemyGasStation
-- EthereumEtherscanGasStation
-- PolygonGasStation
+- [Ottersec 2023 Cega Security Audit](https://drive.google.com/file/d/1a0nYzQ41kZMFDxDDDOJua3V2UTK8v2jX/view?pli=1 'Ottersec 2023 Cega Security Audit')
+- [Zellic 2023 Cega Smart Contract Audit](https://drive.google.com/file/d/1qcNiP-5vQpqUqo4WzlNT6gsjzKSd8IqZ/view?pli=1 'Zellic 2023 Cega Smart Contract Audit')
 
-You can also create your own custom gas station and use that when initializing the SDK.
+### V2 Contract Audit Reports
 
-### Getting started with CegaEvmSDK
-
-```tsx
-import { GasStation, CegaEvmSDK } from '@cega-fi/cega-sdk-evm';
-
-const sdk = new CegaEvmSDK(
-  '0x0730AA138062D8Cc54510aa939b533ba7c30f26B',
-  new GasStation(), // or new EthereumEtherscanGasStation(apiKey), etc.
-  provider,
-  signer,
-);
-```
-
-For an example of its usage, check `app.ts`.
-
-### How to sanity test locally
-
-1. `$ cp .env.sample .env`
-2. Fill in .env file (only used for the test runner)
-3. `$ yarn dev`
-
-This will iterate through and get values from the contract address
-
-### License
-
-MIT License (including **all** dependencies).
+- [Ottersec 2023 Cega Security Audit](https://drive.google.com/file/d/1RbEJmROcl-5j6wwA-cYbSekGJQ4Jmmba/view)
