@@ -1,5 +1,11 @@
 import { BigNumberish, ethers } from 'ethers';
-import { EvmAddress, OracleDataSourceDcs, TxOverrides } from './types';
+import {
+  EvmAddress,
+  OracleDataSourceDcs,
+  SettlementStatus,
+  TxOverrides,
+  VaultStatusV2,
+} from './types';
 import { GasStation } from './GasStation';
 
 import Erc20Abi from './abi/ERC20.json';
@@ -672,5 +678,25 @@ export default class CegaEvmSDKV2 {
       updates,
       { value: fee, ...(await this._gasStation.getGasOraclePrices()), ...overrides },
     );
+  }
+
+  /**
+   * CEGA ADMIN METHODS
+   */
+
+  async setVaultStatus(
+    vaultAddress: EvmAddress,
+    vaultStatus: VaultStatusV2,
+  ): Promise<ethers.providers.TransactionResponse> {
+    const cegaEntry = await this.loadCegaEntry();
+    return cegaEntry.setVaultStatus(vaultAddress, vaultStatus);
+  }
+
+  async dcsSetSettlementStatus(
+    vaultAddress: EvmAddress,
+    settlementStatus: SettlementStatus,
+  ): Promise<ethers.providers.TransactionResponse> {
+    const cegaEntry = await this.loadCegaEntry();
+    return cegaEntry.dcsSetSettlementStatus(vaultAddress, settlementStatus);
   }
 }
