@@ -146,7 +146,7 @@ export default class CegaEvmSDKV2 {
     return cegaEntry.dcsCalculateLateFee(vaultAddress);
   }
 
-  async getLatestProductId() {
+  async getLatestProductId(): Promise<number> {
     const cegaEntry = await this.loadCegaEntry();
     return cegaEntry.getLatestProductId();
   }
@@ -159,6 +159,16 @@ export default class CegaEvmSDKV2 {
   async dcsIsWithdrawalPossible(vaultAddress: EvmAddress) {
     const cegaEntry = await this.loadCegaEntry();
     return cegaEntry.dcsIsWithdrawalPossible(vaultAddress);
+  }
+
+  async dcsGetDepositQueue(productId: ethers.BigNumberish) {
+    const cegaEntry = await this.loadCegaEntry();
+    return cegaEntry.dcsGetDepositQueue(productId);
+  }
+
+  async dcsGetWithdrawalQueue(vaultAddress: EvmAddress) {
+    const cegaEntry = await this.loadCegaEntry();
+    return cegaEntry.dcsGetWithdrawalQueue(vaultAddress);
   }
 
   /**

@@ -3,6 +3,7 @@ import * as dotenv from 'dotenv';
 
 import { ethers } from 'ethers';
 import { CegaEvmSDKV2, EthereumAlchemyGasStation, types, GasStation } from '..';
+import { EvmAddress } from '../types';
 
 dotenv.config();
 
@@ -14,8 +15,23 @@ const ADMIN_ACCOUNTS = {
   userPk: process.env.RANDOM_USER_PK || '',
 };
 
-const CONFIGS = {
+enum Network {
+  ethereum = 'ethereum',
+  ethereum_qa = 'ethereum_qa',
+  arbitrum = 'arbitrum',
+}
+
+const CONFIGS: Record<Network, any> = {
   ethereum: {
+    RPC_URL: process.env.ETH_RPC_URL,
+    addressManager: '0x1DdF7C4C98a78b492bb4a2881358f183d94c9806' as types.EvmAddress,
+    treasuryAddress: '0xA8AB795731fbBFDd1Fbc57ca11e6f722e7783642' as types.EvmAddress,
+    usdcAddress: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48' as types.EvmAddress,
+    stEth: '0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84' as types.EvmAddress,
+    gasStation: new EthereumAlchemyGasStation(process.env.ETH_ALCHEMY_API_KEY || ''),
+    pythAdapterAddress: '0x271AcA3E9b8Ed9F4F618875093bD75a7E1b3116C' as types.EvmAddress,
+  },
+  ethereum_qa: {
     RPC_URL: process.env.ETH_RPC_URL,
     addressManager: '0xD40a37ADc14f73579A073DF353a2f6118CF313F4' as types.EvmAddress,
     treasuryAddress: '0x13159257aE85276f30A7b3DD8f2fC724913265e0' as types.EvmAddress,
@@ -35,9 +51,9 @@ const CONFIGS = {
   },
 };
 
-const CURRENT_NETWORK = 'arbitrum';
+const CURRENT_NETWORK: Network = Network.arbitrum;
 
-async function addDeposits(network: 'ethereum' | 'arbitrum') {
+async function addDeposits(network: Network) {
   const config = CONFIGS[network];
   const provider = new ethers.providers.JsonRpcProvider(config.RPC_URL);
   const userSigner = new ethers.Wallet(ADMIN_ACCOUNTS.userPk, provider);
@@ -92,7 +108,7 @@ async function addDeposits(network: 'ethereum' | 'arbitrum') {
   // console.log('deposit stETH: ', txResponse.hash);
 }
 
-async function bulkActions(network: 'ethereum' | 'arbitrum') {
+async function bulkActions(network: Network) {
   const config = CONFIGS[network];
   const provider = new ethers.providers.JsonRpcProvider(config.RPC_URL);
   const traderSigner = new ethers.Wallet(ADMIN_ACCOUNTS.traderAdminPk, provider);
@@ -110,8 +126,52 @@ async function bulkActions(network: 'ethereum' | 'arbitrum') {
   await sdk.dcsBulkOpenVaultDeposits([]);
 }
 
+async function getQueues(network: Network) {
+  const config = CONFIGS[network];
+  const provider = new ethers.providers.JsonRpcProvider(config.RPC_URL);
+  // const userSigner = new ethers.Wallet(ADMIN_ACCOUNTS.userPk, provider);
+
+  const sdk = new CegaEvmSDKV2(
+    config.addressManager,
+    config.treasuryAddress,
+    config.gasStation,
+    provider,
+    // userSigner,
+    // config.pythAdapterAddress,
+  );
+
+  // console.log('get deposit queue');
+
+  const productId = await sdk.getLatestProductId();
+  // Get deposit queue
+  for (let i = 1; i <= productId; i += 1) {
+    // // eslint-disable-next-line no-await-in-loop
+    // const depositQueue = await sdk.dcsGetDepositQueue(i);
+    // console.log('deposit queue for product: ', i, ', Deposit Queue: ', depositQueue);
+  }
+
+  // Get withdrawal queue
+  const vaultsToCheck: Record<string, EvmAddress[]> = {
+    ethereum: [
+      // Ethereum ETH dragon vault
+      '0x5271d7425748a35455d1106c146a3e7f9dd4555a',
+      // Ethereum USDC dragon vault
+      '0x6754b1db1a4cb7e28e757290d24ba1181cbcd2ba',
+      // Ethereum USDC dragon vault
+      '0x3a3123E67aF60D97FD0050d1D20A0183C5190541',
+    ],
+    arbitrum: [],
+  };
+  for (const vaultAddress of vaultsToCheck[network]) {
+    // eslint-disable-next-line no-await-in-loop
+    const withdrawalQueue = await sdk.dcsGetWithdrawalQueue(vaultAddress);
+    console.log('Withdrawal queue: ', vaultAddress, ':', withdrawalQueue);
+  }
+}
+
 async function main() {
-  await addDeposits(CURRENT_NETWORK);
+  await getQueues(Network.ethereum);
+  // await addDeposits(CURRENT_NETWORK);
   // await bulkActions(CURRENT_NETWORK);
 }
 
