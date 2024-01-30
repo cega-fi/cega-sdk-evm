@@ -171,6 +171,11 @@ export default class CegaEvmSDKV2 {
     return cegaEntry.dcsGetWithdrawalQueue(vaultAddress);
   }
 
+  async dcsGetVaultSettlementAsset(vaultAddress: EvmAddress) {
+    const cegaEntry = await this.loadCegaEntry();
+    return cegaEntry.dcsGetVaultSettlementAsset(vaultAddress);
+  }
+
   /**
    * USER FACING METHODS
    */
