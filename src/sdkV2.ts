@@ -61,10 +61,6 @@ export default class CegaEvmSDKV2 {
     return chainConfig;
   }
 
-  getProvider(): ethers.providers.Provider {
-    return this._provider;
-  }
-
   loadAddressManager(): ethers.Contract {
     return new ethers.Contract(
       this._addressManagerAddress,
