@@ -61,7 +61,7 @@ export default class CegaEvmSDKV2 {
     return chainConfig;
   }
 
-  async getProvider(): Promise<ethers.providers.Provider> {
+  getProvider(): ethers.providers.Provider {
     return this._provider;
   }
 
