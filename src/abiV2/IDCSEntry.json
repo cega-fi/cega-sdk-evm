@@ -127,6 +127,50 @@
       "inputs": [
         {
           "indexed": true,
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "bool",
+          "name": "isDisputeAccepted",
+          "type": "bool"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint40",
+          "name": "timestamp",
+          "type": "uint40"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint128",
+          "name": "newPrice",
+          "type": "uint128"
+        }
+      ],
+      "name": "DCSDisputeProcessed",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        }
+      ],
+      "name": "DCSDisputeSubmitted",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
           "internalType": "uint32",
           "name": "productId",
           "type": "uint32"
@@ -476,9 +520,21 @@
           "internalType": "address",
           "name": "vaultAddress",
           "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "timestamp",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "newPrice",
+          "type": "uint256"
         }
       ],
-      "name": "DisputeSubmitted",
+      "name": "OraclePriceOverriden",
       "type": "event"
     },
     {
@@ -1364,6 +1420,25 @@
           "type": "address"
         }
       ],
+      "name": "dcsGetVaultSettlementAsset",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        }
+      ],
       "name": "dcsGetWithdrawalQueue",
       "outputs": [
         {
@@ -1767,6 +1842,46 @@
           "internalType": "address",
           "name": "vaultAddress",
           "type": "address"
+        },
+        {
+          "internalType": "enum ISwapManager.SwapProtocol",
+          "name": "swapProtocol",
+          "type": "uint8"
+        },
+        {
+          "components": [
+            {
+              "internalType": "uint256",
+              "name": "deadline",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint128",
+              "name": "minOutputAmount",
+              "type": "uint128"
+            },
+            {
+              "internalType": "bytes",
+              "name": "extraData",
+              "type": "bytes"
+            }
+          ],
+          "internalType": "struct ISwapManager.SwapData",
+          "name": "swapData",
+          "type": "tuple"
+        }
+      ],
+      "name": "dcsSwapAndSettleVault",
+      "outputs": [],
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
         }
       ],
       "name": "getDaysLate",
@@ -1789,6 +1904,19 @@
         }
       ],
       "name": "getIsDefaulted",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getIsProtocolPaused",
       "outputs": [
         {
           "internalType": "bool",
@@ -2008,6 +2136,19 @@
         }
       ],
       "name": "overrideOraclePrice",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bool",
+          "name": "value",
+          "type": "bool"
+        }
+      ],
+      "name": "setIsProtocolPaused",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
