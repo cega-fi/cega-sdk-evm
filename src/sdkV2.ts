@@ -687,6 +687,15 @@ export default class CegaEvmSDKV2 {
     return oracleEntry.getPrice(baseAsset, quoteAsset, timestamp, oracleDataSource);
   }
 
+  async getSingleOraclePrice(
+    asset: EvmAddress,
+    timestamp: number,
+    oracleDataSource: OracleDataSourceDcs = OracleDataSourceDcs.Pyth,
+  ): Promise<ethers.BigNumber> {
+    const oracleEntry = await this.loadOracleEntry();
+    return oracleEntry.getSinglePrice(asset, timestamp, oracleDataSource);
+  }
+
   async pythUpdateAssetPrices(
     timestamp: Date,
     assetAddresses: EvmAddress[],
