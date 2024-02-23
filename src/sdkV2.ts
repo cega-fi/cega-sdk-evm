@@ -227,6 +227,9 @@ export default class CegaEvmSDKV2 {
     return this.approveErc20ForCegaEntry(amount, asset, overrides);
   }
 
+  /**
+   * @deprecated increaseAllowanceErc20 should not be used. Use approveErc20 instead
+   */
   async increaseAllowanceErc20(
     amount: ethers.BigNumber,
     asset: EvmAddress,
@@ -278,6 +281,10 @@ export default class CegaEvmSDKV2 {
     });
   }
 
+  /**
+   * @deprecated increaseAllowanceErc20ForCegaEntry should not be used.
+   * Use approveErc20ForCegaEntry instead
+   */
   private async increaseAllowanceErc20ForCegaEntry(
     amount: ethers.BigNumber,
     asset: EvmAddress,
@@ -291,6 +298,10 @@ export default class CegaEvmSDKV2 {
     });
   }
 
+  /**
+   * @deprecated increaseAllowanceErc20ForCegaProxy should not be used.
+   * Use approveErc20ForCegaProxy instead
+   */
   private async increaseAllowanceErc20ForCegaProxy(
     amount: ethers.BigNumber,
     asset: EvmAddress,
