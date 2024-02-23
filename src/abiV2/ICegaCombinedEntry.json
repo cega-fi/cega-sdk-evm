@@ -1,0 +1,4121 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "ICegaCombinedEntry",
+  "sourceName": "contracts/common/interfaces/ICegaCombinedEntry.sol",
+  "abi": [
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "enum VaultStatus",
+          "name": "vaultStatus",
+          "type": "uint8"
+        }
+      ],
+      "name": "CommonVaultStatusUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "auctionWinner",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint40",
+          "name": "tradeStartDate",
+          "type": "uint40"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint16",
+          "name": "aprBps",
+          "type": "uint16"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint128",
+          "name": "initialSpotPrice",
+          "type": "uint128"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint128",
+          "name": "strikePrice",
+          "type": "uint128"
+        }
+      ],
+      "name": "DCSAuctionEnded",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint8",
+          "name": "daysToStartAuctionDefault",
+          "type": "uint8"
+        }
+      ],
+      "name": "DCSDaysToStartAuctionDefaultUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint8",
+          "name": "daysToStartLateFees",
+          "type": "uint8"
+        }
+      ],
+      "name": "DCSDaysToStartLateFeesUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint8",
+          "name": "daysToStartSettlementDefault",
+          "type": "uint8"
+        }
+      ],
+      "name": "DCSDaysToStartSettlementDefaultUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint8",
+          "name": "disputePeriodInHours",
+          "type": "uint8"
+        }
+      ],
+      "name": "DCSDisputePeriodInHoursUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "bool",
+          "name": "isDisputeAccepted",
+          "type": "bool"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint40",
+          "name": "timestamp",
+          "type": "uint40"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint128",
+          "name": "newPrice",
+          "type": "uint128"
+        }
+      ],
+      "name": "DCSDisputeProcessed",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        }
+      ],
+      "name": "DCSDisputeSubmitted",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "indexed": false,
+          "internalType": "bool",
+          "name": "isDepositQueueOpen",
+          "type": "bool"
+        }
+      ],
+      "name": "DCSIsDepositQueueOpenUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "bool",
+          "name": "isPayoffInDepositAsset",
+          "type": "bool"
+        }
+      ],
+      "name": "DCSIsPayoffInDepositAssetUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint16",
+          "name": "lateFeeBps",
+          "type": "uint16"
+        }
+      ],
+      "name": "DCSLateFeeBpsUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint16",
+          "name": "value",
+          "type": "uint16"
+        }
+      ],
+      "name": "DCSManagementFeeUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint128",
+          "name": "maxUnderlyingAmountLimit",
+          "type": "uint128"
+        }
+      ],
+      "name": "DCSMaxUnderlyingAmountLimitUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint128",
+          "name": "minDepositAmount",
+          "type": "uint128"
+        }
+      ],
+      "name": "DCSMinDepositAmountUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint128",
+          "name": "minWithdrawalAmount",
+          "type": "uint128"
+        }
+      ],
+      "name": "DCSMinWithdrawalAmountUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        }
+      ],
+      "name": "DCSProductCreated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "enum SettlementStatus",
+          "name": "settlementStatus",
+          "type": "uint8"
+        }
+      ],
+      "name": "DCSSettlementStatusUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "auctionWinner",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint128",
+          "name": "notionalAmount",
+          "type": "uint128"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint128",
+          "name": "yieldAmount",
+          "type": "uint128"
+        }
+      ],
+      "name": "DCSTradeStarted",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "components": [
+            {
+              "internalType": "string",
+              "name": "tokenName",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "tokenSymbol",
+              "type": "string"
+            },
+            {
+              "internalType": "uint16",
+              "name": "yieldFeeBps",
+              "type": "uint16"
+            },
+            {
+              "internalType": "uint16",
+              "name": "managementFeeBps",
+              "type": "uint16"
+            }
+          ],
+          "indexed": false,
+          "internalType": "struct VaultCreationParams",
+          "name": "params",
+          "type": "tuple"
+        }
+      ],
+      "name": "DCSVaultCreated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint128",
+          "name": "totalFees",
+          "type": "uint128"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint128",
+          "name": "managementFee",
+          "type": "uint128"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint128",
+          "name": "yieldFee",
+          "type": "uint128"
+        }
+      ],
+      "name": "DCSVaultFeesCollected",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        }
+      ],
+      "name": "DCSVaultRolledOver",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "settler",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint128",
+          "name": "depositedAmount",
+          "type": "uint128"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint128",
+          "name": "withdrawnAmount",
+          "type": "uint128"
+        }
+      ],
+      "name": "DCSVaultSettled",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint16",
+          "name": "value",
+          "type": "uint16"
+        }
+      ],
+      "name": "DCSYieldFeeUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "receiver",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint128",
+          "name": "amount",
+          "type": "uint128"
+        }
+      ],
+      "name": "DepositProcessed",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "sender",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "receiver",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint128",
+          "name": "amount",
+          "type": "uint128"
+        }
+      ],
+      "name": "DepositQueued",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "depositor",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint128",
+          "name": "amount",
+          "type": "uint128"
+        }
+      ],
+      "name": "DepositRemoved",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "auctionWinner",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint40",
+          "name": "tradeStartDate",
+          "type": "uint40"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint16",
+          "name": "aprBps",
+          "type": "uint16"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint128[]",
+          "name": "initialSpotPrices",
+          "type": "uint128[]"
+        }
+      ],
+      "name": "FCNAuctionEnded",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "receiver",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "bool",
+          "name": "value",
+          "type": "bool"
+        }
+      ],
+      "name": "FCNBondAllowListUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint128",
+          "name": "amount",
+          "type": "uint128"
+        }
+      ],
+      "name": "FCNBondRepaid",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint8",
+          "name": "daysToStartAuctionDefault",
+          "type": "uint8"
+        }
+      ],
+      "name": "FCNDaysToStartAuctionDefaultUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint8",
+          "name": "daysToStartLateFees",
+          "type": "uint8"
+        }
+      ],
+      "name": "FCNDaysToStartLateFeesUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint8",
+          "name": "daysToStartSettlementDefault",
+          "type": "uint8"
+        }
+      ],
+      "name": "FCNDaysToStartSettlementDefaultUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint8",
+          "name": "disputePeriodInHours",
+          "type": "uint8"
+        }
+      ],
+      "name": "FCNDisputePeriodInHoursUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "bool",
+          "name": "isDisputeAccepted",
+          "type": "bool"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint8",
+          "name": "barrierIndex",
+          "type": "uint8"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint40",
+          "name": "timestamp",
+          "type": "uint40"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint128",
+          "name": "newPrice",
+          "type": "uint128"
+        }
+      ],
+      "name": "FCNDisputeProcessed",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint8",
+          "name": "barrierIndex",
+          "type": "uint8"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint40",
+          "name": "timestamp",
+          "type": "uint40"
+        }
+      ],
+      "name": "FCNDisputeSubmitted",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "indexed": false,
+          "internalType": "bool",
+          "name": "isDepositQueueOpen",
+          "type": "bool"
+        }
+      ],
+      "name": "FCNIsDepositQueueOpenUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "bool",
+          "name": "isKnockedIn",
+          "type": "bool"
+        }
+      ],
+      "name": "FCNIsKnockedInUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint16",
+          "name": "lateFeeBps",
+          "type": "uint16"
+        }
+      ],
+      "name": "FCNLateFeeBpsUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint128",
+          "name": "feeAmount",
+          "type": "uint128"
+        }
+      ],
+      "name": "FCNLateFeePaid",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint128",
+          "name": "maxUnderlyingAmountLimit",
+          "type": "uint128"
+        }
+      ],
+      "name": "FCNMaxUnderlyingAmountLimitUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint128",
+          "name": "minDepositAmount",
+          "type": "uint128"
+        }
+      ],
+      "name": "FCNMinDepositAmountUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint128",
+          "name": "minWithdrawalAmount",
+          "type": "uint128"
+        }
+      ],
+      "name": "FCNMinWithdrawalAmountUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        }
+      ],
+      "name": "FCNProductCreated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "auctionWinner",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint128",
+          "name": "notionalAmount",
+          "type": "uint128"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint128",
+          "name": "yieldAmount",
+          "type": "uint128"
+        }
+      ],
+      "name": "FCNTradeStarted",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "components": [
+            {
+              "internalType": "string",
+              "name": "tokenName",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "tokenSymbol",
+              "type": "string"
+            },
+            {
+              "internalType": "uint16",
+              "name": "yieldFeeBps",
+              "type": "uint16"
+            },
+            {
+              "internalType": "uint16",
+              "name": "managementFeeBps",
+              "type": "uint16"
+            }
+          ],
+          "indexed": false,
+          "internalType": "struct FCNVaultCreationParams",
+          "name": "creationParams",
+          "type": "tuple"
+        }
+      ],
+      "name": "FCNVaultCreated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint128",
+          "name": "totalFees",
+          "type": "uint128"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint128",
+          "name": "managementFee",
+          "type": "uint128"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint128",
+          "name": "yieldFee",
+          "type": "uint128"
+        }
+      ],
+      "name": "FCNVaultFeesCollected",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        }
+      ],
+      "name": "FCNVaultRolledOver",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint16",
+          "name": "value",
+          "type": "uint16"
+        }
+      ],
+      "name": "ManagementFeeUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "timestamp",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "newPrice",
+          "type": "uint256"
+        }
+      ],
+      "name": "OraclePriceOverriden",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "indexed": false,
+          "internalType": "string",
+          "name": "name",
+          "type": "string"
+        }
+      ],
+      "name": "ProductNameUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "indexed": false,
+          "internalType": "string",
+          "name": "imageUrl",
+          "type": "string"
+        }
+      ],
+      "name": "TradeWinnerNftImageUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "string",
+          "name": "_tokenSymbol",
+          "type": "string"
+        },
+        {
+          "indexed": false,
+          "internalType": "string",
+          "name": "_tokenName",
+          "type": "string"
+        }
+      ],
+      "name": "VaultCreated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "bool",
+          "name": "value",
+          "type": "bool"
+        }
+      ],
+      "name": "VaultDefaultUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "enum OldVaultStatus",
+          "name": "vaultStatus",
+          "type": "uint8"
+        }
+      ],
+      "name": "VaultStatusUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "sharesAmount",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "owner",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint32",
+          "name": "nextProductId",
+          "type": "uint32"
+        }
+      ],
+      "name": "WithdrawalProcessed",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "sharesAmount",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "owner",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint32",
+          "name": "nextProductId",
+          "type": "uint32"
+        },
+        {
+          "indexed": false,
+          "internalType": "bool",
+          "name": "withProxy",
+          "type": "bool"
+        }
+      ],
+      "name": "WithdrawalQueued",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint16",
+          "name": "value",
+          "type": "uint16"
+        }
+      ],
+      "name": "YieldFeeUpdated",
+      "type": "event"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "internalType": "uint128",
+          "name": "amount",
+          "type": "uint128"
+        },
+        {
+          "internalType": "address",
+          "name": "receiver",
+          "type": "address"
+        }
+      ],
+      "name": "addToDepositQueue",
+      "outputs": [],
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "internalType": "uint128",
+          "name": "sharesAmount",
+          "type": "uint128"
+        },
+        {
+          "internalType": "uint32",
+          "name": "nextProductId",
+          "type": "uint32"
+        }
+      ],
+      "name": "addToWithdrawalQueue",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "internalType": "uint128",
+          "name": "sharesAmount",
+          "type": "uint128"
+        }
+      ],
+      "name": "addToWithdrawalQueueWithProxy",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "shares",
+          "type": "uint256"
+        }
+      ],
+      "name": "convertToAssets",
+      "outputs": [
+        {
+          "internalType": "uint128",
+          "name": "",
+          "type": "uint128"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "internalType": "uint128",
+          "name": "assets",
+          "type": "uint128"
+        }
+      ],
+      "name": "convertToShares",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "internalType": "uint128",
+          "name": "amount",
+          "type": "uint128"
+        },
+        {
+          "internalType": "address",
+          "name": "receiver",
+          "type": "address"
+        }
+      ],
+      "name": "dcsAddToDepositQueue",
+      "outputs": [],
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vault",
+          "type": "address"
+        },
+        {
+          "internalType": "uint128",
+          "name": "sharesAmount",
+          "type": "uint128"
+        },
+        {
+          "internalType": "uint32",
+          "name": "nextProductId",
+          "type": "uint32"
+        }
+      ],
+      "name": "dcsAddToWithdrawalQueue",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "internalType": "uint128",
+          "name": "sharesAmount",
+          "type": "uint128"
+        }
+      ],
+      "name": "dcsAddToWithdrawalQueueWithProxy",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address[]",
+          "name": "vaultAddresses",
+          "type": "address[]"
+        }
+      ],
+      "name": "dcsBulkCheckAuctionDefault",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address[]",
+          "name": "vaultAddresses",
+          "type": "address[]"
+        }
+      ],
+      "name": "dcsBulkCheckSettlementDefault",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address[]",
+          "name": "vaultAddresses",
+          "type": "address[]"
+        }
+      ],
+      "name": "dcsBulkCheckTradesExpiry",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address[]",
+          "name": "vaultAddresses",
+          "type": "address[]"
+        }
+      ],
+      "name": "dcsBulkCollectFees",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address[]",
+          "name": "vaultAddresses",
+          "type": "address[]"
+        }
+      ],
+      "name": "dcsBulkOpenVaultDeposits",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address[]",
+          "name": "vaultAddresses",
+          "type": "address[]"
+        },
+        {
+          "internalType": "uint256",
+          "name": "maxProcessCount",
+          "type": "uint256"
+        }
+      ],
+      "name": "dcsBulkProcessDepositQueues",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address[]",
+          "name": "vaultAddresses",
+          "type": "address[]"
+        },
+        {
+          "internalType": "uint256",
+          "name": "maxProcessCount",
+          "type": "uint256"
+        }
+      ],
+      "name": "dcsBulkProcessWithdrawalQueues",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address[]",
+          "name": "vaultAddresses",
+          "type": "address[]"
+        }
+      ],
+      "name": "dcsBulkRolloverVaults",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address[]",
+          "name": "vaultAddresses",
+          "type": "address[]"
+        }
+      ],
+      "name": "dcsBulkSettleVaults",
+      "outputs": [],
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address[]",
+          "name": "vaultAddresses",
+          "type": "address[]"
+        }
+      ],
+      "name": "dcsBulkStartTrades",
+      "outputs": [],
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        }
+      ],
+      "name": "dcsCalculateLateFee",
+      "outputs": [
+        {
+          "internalType": "uint128",
+          "name": "",
+          "type": "uint128"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        }
+      ],
+      "name": "dcsCalculateVaultFinalPayoff",
+      "outputs": [
+        {
+          "internalType": "uint128",
+          "name": "",
+          "type": "uint128"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        }
+      ],
+      "name": "dcsCheckAuctionDefault",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        }
+      ],
+      "name": "dcsCheckSettlementDefault",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        }
+      ],
+      "name": "dcsCheckTradeExpiry",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        }
+      ],
+      "name": "dcsCollectVaultFees",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "components": [
+            {
+              "internalType": "uint128",
+              "name": "maxUnderlyingAmountLimit",
+              "type": "uint128"
+            },
+            {
+              "internalType": "uint128",
+              "name": "minDepositAmount",
+              "type": "uint128"
+            },
+            {
+              "internalType": "uint128",
+              "name": "minWithdrawalAmount",
+              "type": "uint128"
+            },
+            {
+              "internalType": "address",
+              "name": "quoteAssetAddress",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "baseAssetAddress",
+              "type": "address"
+            },
+            {
+              "internalType": "enum DCSOptionType",
+              "name": "dcsOptionType",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint8",
+              "name": "daysToStartLateFees",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint8",
+              "name": "daysToStartAuctionDefault",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint8",
+              "name": "daysToStartSettlementDefault",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint16",
+              "name": "lateFeeBps",
+              "type": "uint16"
+            },
+            {
+              "internalType": "uint16",
+              "name": "strikeBarrierBps",
+              "type": "uint16"
+            },
+            {
+              "internalType": "uint40",
+              "name": "tenorInSeconds",
+              "type": "uint40"
+            },
+            {
+              "internalType": "uint8",
+              "name": "disputePeriodInHours",
+              "type": "uint8"
+            },
+            {
+              "internalType": "string",
+              "name": "name",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "tradeWinnerNftImage",
+              "type": "string"
+            }
+          ],
+          "internalType": "struct DCSProductCreationParams",
+          "name": "creationParams",
+          "type": "tuple"
+        }
+      ],
+      "name": "dcsCreateProduct",
+      "outputs": [
+        {
+          "internalType": "uint32",
+          "name": "",
+          "type": "uint32"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "_productId",
+          "type": "uint32"
+        },
+        {
+          "components": [
+            {
+              "internalType": "string",
+              "name": "tokenName",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "tokenSymbol",
+              "type": "string"
+            },
+            {
+              "internalType": "uint16",
+              "name": "yieldFeeBps",
+              "type": "uint16"
+            },
+            {
+              "internalType": "uint16",
+              "name": "managementFeeBps",
+              "type": "uint16"
+            }
+          ],
+          "internalType": "struct VaultCreationParams",
+          "name": "creationParams",
+          "type": "tuple"
+        }
+      ],
+      "name": "dcsCreateVault",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "_auctionWinner",
+          "type": "address"
+        },
+        {
+          "internalType": "uint40",
+          "name": "_tradeStartDate",
+          "type": "uint40"
+        },
+        {
+          "internalType": "uint16",
+          "name": "_aprBps",
+          "type": "uint16"
+        },
+        {
+          "internalType": "enum IOracleEntry.DataSource",
+          "name": "dataSource",
+          "type": "uint8"
+        }
+      ],
+      "name": "dcsEndAuction",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        }
+      ],
+      "name": "dcsGetCouponPayment",
+      "outputs": [
+        {
+          "internalType": "uint128",
+          "name": "",
+          "type": "uint128"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        }
+      ],
+      "name": "dcsGetProduct",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "uint128",
+              "name": "maxUnderlyingAmountLimit",
+              "type": "uint128"
+            },
+            {
+              "internalType": "uint128",
+              "name": "minDepositAmount",
+              "type": "uint128"
+            },
+            {
+              "internalType": "uint128",
+              "name": "minWithdrawalAmount",
+              "type": "uint128"
+            },
+            {
+              "internalType": "uint128",
+              "name": "sumVaultUnderlyingAmounts",
+              "type": "uint128"
+            },
+            {
+              "internalType": "address",
+              "name": "quoteAssetAddress",
+              "type": "address"
+            },
+            {
+              "internalType": "uint40",
+              "name": "tenorInSeconds",
+              "type": "uint40"
+            },
+            {
+              "internalType": "uint16",
+              "name": "lateFeeBps",
+              "type": "uint16"
+            },
+            {
+              "internalType": "uint8",
+              "name": "daysToStartLateFees",
+              "type": "uint8"
+            },
+            {
+              "internalType": "address",
+              "name": "baseAssetAddress",
+              "type": "address"
+            },
+            {
+              "internalType": "uint16",
+              "name": "strikeBarrierBps",
+              "type": "uint16"
+            },
+            {
+              "internalType": "uint8",
+              "name": "daysToStartAuctionDefault",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint8",
+              "name": "daysToStartSettlementDefault",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint8",
+              "name": "disputePeriodInHours",
+              "type": "uint8"
+            },
+            {
+              "internalType": "enum DCSOptionType",
+              "name": "dcsOptionType",
+              "type": "uint8"
+            },
+            {
+              "internalType": "bool",
+              "name": "isDepositQueueOpen",
+              "type": "bool"
+            },
+            {
+              "internalType": "address[]",
+              "name": "vaults",
+              "type": "address[]"
+            }
+          ],
+          "internalType": "struct DCSProduct",
+          "name": "",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        }
+      ],
+      "name": "dcsGetProductDepositAsset",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        }
+      ],
+      "name": "dcsGetVault",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "uint128",
+              "name": "initialSpotPrice",
+              "type": "uint128"
+            },
+            {
+              "internalType": "uint128",
+              "name": "strikePrice",
+              "type": "uint128"
+            },
+            {
+              "internalType": "uint128",
+              "name": "totalYield",
+              "type": "uint128"
+            },
+            {
+              "internalType": "uint16",
+              "name": "aprBps",
+              "type": "uint16"
+            },
+            {
+              "internalType": "enum SettlementStatus",
+              "name": "settlementStatus",
+              "type": "uint8"
+            },
+            {
+              "internalType": "bool",
+              "name": "isPayoffInDepositAsset",
+              "type": "bool"
+            }
+          ],
+          "internalType": "struct DCSVault",
+          "name": "",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        }
+      ],
+      "name": "dcsGetVaultSettlementAsset",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        }
+      ],
+      "name": "dcsIsWithdrawalPossible",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vault",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "maxProcessCount",
+          "type": "uint256"
+        }
+      ],
+      "name": "dcsProcessDepositQueue",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "internalType": "uint128",
+          "name": "newPrice",
+          "type": "uint128"
+        }
+      ],
+      "name": "dcsProcessTradeDispute",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vault",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "maxProcessCount",
+          "type": "uint256"
+        }
+      ],
+      "name": "dcsProcessWithdrawalQueue",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "internalType": "uint128",
+          "name": "amount",
+          "type": "uint128"
+        }
+      ],
+      "name": "dcsRemoveFromDepositQueue",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        }
+      ],
+      "name": "dcsRolloverVault",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "internalType": "uint8",
+          "name": "daysToStartAuctionDefault",
+          "type": "uint8"
+        }
+      ],
+      "name": "dcsSetDaysToStartAuctionDefault",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "internalType": "uint8",
+          "name": "daysToStartLateFees",
+          "type": "uint8"
+        }
+      ],
+      "name": "dcsSetDaysToStartLateFees",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "internalType": "uint8",
+          "name": "daysToStartSettlementDefault",
+          "type": "uint8"
+        }
+      ],
+      "name": "dcsSetDaysToStartSettlementDefault",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "internalType": "uint8",
+          "name": "disputePeriodInHours",
+          "type": "uint8"
+        }
+      ],
+      "name": "dcsSetDisputePeriodInHours",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bool",
+          "name": "isDepositQueueOpen",
+          "type": "bool"
+        },
+        {
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        }
+      ],
+      "name": "dcsSetIsDepositQueueOpen",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "internalType": "bool",
+          "name": "newState",
+          "type": "bool"
+        }
+      ],
+      "name": "dcsSetIsPayoffInDepositAsset",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint16",
+          "name": "lateFeeBps",
+          "type": "uint16"
+        },
+        {
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        }
+      ],
+      "name": "dcsSetLateFeeBps",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "internalType": "uint16",
+          "name": "value",
+          "type": "uint16"
+        }
+      ],
+      "name": "dcsSetManagementFee",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint128",
+          "name": "maxUnderlyingAmountLimit",
+          "type": "uint128"
+        },
+        {
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        }
+      ],
+      "name": "dcsSetMaxUnderlyingAmount",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint128",
+          "name": "minDepositAmount",
+          "type": "uint128"
+        },
+        {
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        }
+      ],
+      "name": "dcsSetMinDepositAmount",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint128",
+          "name": "minWithdrawalAmount",
+          "type": "uint128"
+        },
+        {
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        }
+      ],
+      "name": "dcsSetMinWithdrawalAmount",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "internalType": "uint16",
+          "name": "value",
+          "type": "uint16"
+        }
+      ],
+      "name": "dcsSetYieldFee",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        }
+      ],
+      "name": "dcsSettleVault",
+      "outputs": [],
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        }
+      ],
+      "name": "dcsStartTrade",
+      "outputs": [],
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        }
+      ],
+      "name": "dcsSubmitDispute",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "internalType": "enum ISwapManager.SwapProtocol",
+          "name": "swapProtocol",
+          "type": "uint8"
+        },
+        {
+          "components": [
+            {
+              "internalType": "uint256",
+              "name": "deadline",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint128",
+              "name": "minOutputAmount",
+              "type": "uint128"
+            },
+            {
+              "internalType": "bytes",
+              "name": "extraData",
+              "type": "bytes"
+            }
+          ],
+          "internalType": "struct ISwapManager.SwapData",
+          "name": "swapData",
+          "type": "tuple"
+        }
+      ],
+      "name": "dcsSwapAndSettleVault",
+      "outputs": [],
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "internalType": "uint128",
+          "name": "amount",
+          "type": "uint128"
+        },
+        {
+          "internalType": "address",
+          "name": "receiver",
+          "type": "address"
+        }
+      ],
+      "name": "fcnAddToDepositQueue",
+      "outputs": [],
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "internalType": "uint128",
+          "name": "sharesAmount",
+          "type": "uint128"
+        },
+        {
+          "internalType": "uint32",
+          "name": "nextProductId",
+          "type": "uint32"
+        }
+      ],
+      "name": "fcnAddToWithdrawalQueue",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "internalType": "uint128",
+          "name": "sharesAmount",
+          "type": "uint128"
+        }
+      ],
+      "name": "fcnAddToWithdrawalQueueWithProxy",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address[]",
+          "name": "vaultAddresses",
+          "type": "address[]"
+        }
+      ],
+      "name": "fcnBulkCheckAuctionDefault",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address[]",
+          "name": "vaultAddresses",
+          "type": "address[]"
+        }
+      ],
+      "name": "fcnBulkCheckSettlementDefault",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address[]",
+          "name": "vaultAddresses",
+          "type": "address[]"
+        }
+      ],
+      "name": "fcnBulkCheckTradesExpiry",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address[]",
+          "name": "vaultAddresses",
+          "type": "address[]"
+        }
+      ],
+      "name": "fcnBulkCollectVaultFees",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address[]",
+          "name": "vaultAddresses",
+          "type": "address[]"
+        },
+        {
+          "internalType": "uint256",
+          "name": "maxProcessCount",
+          "type": "uint256"
+        }
+      ],
+      "name": "fcnBulkProcessDepositQueues",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address[]",
+          "name": "vaultAddresses",
+          "type": "address[]"
+        },
+        {
+          "internalType": "uint256",
+          "name": "maxProcessCount",
+          "type": "uint256"
+        }
+      ],
+      "name": "fcnBulkProcessWithdrawalQueues",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address[]",
+          "name": "vaultAddresses",
+          "type": "address[]"
+        },
+        {
+          "internalType": "uint128[]",
+          "name": "amounts",
+          "type": "uint128[]"
+        }
+      ],
+      "name": "fcnBulkRepayBonds",
+      "outputs": [],
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address[]",
+          "name": "vaultAddresses",
+          "type": "address[]"
+        }
+      ],
+      "name": "fcnBulkRolloverVaults",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address[]",
+          "name": "vaultAddresses",
+          "type": "address[]"
+        }
+      ],
+      "name": "fcnBulkSettleVaults",
+      "outputs": [],
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address[]",
+          "name": "vaultAddresses",
+          "type": "address[]"
+        }
+      ],
+      "name": "fcnBulkStartTrades",
+      "outputs": [],
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        }
+      ],
+      "name": "fcnCalculateRepaidBond",
+      "outputs": [
+        {
+          "internalType": "uint128",
+          "name": "",
+          "type": "uint128"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        }
+      ],
+      "name": "fcnCalculateVaultFinalPayoff",
+      "outputs": [
+        {
+          "internalType": "uint128",
+          "name": "",
+          "type": "uint128"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        }
+      ],
+      "name": "fcnCheckAuctionDefault",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "internalType": "uint16",
+          "name": "maxObservations",
+          "type": "uint16"
+        }
+      ],
+      "name": "fcnCheckBarriers",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        }
+      ],
+      "name": "fcnCheckSettlementDefault",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        }
+      ],
+      "name": "fcnCheckTradeExpiry",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        }
+      ],
+      "name": "fcnCollectVaultFees",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "components": [
+            {
+              "internalType": "uint128",
+              "name": "minDepositAmount",
+              "type": "uint128"
+            },
+            {
+              "internalType": "uint128",
+              "name": "minWithdrawalAmount",
+              "type": "uint128"
+            },
+            {
+              "internalType": "uint128",
+              "name": "maxUnderlyingAmountLimit",
+              "type": "uint128"
+            },
+            {
+              "internalType": "address",
+              "name": "underlyingAsset",
+              "type": "address"
+            },
+            {
+              "internalType": "uint64",
+              "name": "leverage",
+              "type": "uint64"
+            },
+            {
+              "internalType": "uint40",
+              "name": "tenorInSeconds",
+              "type": "uint40"
+            },
+            {
+              "internalType": "uint8",
+              "name": "daysToStartLateFees",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint8",
+              "name": "daysToStartAuctionDefault",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint8",
+              "name": "daysToStartSettlementDefault",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint8",
+              "name": "disputePeriodInHours",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint16",
+              "name": "lateFeeBps",
+              "type": "uint16"
+            },
+            {
+              "internalType": "string",
+              "name": "name",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "tradeWinnerNftImage",
+              "type": "string"
+            },
+            {
+              "internalType": "bool",
+              "name": "isBondOption",
+              "type": "bool"
+            },
+            {
+              "internalType": "uint24",
+              "name": "observationIntervalInSeconds",
+              "type": "uint24"
+            },
+            {
+              "components": [
+                {
+                  "internalType": "uint16",
+                  "name": "barrierBps",
+                  "type": "uint16"
+                },
+                {
+                  "internalType": "enum FCNOptionBarrierType",
+                  "name": "barrierType",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "address",
+                  "name": "asset",
+                  "type": "address"
+                },
+                {
+                  "internalType": "uint8",
+                  "name": "exponent",
+                  "type": "uint8"
+                }
+              ],
+              "internalType": "struct FCNOptionBarrier[]",
+              "name": "optionBarriers",
+              "type": "tuple[]"
+            }
+          ],
+          "internalType": "struct FCNProductCreationParams",
+          "name": "creationParams",
+          "type": "tuple"
+        }
+      ],
+      "name": "fcnCreateProduct",
+      "outputs": [
+        {
+          "internalType": "uint32",
+          "name": "",
+          "type": "uint32"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "components": [
+            {
+              "internalType": "string",
+              "name": "tokenName",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "tokenSymbol",
+              "type": "string"
+            },
+            {
+              "internalType": "uint16",
+              "name": "yieldFeeBps",
+              "type": "uint16"
+            },
+            {
+              "internalType": "uint16",
+              "name": "managementFeeBps",
+              "type": "uint16"
+            }
+          ],
+          "internalType": "struct FCNVaultCreationParams",
+          "name": "creationParams",
+          "type": "tuple"
+        }
+      ],
+      "name": "fcnCreateVault",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "_auctionWinner",
+          "type": "address"
+        },
+        {
+          "internalType": "uint40",
+          "name": "_tradeStartDate",
+          "type": "uint40"
+        },
+        {
+          "internalType": "uint16",
+          "name": "_aprBps",
+          "type": "uint16"
+        },
+        {
+          "internalType": "enum IOracleEntry.DataSource[]",
+          "name": "_dataSources",
+          "type": "uint8[]"
+        }
+      ],
+      "name": "fcnEndAuction",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "receiver",
+          "type": "address"
+        }
+      ],
+      "name": "fcnGetBondAllowList",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        }
+      ],
+      "name": "fcnGetProduct",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "uint128",
+              "name": "minDepositAmount",
+              "type": "uint128"
+            },
+            {
+              "internalType": "uint128",
+              "name": "minWithdrawalAmount",
+              "type": "uint128"
+            },
+            {
+              "internalType": "uint128",
+              "name": "maxUnderlyingAmountLimit",
+              "type": "uint128"
+            },
+            {
+              "internalType": "uint128",
+              "name": "sumVaultUnderlyingAmounts",
+              "type": "uint128"
+            },
+            {
+              "internalType": "address",
+              "name": "underlyingAsset",
+              "type": "address"
+            },
+            {
+              "internalType": "uint64",
+              "name": "leverage",
+              "type": "uint64"
+            },
+            {
+              "internalType": "uint40",
+              "name": "tenorInSeconds",
+              "type": "uint40"
+            },
+            {
+              "internalType": "uint8",
+              "name": "daysToStartLateFees",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint8",
+              "name": "daysToStartAuctionDefault",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint8",
+              "name": "daysToStartSettlementDefault",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint8",
+              "name": "disputePeriodInHours",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint16",
+              "name": "lateFeeBps",
+              "type": "uint16"
+            },
+            {
+              "internalType": "bool",
+              "name": "isDepositQueueOpen",
+              "type": "bool"
+            },
+            {
+              "internalType": "bool",
+              "name": "isBondOption",
+              "type": "bool"
+            },
+            {
+              "internalType": "uint24",
+              "name": "observationIntervalInSeconds",
+              "type": "uint24"
+            },
+            {
+              "components": [
+                {
+                  "internalType": "uint16",
+                  "name": "barrierBps",
+                  "type": "uint16"
+                },
+                {
+                  "internalType": "enum FCNOptionBarrierType",
+                  "name": "barrierType",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "address",
+                  "name": "asset",
+                  "type": "address"
+                },
+                {
+                  "internalType": "uint8",
+                  "name": "exponent",
+                  "type": "uint8"
+                }
+              ],
+              "internalType": "struct FCNOptionBarrier[]",
+              "name": "optionBarriers",
+              "type": "tuple[]"
+            },
+            {
+              "internalType": "address[]",
+              "name": "vaults",
+              "type": "address[]"
+            }
+          ],
+          "internalType": "struct FCNProduct",
+          "name": "",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        }
+      ],
+      "name": "fcnGetProductDepositAsset",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        }
+      ],
+      "name": "fcnGetVault",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "uint128",
+              "name": "notional",
+              "type": "uint128"
+            },
+            {
+              "internalType": "uint128",
+              "name": "totalYield",
+              "type": "uint128"
+            },
+            {
+              "internalType": "uint16",
+              "name": "aprBps",
+              "type": "uint16"
+            },
+            {
+              "internalType": "bool",
+              "name": "isKnockedIn",
+              "type": "bool"
+            },
+            {
+              "internalType": "uint16",
+              "name": "observationsDone",
+              "type": "uint16"
+            },
+            {
+              "internalType": "uint96",
+              "name": "buffer",
+              "type": "uint96"
+            },
+            {
+              "components": [
+                {
+                  "internalType": "uint128",
+                  "name": "initialSpotPrice",
+                  "type": "uint128"
+                },
+                {
+                  "internalType": "enum IOracleEntry.DataSource",
+                  "name": "dataSource",
+                  "type": "uint8"
+                }
+              ],
+              "internalType": "struct FCNVaultBarrierData[]",
+              "name": "barrierData",
+              "type": "tuple[]"
+            }
+          ],
+          "internalType": "struct FCNVault",
+          "name": "",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "maxProcessCount",
+          "type": "uint256"
+        }
+      ],
+      "name": "fcnProcessDepositQueue",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "internalType": "uint8",
+          "name": "barrierIndex",
+          "type": "uint8"
+        },
+        {
+          "internalType": "uint40",
+          "name": "timestamp",
+          "type": "uint40"
+        },
+        {
+          "internalType": "uint128",
+          "name": "newPrice",
+          "type": "uint128"
+        }
+      ],
+      "name": "fcnProcessTradeDispute",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "maxProcessCount",
+          "type": "uint256"
+        }
+      ],
+      "name": "fcnProcessWithdrawalQueue",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "internalType": "uint128",
+          "name": "amount",
+          "type": "uint128"
+        }
+      ],
+      "name": "fcnRemoveFromDepositQueue",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "internalType": "uint128",
+          "name": "amount",
+          "type": "uint128"
+        }
+      ],
+      "name": "fcnRepayBond",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        }
+      ],
+      "name": "fcnRolloverVault",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "receiver",
+          "type": "address"
+        },
+        {
+          "internalType": "bool",
+          "name": "value",
+          "type": "bool"
+        }
+      ],
+      "name": "fcnSetBondAllowList",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "internalType": "uint8",
+          "name": "daysToStartAuctionDefault",
+          "type": "uint8"
+        }
+      ],
+      "name": "fcnSetDaysToStartAuctionDefault",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "internalType": "uint8",
+          "name": "daysToStartLateFees",
+          "type": "uint8"
+        }
+      ],
+      "name": "fcnSetDaysToStartLateFees",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "internalType": "uint8",
+          "name": "daysToStartSettlementDefault",
+          "type": "uint8"
+        }
+      ],
+      "name": "fcnSetDaysToStartSettlementDefault",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "internalType": "uint8",
+          "name": "disputePeriodInHours",
+          "type": "uint8"
+        }
+      ],
+      "name": "fcnSetDisputePeriodInHours",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "internalType": "bool",
+          "name": "isDepositQueueOpen",
+          "type": "bool"
+        }
+      ],
+      "name": "fcnSetIsDepositQueueOpen",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "internalType": "uint16",
+          "name": "lateFeeBps",
+          "type": "uint16"
+        }
+      ],
+      "name": "fcnSetLateFeeBps",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "internalType": "uint128",
+          "name": "maxUnderlyingAmountLimit",
+          "type": "uint128"
+        }
+      ],
+      "name": "fcnSetMaxUnderlyingAmountLimit",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "internalType": "uint128",
+          "name": "minDepositAmount",
+          "type": "uint128"
+        }
+      ],
+      "name": "fcnSetMinDepositAmount",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "internalType": "uint128",
+          "name": "minWithdrawalAmount",
+          "type": "uint128"
+        }
+      ],
+      "name": "fcnSetMinWithdrawalAmount",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        }
+      ],
+      "name": "fcnSettleVault",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        }
+      ],
+      "name": "fcnStartTrade",
+      "outputs": [],
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "internalType": "uint8",
+          "name": "barrierIndex",
+          "type": "uint8"
+        },
+        {
+          "internalType": "uint40",
+          "name": "timestamp",
+          "type": "uint40"
+        }
+      ],
+      "name": "fcnSubmitDispute",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        }
+      ],
+      "name": "getDaysLate",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        }
+      ],
+      "name": "getDepositQueue",
+      "outputs": [
+        {
+          "internalType": "address[]",
+          "name": "depositors",
+          "type": "address[]"
+        },
+        {
+          "internalType": "uint128[]",
+          "name": "amounts",
+          "type": "uint128[]"
+        },
+        {
+          "internalType": "uint128",
+          "name": "totalAmount",
+          "type": "uint128"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        }
+      ],
+      "name": "getIsAuctionDefaulted",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getIsProtocolPaused",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getLatestProductId",
+      "outputs": [
+        {
+          "internalType": "uint32",
+          "name": "",
+          "type": "uint32"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "internalType": "uint40",
+          "name": "timestamp",
+          "type": "uint40"
+        }
+      ],
+      "name": "getOraclePriceOverride",
+      "outputs": [
+        {
+          "internalType": "uint128",
+          "name": "",
+          "type": "uint128"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        }
+      ],
+      "name": "getProductMetadata",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "string",
+              "name": "name",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "tradeWinnerNftImage",
+              "type": "string"
+            }
+          ],
+          "internalType": "struct ProductMetadata",
+          "name": "",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        }
+      ],
+      "name": "getStrategyOfProduct",
+      "outputs": [
+        {
+          "internalType": "uint32",
+          "name": "",
+          "type": "uint32"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        }
+      ],
+      "name": "getVault",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "uint128",
+              "name": "totalAssets",
+              "type": "uint128"
+            },
+            {
+              "internalType": "uint64",
+              "name": "auctionWinnerTokenId",
+              "type": "uint64"
+            },
+            {
+              "internalType": "uint16",
+              "name": "yieldFeeBps",
+              "type": "uint16"
+            },
+            {
+              "internalType": "uint16",
+              "name": "managementFeeBps",
+              "type": "uint16"
+            },
+            {
+              "internalType": "uint32",
+              "name": "productId",
+              "type": "uint32"
+            },
+            {
+              "internalType": "address",
+              "name": "auctionWinner",
+              "type": "address"
+            },
+            {
+              "internalType": "uint40",
+              "name": "tradeStartDate",
+              "type": "uint40"
+            },
+            {
+              "internalType": "enum VaultStatus",
+              "name": "vaultStatus",
+              "type": "uint8"
+            },
+            {
+              "internalType": "enum IOracleEntry.DataSource",
+              "name": "dataSource",
+              "type": "uint8"
+            },
+            {
+              "internalType": "bool",
+              "name": "isInDispute",
+              "type": "bool"
+            },
+            {
+              "internalType": "bool",
+              "name": "isDefaulted",
+              "type": "bool"
+            }
+          ],
+          "internalType": "struct Vault",
+          "name": "",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vault",
+          "type": "address"
+        }
+      ],
+      "name": "getVaultProductId",
+      "outputs": [
+        {
+          "internalType": "uint32",
+          "name": "",
+          "type": "uint32"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        }
+      ],
+      "name": "getWithdrawalQueue",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "address",
+              "name": "account",
+              "type": "address"
+            },
+            {
+              "internalType": "uint32",
+              "name": "nextProductId",
+              "type": "uint32"
+            }
+          ],
+          "internalType": "struct Withdrawer[]",
+          "name": "withdrawers",
+          "type": "tuple[]"
+        },
+        {
+          "internalType": "uint256[]",
+          "name": "amounts",
+          "type": "uint256[]"
+        },
+        {
+          "internalType": "bool[]",
+          "name": "withProxy",
+          "type": "bool[]"
+        },
+        {
+          "internalType": "uint256",
+          "name": "totalAmount",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        }
+      ],
+      "name": "openVaultDeposits",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "asset",
+          "type": "address"
+        },
+        {
+          "internalType": "uint40",
+          "name": "timestamp",
+          "type": "uint40"
+        },
+        {
+          "internalType": "uint128",
+          "name": "newPrice",
+          "type": "uint128"
+        }
+      ],
+      "name": "overrideOraclePrice",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "internalType": "uint128",
+          "name": "amount",
+          "type": "uint128"
+        }
+      ],
+      "name": "removeFromDepositQueue",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "internalType": "bool",
+          "name": "newState",
+          "type": "bool"
+        }
+      ],
+      "name": "setIsDefaulted",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bool",
+          "name": "value",
+          "type": "bool"
+        }
+      ],
+      "name": "setIsProtocolPaused",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "internalType": "uint16",
+          "name": "value",
+          "type": "uint16"
+        }
+      ],
+      "name": "setManagementFee",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "internalType": "string",
+          "name": "name",
+          "type": "string"
+        }
+      ],
+      "name": "setProductName",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "internalType": "string",
+          "name": "imageUrl",
+          "type": "string"
+        }
+      ],
+      "name": "setTradeWinnerNftImage",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "internalType": "enum VaultStatus",
+          "name": "_vaultStatus",
+          "type": "uint8"
+        }
+      ],
+      "name": "setVaultStatus",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "internalType": "uint16",
+          "name": "value",
+          "type": "uint16"
+        }
+      ],
+      "name": "setYieldFee",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        }
+      ],
+      "name": "totalAssets",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

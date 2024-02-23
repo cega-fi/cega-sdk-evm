@@ -25,6 +25,7 @@ path_to_cega_eth_v2="../cega-eth-v2/artifacts/contracts"
 path_to_abis_v2="./src/abiV2"
 mkdir -p "${path_to_abis_v2}"
 
+cp "${path_to_cega_eth_v2}/common/interfaces/ICegaCombinedEntry.sol/ICegaCombinedEntry.json" ${path_to_abis_v2}
 cp "${path_to_cega_eth_v2}/cega-strategies/dcs/interfaces/IDCSEntry.sol/IDCSEntry.json" ${path_to_abis_v2}
 cp "${path_to_cega_eth_v2}/proxies/interfaces/IWrappingProxy.sol/IWrappingProxy.json" ${path_to_abis_v2}
 cp "${path_to_cega_eth_v2}/oracle-entry/OracleEntry.sol/OracleEntry.json" ${path_to_abis_v2}

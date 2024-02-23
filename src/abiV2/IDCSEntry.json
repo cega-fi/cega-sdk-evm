@@ -13,6 +13,25 @@
           "type": "address"
         },
         {
+          "indexed": false,
+          "internalType": "enum VaultStatus",
+          "name": "vaultStatus",
+          "type": "uint8"
+        }
+      ],
+      "name": "CommonVaultStatusUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
           "indexed": true,
           "internalType": "address",
           "name": "auctionWinner",
@@ -367,6 +386,53 @@
       "inputs": [
         {
           "indexed": true,
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "components": [
+            {
+              "internalType": "string",
+              "name": "tokenName",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "tokenSymbol",
+              "type": "string"
+            },
+            {
+              "internalType": "uint16",
+              "name": "yieldFeeBps",
+              "type": "uint16"
+            },
+            {
+              "internalType": "uint16",
+              "name": "managementFeeBps",
+              "type": "uint16"
+            }
+          ],
+          "indexed": false,
+          "internalType": "struct VaultCreationParams",
+          "name": "params",
+          "type": "tuple"
+        }
+      ],
+      "name": "DCSVaultCreated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
           "internalType": "address",
           "name": "vaultAddress",
           "type": "address"
@@ -517,6 +583,50 @@
       "inputs": [
         {
           "indexed": true,
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "depositor",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint128",
+          "name": "amount",
+          "type": "uint128"
+        }
+      ],
+      "name": "DepositRemoved",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint16",
+          "name": "value",
+          "type": "uint16"
+        }
+      ],
+      "name": "ManagementFeeUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
           "internalType": "address",
           "name": "vaultAddress",
           "type": "address"
@@ -617,7 +727,26 @@
         },
         {
           "indexed": false,
-          "internalType": "enum VaultStatus",
+          "internalType": "bool",
+          "name": "value",
+          "type": "bool"
+        }
+      ],
+      "name": "VaultDefaultUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "enum OldVaultStatus",
           "name": "vaultStatus",
           "type": "uint8"
         }
@@ -692,6 +821,89 @@
       ],
       "name": "WithdrawalQueued",
       "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint16",
+          "name": "value",
+          "type": "uint16"
+        }
+      ],
+      "name": "YieldFeeUpdated",
+      "type": "event"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "internalType": "uint128",
+          "name": "amount",
+          "type": "uint128"
+        },
+        {
+          "internalType": "address",
+          "name": "receiver",
+          "type": "address"
+        }
+      ],
+      "name": "addToDepositQueue",
+      "outputs": [],
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "internalType": "uint128",
+          "name": "sharesAmount",
+          "type": "uint128"
+        },
+        {
+          "internalType": "uint32",
+          "name": "nextProductId",
+          "type": "uint32"
+        }
+      ],
+      "name": "addToWithdrawalQueue",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "internalType": "uint128",
+          "name": "sharesAmount",
+          "type": "uint128"
+        }
+      ],
+      "name": "addToWithdrawalQueueWithProxy",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
     },
     {
       "inputs": [
@@ -1135,18 +1347,35 @@
       "inputs": [
         {
           "internalType": "uint32",
-          "name": "productId",
+          "name": "_productId",
           "type": "uint32"
         },
         {
-          "internalType": "string",
-          "name": "_tokenName",
-          "type": "string"
-        },
-        {
-          "internalType": "string",
-          "name": "_tokenSymbol",
-          "type": "string"
+          "components": [
+            {
+              "internalType": "string",
+              "name": "tokenName",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "tokenSymbol",
+              "type": "string"
+            },
+            {
+              "internalType": "uint16",
+              "name": "yieldFeeBps",
+              "type": "uint16"
+            },
+            {
+              "internalType": "uint16",
+              "name": "managementFeeBps",
+              "type": "uint16"
+            }
+          ],
+          "internalType": "struct VaultCreationParams",
+          "name": "creationParams",
+          "type": "tuple"
         }
       ],
       "name": "dcsCreateVault",
@@ -1206,35 +1435,6 @@
         {
           "internalType": "uint128",
           "name": "",
-          "type": "uint128"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "uint32",
-          "name": "productId",
-          "type": "uint32"
-        }
-      ],
-      "name": "dcsGetDepositQueue",
-      "outputs": [
-        {
-          "internalType": "address[]",
-          "name": "depositors",
-          "type": "address[]"
-        },
-        {
-          "internalType": "uint128[]",
-          "name": "amounts",
-          "type": "uint128[]"
-        },
-        {
-          "internalType": "uint128",
-          "name": "totalAmount",
           "type": "uint128"
         }
       ],
@@ -1439,52 +1639,6 @@
           "type": "address"
         }
       ],
-      "name": "dcsGetWithdrawalQueue",
-      "outputs": [
-        {
-          "components": [
-            {
-              "internalType": "address",
-              "name": "account",
-              "type": "address"
-            },
-            {
-              "internalType": "uint32",
-              "name": "nextProductId",
-              "type": "uint32"
-            }
-          ],
-          "internalType": "struct Withdrawer[]",
-          "name": "withdrawers",
-          "type": "tuple[]"
-        },
-        {
-          "internalType": "uint256[]",
-          "name": "amounts",
-          "type": "uint256[]"
-        },
-        {
-          "internalType": "bool[]",
-          "name": "withProxy",
-          "type": "bool[]"
-        },
-        {
-          "internalType": "uint256",
-          "name": "totalAmount",
-          "type": "uint256"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "vaultAddress",
-          "type": "address"
-        }
-      ],
       "name": "dcsIsWithdrawalPossible",
       "outputs": [
         {
@@ -1546,6 +1700,24 @@
         }
       ],
       "name": "dcsProcessWithdrawalQueue",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "internalType": "uint128",
+          "name": "amount",
+          "type": "uint128"
+        }
+      ],
+      "name": "dcsRemoveFromDepositQueue",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -1769,24 +1941,6 @@
           "type": "address"
         },
         {
-          "internalType": "enum SettlementStatus",
-          "name": "_settlementStatus",
-          "type": "uint8"
-        }
-      ],
-      "name": "dcsSetSettlementStatus",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "vaultAddress",
-          "type": "address"
-        },
-        {
           "internalType": "uint16",
           "name": "value",
           "type": "uint16"
@@ -1882,6 +2036,46 @@
           "internalType": "address",
           "name": "vaultAddress",
           "type": "address"
+        },
+        {
+          "internalType": "enum ISwapManager.SwapProtocol",
+          "name": "swapProtocol",
+          "type": "uint8"
+        },
+        {
+          "components": [
+            {
+              "internalType": "uint256",
+              "name": "deadline",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint128",
+              "name": "minOutputAmount",
+              "type": "uint128"
+            },
+            {
+              "internalType": "bytes",
+              "name": "extraData",
+              "type": "bytes"
+            }
+          ],
+          "internalType": "struct ISwapManager.SwapData",
+          "name": "swapData",
+          "type": "tuple"
+        }
+      ],
+      "name": "dcsSwapAndSettleVault",
+      "outputs": [],
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
         }
       ],
       "name": "getDaysLate",
@@ -1898,12 +2092,54 @@
     {
       "inputs": [
         {
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        }
+      ],
+      "name": "getDepositQueue",
+      "outputs": [
+        {
+          "internalType": "address[]",
+          "name": "depositors",
+          "type": "address[]"
+        },
+        {
+          "internalType": "uint128[]",
+          "name": "amounts",
+          "type": "uint128[]"
+        },
+        {
+          "internalType": "uint128",
+          "name": "totalAmount",
+          "type": "uint128"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
           "internalType": "address",
           "name": "vaultAddress",
           "type": "address"
         }
       ],
-      "name": "getIsDefaulted",
+      "name": "getIsAuctionDefaulted",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getIsProtocolPaused",
       "outputs": [
         {
           "internalType": "bool",
@@ -2075,6 +2311,11 @@
               "internalType": "bool",
               "name": "isInDispute",
               "type": "bool"
+            },
+            {
+              "internalType": "bool",
+              "name": "isDefaulted",
+              "type": "bool"
             }
           ],
           "internalType": "struct Vault",
@@ -2112,6 +2353,52 @@
           "type": "address"
         }
       ],
+      "name": "getWithdrawalQueue",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "address",
+              "name": "account",
+              "type": "address"
+            },
+            {
+              "internalType": "uint32",
+              "name": "nextProductId",
+              "type": "uint32"
+            }
+          ],
+          "internalType": "struct Withdrawer[]",
+          "name": "withdrawers",
+          "type": "tuple[]"
+        },
+        {
+          "internalType": "uint256[]",
+          "name": "amounts",
+          "type": "uint256[]"
+        },
+        {
+          "internalType": "bool[]",
+          "name": "withProxy",
+          "type": "bool[]"
+        },
+        {
+          "internalType": "uint256",
+          "name": "totalAmount",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        }
+      ],
       "name": "openVaultDeposits",
       "outputs": [],
       "stateMutability": "nonpayable",
@@ -2122,6 +2409,11 @@
         {
           "internalType": "address",
           "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "asset",
           "type": "address"
         },
         {
@@ -2149,6 +2441,73 @@
         }
       ],
       "name": "setIsProtocolPaused",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "internalType": "uint128",
+          "name": "amount",
+          "type": "uint128"
+        }
+      ],
+      "name": "removeFromDepositQueue",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "internalType": "bool",
+          "name": "newState",
+          "type": "bool"
+        }
+      ],
+      "name": "setIsDefaulted",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bool",
+          "name": "value",
+          "type": "bool"
+        }
+      ],
+      "name": "setIsProtocolPaused",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "internalType": "uint16",
+          "name": "value",
+          "type": "uint16"
+        }
+      ],
+      "name": "setManagementFee",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -2203,6 +2562,24 @@
         }
       ],
       "name": "setVaultStatus",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "internalType": "uint16",
+          "name": "value",
+          "type": "uint16"
+        }
+      ],
+      "name": "setYieldFee",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
