@@ -991,6 +991,15 @@ export default class CegaEvmSDK {
     return withdrawalQueue;
   }
 
+  async getWithdrawalQueueCount(
+    productName: string,
+    vaultAddress: EvmAddress,
+  ): Promise<ethers.BigNumber> {
+    const product = await this.loadProductContract(productName);
+    const { queuedWithdrawalsCount } = await product.vaults(vaultAddress);
+    return queuedWithdrawalsCount;
+  }
+
   async getManagementFeeBps(productName: string): Promise<number> {
     const product = await this.loadProductContract(productName);
     const managementFeeBps = await product.managementFeeBps();
