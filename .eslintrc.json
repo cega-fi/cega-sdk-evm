@@ -16,7 +16,7 @@
   "parserOptions": {
     "project": "./tsconfig.json"
   },
-  "plugins": ["@typescript-eslint", "prettier", "react", "react-hooks"],
+  "plugins": ["@typescript-eslint", "prettier", "react", "react-hooks", "deprecation"],
   "settings": {
     "react": {
       "version": "detect"
@@ -43,6 +43,7 @@
     "@typescript-eslint/naming-convention": "off",
     "no-underscore-dangle": "off",
     "function-paren-newline": "off",
+    "deprecation/deprecation": "warn",
     "no-param-reassign": [
       "error",
       {

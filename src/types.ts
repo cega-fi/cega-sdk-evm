@@ -59,6 +59,9 @@ export enum VaultStatusV1 {
   Zombie,
 }
 
+/**
+ * @deprecated this is now old and will not be used after SC upgrade in March 2024
+ */
 export enum VaultStatusV2 {
   DepositsClosed,
   DepositsOpen,
@@ -70,6 +73,25 @@ export enum VaultStatusV2 {
   Zombie,
 }
 
+/**
+ * TODO: once the old enum VaultStatusV2 is removed, can rename to VaultStatusV2
+ */
+export enum VaultStatusV2_202403 {
+  DepositsClosed,
+  DepositsOpen,
+  PreAuction,
+  Auctioned,
+  Traded,
+  AwaitingSettlement,
+  Settled,
+  FeesCollected,
+  WithdrawalQueueProcessed,
+  Zombie,
+}
+
+/**
+ * @deprecated This is deprecated since the SC upgrade in March 2024
+ */
 export enum SettlementStatus {
   NotAuctioned,
   Auctioned,
@@ -164,7 +186,7 @@ export interface TxOverrides {
   maxPriorityFeePerGas?: number;
 }
 
-export enum OracleDataSourceDcs {
+export enum OracleDataSource {
   None,
   Pyth,
 }
