@@ -257,12 +257,24 @@ export default class CegaEvmSDKV2 {
   }
 
   /**
-   * FCN GETTER METHODS
+   * FCN GETTER & SETTER METHODS
    */
 
   async fcnGetBondAllowList(receiver: EvmAddress): Promise<boolean> {
     const cegaEntry = await this.loadCegaEntry();
     return cegaEntry.fcnGetBondAllowList(receiver);
+  }
+
+  async fcnSetBondAllowList(
+    receiver: EvmAddress,
+    isAllowed: boolean,
+    overrides: TxOverrides = {},
+  ): Promise<ethers.providers.TransactionResponse> {
+    const cegaEntry = await this.loadCegaEntry();
+    return cegaEntry.fcnSetBondAllowList(receiver, isAllowed, {
+      ...(await this._gasStation.getGasOraclePrices()),
+      ...overrides,
+    });
   }
 
   async fcnGetProduct(productId: ethers.BigNumberish) {
@@ -278,6 +290,16 @@ export default class CegaEvmSDKV2 {
   async fcnGetVault(vaultAddress: EvmAddress) {
     const cegaEntry = await this.loadCegaEntry();
     return cegaEntry.fcnGetVault(vaultAddress);
+  }
+
+  async fcnCalculateVaultSettlementAmount(vaultAddress: EvmAddress): Promise<ethers.BigNumber> {
+    const cegaEntry = await this.loadCegaEntry();
+    return cegaEntry.fcnCalculateVaultSettlementAmount(vaultAddress);
+  }
+
+  async fcnGetCouponPayment(vaultAddress: EvmAddress): Promise<ethers.BigNumber> {
+    const cegaEntry = await this.loadCegaEntry();
+    return cegaEntry.fcnGetCouponPayment(vaultAddress);
   }
 
   /**
