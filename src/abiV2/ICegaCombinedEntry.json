@@ -2766,6 +2766,25 @@
           "type": "address"
         }
       ],
+      "name": "fcnCalculateVaultSettlementAmount",
+      "outputs": [
+        {
+          "internalType": "uint128",
+          "name": "",
+          "type": "uint128"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        }
+      ],
       "name": "fcnCheckAuctionDefault",
       "outputs": [],
       "stateMutability": "nonpayable",
@@ -3044,6 +3063,25 @@
           "internalType": "bool",
           "name": "",
           "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        }
+      ],
+      "name": "fcnGetCouponPayment",
+      "outputs": [
+        {
+          "internalType": "uint128",
+          "name": "",
+          "type": "uint128"
         }
       ],
       "stateMutability": "view",
@@ -3361,7 +3399,7 @@
       ],
       "name": "fcnRepayBond",
       "outputs": [],
-      "stateMutability": "nonpayable",
+      "stateMutability": "payable",
       "type": "function"
     },
     {
@@ -3567,7 +3605,7 @@
       ],
       "name": "fcnSettleVault",
       "outputs": [],
-      "stateMutability": "nonpayable",
+      "stateMutability": "payable",
       "type": "function"
     },
     {

@@ -280,6 +280,16 @@ export default class CegaEvmSDKV2 {
     return cegaEntry.fcnGetVault(vaultAddress);
   }
 
+  async fcnCalculateVaultSettlementAmount(vaultAddress: EvmAddress): Promise<ethers.BigNumber> {
+    const cegaEntry = await this.loadCegaEntry();
+    return cegaEntry.fcnCalculateVaultSettlementAmount(vaultAddress);
+  }
+
+  async fcnGetCouponPayment(vaultAddress: EvmAddress): Promise<ethers.BigNumber> {
+    const cegaEntry = await this.loadCegaEntry();
+    return cegaEntry.fcnGetCouponPayment(vaultAddress);
+  }
+
   /**
    * USER FACING METHODS
    */
