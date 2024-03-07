@@ -2116,25 +2116,6 @@
       "inputs": [
         {
           "internalType": "address",
-          "name": "vaultAddress",
-          "type": "address"
-        }
-      ],
-      "name": "dcsIsWithdrawalPossible",
-      "outputs": [
-        {
-          "internalType": "bool",
-          "name": "",
-          "type": "bool"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
           "name": "vault",
           "type": "address"
         },
@@ -2345,24 +2326,6 @@
     {
       "inputs": [
         {
-          "internalType": "address",
-          "name": "vaultAddress",
-          "type": "address"
-        },
-        {
-          "internalType": "uint16",
-          "name": "value",
-          "type": "uint16"
-        }
-      ],
-      "name": "dcsSetManagementFee",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
           "internalType": "uint128",
           "name": "maxUnderlyingAmountLimit",
           "type": "uint128"
@@ -2410,24 +2373,6 @@
         }
       ],
       "name": "dcsSetMinWithdrawalAmount",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "vaultAddress",
-          "type": "address"
-        },
-        {
-          "internalType": "uint16",
-          "name": "value",
-          "type": "uint16"
-        }
-      ],
-      "name": "dcsSetYieldFee",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -2594,6 +2539,24 @@
           "internalType": "address[]",
           "name": "vaultAddresses",
           "type": "address[]"
+        },
+        {
+          "internalType": "uint16",
+          "name": "maxObservations",
+          "type": "uint16"
+        }
+      ],
+      "name": "fcnBulkCheckBarriers",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address[]",
+          "name": "vaultAddresses",
+          "type": "address[]"
         }
       ],
       "name": "fcnBulkCheckSettlementDefault",
@@ -2622,7 +2585,7 @@
           "type": "address[]"
         }
       ],
-      "name": "fcnBulkCollectVaultFees",
+      "name": "fcnBulkCollectFees",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -2718,6 +2681,25 @@
       "name": "fcnBulkStartTrades",
       "outputs": [],
       "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        }
+      ],
+      "name": "fcnCalculateLateFee",
+      "outputs": [
+        {
+          "internalType": "uint128",
+          "name": "",
+          "type": "uint128"
+        }
+      ],
+      "stateMutability": "view",
       "type": "function"
     },
     {
@@ -3947,6 +3929,25 @@
           "internalType": "uint256",
           "name": "totalAmount",
           "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        }
+      ],
+      "name": "isWithdrawalPossible",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
         }
       ],
       "stateMutability": "view",

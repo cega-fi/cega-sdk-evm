@@ -145,7 +145,7 @@ export default class CegaEvmSDKV2 {
     return cegaEntry.getVault(vaultAddress);
   }
 
-  async getVaultTotalAssets(vaultAddress: EvmAddress) {
+  async getVaultTotalAssets(vaultAddress: EvmAddress): Promise<ethers.BigNumber> {
     const cegaEntry = await this.loadCegaEntry();
     return cegaEntry.totalAssets(vaultAddress);
   }
@@ -153,6 +153,11 @@ export default class CegaEvmSDKV2 {
   async getStrategyOfProduct(productId: ethers.BigNumberish): Promise<number> {
     const cegaEntry = await this.loadCegaEntry();
     return cegaEntry.getStrategyOfProduct(productId);
+  }
+
+  async isWithdrawalPossible(vaultAddress: EvmAddress): Promise<boolean> {
+    const cegaEntry = await this.loadCegaEntry();
+    return cegaEntry.isWithdrawalPossible(vaultAddress);
   }
 
   /**
@@ -221,14 +226,9 @@ export default class CegaEvmSDKV2 {
     return cegaEntry.dcsGetVault(vaultAddress);
   }
 
-  async dcsCalculateLateFee(vaultAddress: EvmAddress) {
+  async dcsCalculateLateFee(vaultAddress: EvmAddress): Promise<ethers.BigNumber> {
     const cegaEntry = await this.loadCegaEntry();
     return cegaEntry.dcsCalculateLateFee(vaultAddress);
-  }
-
-  async dcsIsWithdrawalPossible(vaultAddress: EvmAddress): Promise<boolean> {
-    const cegaEntry = await this.loadCegaEntry();
-    return cegaEntry.dcsIsWithdrawalPossible(vaultAddress);
   }
 
   async dcsGetDepositQueue(productId: ethers.BigNumberish) {
@@ -241,17 +241,17 @@ export default class CegaEvmSDKV2 {
     return cegaEntry.dcsGetWithdrawalQueue(vaultAddress);
   }
 
-  async dcsGetProductDepositAsset(productId: ethers.BigNumberish) {
+  async dcsGetProductDepositAsset(productId: ethers.BigNumberish): Promise<EvmAddress> {
     const cegaEntry = await this.loadCegaEntry();
     return cegaEntry.dcsGetProductDepositAsset(productId);
   }
 
-  async dcsGetVaultSettlementAsset(vaultAddress: EvmAddress) {
+  async dcsGetVaultSettlementAsset(vaultAddress: EvmAddress): Promise<EvmAddress> {
     const cegaEntry = await this.loadCegaEntry();
     return cegaEntry.dcsGetVaultSettlementAsset(vaultAddress);
   }
 
-  async dcsCalculateVaultFinalPayoff(vaultAddress: EvmAddress) {
+  async dcsCalculateVaultFinalPayoff(vaultAddress: EvmAddress): Promise<ethers.BigNumber> {
     const cegaEntry = await this.loadCegaEntry();
     return cegaEntry.dcsCalculateVaultFinalPayoff(vaultAddress);
   }
@@ -295,6 +295,11 @@ export default class CegaEvmSDKV2 {
   async fcnCalculateVaultSettlementAmount(vaultAddress: EvmAddress): Promise<ethers.BigNumber> {
     const cegaEntry = await this.loadCegaEntry();
     return cegaEntry.fcnCalculateVaultSettlementAmount(vaultAddress);
+  }
+
+  async fcnCalculateLateFee(vaultAddress: EvmAddress): Promise<ethers.BigNumber> {
+    const cegaEntry = await this.loadCegaEntry();
+    return cegaEntry.fcnCalculateLateFee(vaultAddress);
   }
 
   async fcnGetCouponPayment(vaultAddress: EvmAddress): Promise<ethers.BigNumber> {
@@ -845,7 +850,7 @@ export default class CegaEvmSDKV2 {
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = await this.loadCegaEntry();
-    return cegaEntry.fcnBulkCollectVaultFees(vaultAddresses, {
+    return cegaEntry.fcnBulkCollectFees(vaultAddresses, {
       ...(await this._gasStation.getGasOraclePrices()),
       ...overrides,
     });
@@ -1032,38 +1037,6 @@ export default class CegaEvmSDKV2 {
     );
   }
 
-  /**
-   * @deprecated instead use the generic setManagementFee function
-   */
-  async dcsSetManagementFee(
-    vaultAddress: EvmAddress,
-    managementFeeBps: number,
-    overrides: TxOverrides = {},
-  ): Promise<ethers.providers.TransactionResponse> {
-    const cegaEntry = await this.loadCegaEntry();
-
-    return cegaEntry.dcsSetManagementFee(vaultAddress, managementFeeBps, {
-      ...(await this._gasStation.getGasOraclePrices()),
-      ...overrides,
-    });
-  }
-
-  /**
-   * @deprecated instead use the generic setYieldFee function
-   */
-  async dcsSetYieldFee(
-    vaultAddress: EvmAddress,
-    yieldFeeBps: number,
-    overrides: TxOverrides = {},
-  ): Promise<ethers.providers.TransactionResponse> {
-    const cegaEntry = await this.loadCegaEntry();
-
-    return cegaEntry.dcsSetYieldFee(vaultAddress, yieldFeeBps, {
-      ...(await this._gasStation.getGasOraclePrices()),
-      ...overrides,
-    });
-  }
-
   async dcsSetMaxUnderlyingAmount(
     productId: ethers.BigNumberish,
     maxUnderlyingAmount: ethers.BigNumberish,
@@ -1239,6 +1212,18 @@ export default class CegaEvmSDKV2 {
   /**
    * CRANK METHODS
    */
+
+  async fcnBulkCheckBarriers(
+    vaultAddresses: EvmAddress[],
+    maxObservations: number,
+    overrides: TxOverrides = {},
+  ): Promise<ethers.providers.TransactionResponse> {
+    const cegaEntry = await this.loadCegaEntry();
+    return cegaEntry.fcnBulkCheckBarriers(vaultAddresses, maxObservations, {
+      ...(await this._gasStation.getGasOraclePrices()),
+      ...overrides,
+    });
+  }
 
   async dcsBulkCheckAuctionDefault(
     vaultAddresses: EvmAddress[],
