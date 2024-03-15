@@ -676,20 +676,6 @@ export default class CegaEvmSDKV2 {
     });
   }
 
-  /**
-   * @deprecated instead use `bulkOpenVaultDeposits`
-   */
-  async dcsBulkOpenVaultDeposits(
-    vaultAddresses: EvmAddress[],
-    overrides: TxOverrides = {},
-  ): Promise<ethers.providers.TransactionResponse> {
-    const cegaEntry = await this.loadCegaEntry();
-    return cegaEntry.dcsBulkOpenVaultDeposits(vaultAddresses, {
-      ...(await this._gasStation.getGasOraclePrices()),
-      ...overrides,
-    });
-  }
-
   async dcsBulkProcessDepositQueues(
     vaultAddresses: EvmAddress[],
     maxProcessCount: ethers.BigNumberish,
@@ -1178,6 +1164,32 @@ export default class CegaEvmSDKV2 {
     const cegaEntry = await this.loadCegaEntry();
 
     return cegaEntry.fcnSetDaysToStartSettlementDefault(productId, daysToStartSettlementDefault, {
+      ...(await this._gasStation.getGasOraclePrices()),
+      ...overrides,
+    });
+  }
+
+  async dcsSetDisputeGraceDelayInHours(
+    productId: ethers.BigNumberish,
+    disputeGraceDelayInHours: number,
+    overrides: TxOverrides = {},
+  ): Promise<ethers.providers.TransactionResponse> {
+    const cegaEntry = await this.loadCegaEntry();
+
+    return cegaEntry.dcsSetDisputeGraceDelayInHours(productId, disputeGraceDelayInHours, {
+      ...(await this._gasStation.getGasOraclePrices()),
+      ...overrides,
+    });
+  }
+
+  async fcnSetDisputeGraceDelayInHours(
+    productId: ethers.BigNumberish,
+    disputeGraceDelayInHours: number,
+    overrides: TxOverrides = {},
+  ): Promise<ethers.providers.TransactionResponse> {
+    const cegaEntry = await this.loadCegaEntry();
+
+    return cegaEntry.fcnSetDisputeGraceDelayInHours(productId, disputeGraceDelayInHours, {
       ...(await this._gasStation.getGasOraclePrices()),
       ...overrides,
     });
