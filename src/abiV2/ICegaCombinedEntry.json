@@ -134,6 +134,25 @@
         {
           "indexed": false,
           "internalType": "uint8",
+          "name": "disputeGraceDelayInHours",
+          "type": "uint8"
+        }
+      ],
+      "name": "DCSDisputeGraceDelayInHoursUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint8",
           "name": "disputePeriodInHours",
           "type": "uint8"
         }
@@ -240,6 +259,25 @@
         }
       ],
       "name": "DCSLateFeeBpsUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint128",
+          "name": "feeAmount",
+          "type": "uint128"
+        }
+      ],
+      "name": "DCSLateFeePaid",
       "type": "event"
     },
     {
@@ -747,6 +785,25 @@
         {
           "indexed": false,
           "internalType": "uint8",
+          "name": "disputeGraceDelayInHours",
+          "type": "uint8"
+        }
+      ],
+      "name": "FCNDisputeGraceDelayInHoursUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint8",
           "name": "disputePeriodInHours",
           "type": "uint8"
         }
@@ -1113,6 +1170,12 @@
           "type": "address"
         },
         {
+          "indexed": true,
+          "internalType": "address",
+          "name": "asset",
+          "type": "address"
+        },
+        {
           "indexed": false,
           "internalType": "uint256",
           "name": "timestamp",
@@ -1389,6 +1452,19 @@
     {
       "inputs": [
         {
+          "internalType": "address[]",
+          "name": "vaultAddresses",
+          "type": "address[]"
+        }
+      ],
+      "name": "bulkOpenVaultDeposits",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
           "internalType": "address",
           "name": "vaultAddress",
           "type": "address"
@@ -1546,19 +1622,6 @@
         }
       ],
       "name": "dcsBulkCollectFees",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address[]",
-          "name": "vaultAddresses",
-          "type": "address[]"
-        }
-      ],
-      "name": "dcsBulkOpenVaultDeposits",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -1798,6 +1861,11 @@
               "type": "uint8"
             },
             {
+              "internalType": "uint8",
+              "name": "disputeGraceDelayInHours",
+              "type": "uint8"
+            },
+            {
               "internalType": "string",
               "name": "name",
               "type": "string"
@@ -2013,6 +2081,11 @@
               "internalType": "address[]",
               "name": "vaults",
               "type": "address[]"
+            },
+            {
+              "internalType": "uint8",
+              "name": "disputeGraceDelayInHours",
+              "type": "uint8"
             }
           ],
           "internalType": "struct DCSProduct",
@@ -2247,6 +2320,24 @@
         }
       ],
       "name": "dcsSetDaysToStartSettlementDefault",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "internalType": "uint8",
+          "name": "disputeGraceDelayInHours",
+          "type": "uint8"
+        }
+      ],
+      "name": "dcsSetDisputeGraceDelayInHours",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -2884,6 +2975,11 @@
               "type": "uint8"
             },
             {
+              "internalType": "uint8",
+              "name": "disputeGraceDelayInHours",
+              "type": "uint8"
+            },
+            {
               "internalType": "uint16",
               "name": "lateFeeBps",
               "type": "uint16"
@@ -3007,22 +3103,22 @@
         },
         {
           "internalType": "address",
-          "name": "_auctionWinner",
+          "name": "auctionWinner",
           "type": "address"
         },
         {
           "internalType": "uint40",
-          "name": "_tradeStartDate",
+          "name": "tradeStartDate",
           "type": "uint40"
         },
         {
           "internalType": "uint16",
-          "name": "_aprBps",
+          "name": "aprBps",
           "type": "uint16"
         },
         {
           "internalType": "enum IOracleEntry.DataSource[]",
-          "name": "_dataSources",
+          "name": "dataSources",
           "type": "uint8[]"
         }
       ],
@@ -3134,6 +3230,11 @@
             {
               "internalType": "uint8",
               "name": "disputePeriodInHours",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint8",
+              "name": "disputeGraceDelayInHours",
               "type": "uint8"
             },
             {
@@ -3465,6 +3566,24 @@
         }
       ],
       "name": "fcnSetDaysToStartSettlementDefault",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "internalType": "uint8",
+          "name": "disputeGraceDelayInHours",
+          "type": "uint8"
+        }
+      ],
+      "name": "fcnSetDisputeGraceDelayInHours",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
