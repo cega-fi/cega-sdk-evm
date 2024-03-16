@@ -4,13 +4,7 @@
 import * as dotenv from 'dotenv';
 
 import { ethers } from 'ethers';
-import {
-  CegaEvmSDK,
-  EthereumAlchemyGasStation,
-  ArbitrumAlchemyGasStation,
-  PolygonGasStation,
-  types,
-} from '..';
+import { CegaEvmSDK, EthereumAlchemyGasStation, ArbitrumAlchemyGasStation, types } from '..';
 
 dotenv.config();
 
