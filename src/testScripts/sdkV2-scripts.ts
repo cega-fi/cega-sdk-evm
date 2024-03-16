@@ -123,7 +123,7 @@ async function bulkActions(network: Network) {
   );
 
   // Bulk Open Vault Deposits
-  await sdk.dcsBulkOpenVaultDeposits([]);
+  await sdk.bulkOpenVaultDeposits([]);
 }
 
 async function getQueues(network: Network) {

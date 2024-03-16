@@ -1,3 +1,4 @@
+/* eslint-disable no-await-in-loop */
 import { ethers } from 'ethers';
 import * as dotenv from 'dotenv';
 import CegaEvmSDK from '../sdk';
