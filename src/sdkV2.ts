@@ -213,6 +213,20 @@ export default class CegaEvmSDKV2 {
   }
 
   /**
+   * Shared Getters
+   */
+
+  async getDepositQueue(productId: ethers.BigNumberish) {
+    const cegaEntry = await this.loadCegaEntry();
+    return cegaEntry.getDepositQueue(productId);
+  }
+
+  async getWithdrawalQueue(vaultAddress: EvmAddress) {
+    const cegaEntry = await this.loadCegaEntry();
+    return cegaEntry.getWithdrawalQueue(vaultAddress);
+  }
+
+  /**
    * DCS GETTER METHODS
    */
 
@@ -231,16 +245,6 @@ export default class CegaEvmSDKV2 {
     return cegaEntry.dcsCalculateLateFee(vaultAddress);
   }
 
-  async dcsGetDepositQueue(productId: ethers.BigNumberish) {
-    const cegaEntry = await this.loadCegaEntry();
-    return cegaEntry.dcsGetDepositQueue(productId);
-  }
-
-  async dcsGetWithdrawalQueue(vaultAddress: EvmAddress) {
-    const cegaEntry = await this.loadCegaEntry();
-    return cegaEntry.dcsGetWithdrawalQueue(vaultAddress);
-  }
-
   async dcsGetProductDepositAsset(productId: ethers.BigNumberish): Promise<EvmAddress> {
     const cegaEntry = await this.loadCegaEntry();
     return cegaEntry.dcsGetProductDepositAsset(productId);
@@ -249,6 +253,11 @@ export default class CegaEvmSDKV2 {
   async dcsGetVaultSettlementAsset(vaultAddress: EvmAddress): Promise<EvmAddress> {
     const cegaEntry = await this.loadCegaEntry();
     return cegaEntry.dcsGetVaultSettlementAsset(vaultAddress);
+  }
+
+  async dcsGetCouponPayment(vaultAddress: EvmAddress): Promise<ethers.BigNumber> {
+    const cegaEntry = await this.loadCegaEntry();
+    return cegaEntry.dcsGetCouponPayment(vaultAddress);
   }
 
   async dcsCalculateVaultFinalPayoff(vaultAddress: EvmAddress): Promise<ethers.BigNumber> {
@@ -698,6 +707,56 @@ export default class CegaEvmSDKV2 {
       ...(await this._gasStation.getGasOraclePrices()),
       ...overrides,
     });
+  }
+
+  async dcsBulkEndAuctions(
+    vaultAddresses: EvmAddress[],
+    auctionWinners: EvmAddress[],
+    tradeStartDates: Date[],
+    aprBpsList: number[],
+    oracleDataSources: OracleDataSource[],
+    overrides: TxOverrides = {},
+  ): Promise<ethers.providers.TransactionResponse> {
+    const cegaEntry = await this.loadCegaEntry();
+    const tradesStartInSeconds = tradeStartDates.map((tradeStartDate) =>
+      Math.floor(tradeStartDate.getTime() / 1000),
+    );
+
+    return cegaEntry.dcsBulkEndAuctions(
+      vaultAddresses,
+      auctionWinners,
+      tradesStartInSeconds,
+      aprBpsList,
+      oracleDataSources,
+      {
+        ...overrides,
+      },
+    );
+  }
+
+  async fcnBulkEndAuctions(
+    vaultAddresses: EvmAddress[],
+    auctionWinners: EvmAddress[],
+    tradeStartDates: Date[],
+    aprBpsList: number[],
+    oracleDataSources: OracleDataSource[][],
+    overrides: TxOverrides = {},
+  ): Promise<ethers.providers.TransactionResponse> {
+    const cegaEntry = await this.loadCegaEntry();
+    const tradesStartInSeconds = tradeStartDates.map((tradeStartDate) =>
+      Math.floor(tradeStartDate.getTime() / 1000),
+    );
+
+    return cegaEntry.fcnBulkEndAuctions(
+      vaultAddresses,
+      auctionWinners,
+      tradesStartInSeconds,
+      aprBpsList,
+      oracleDataSources,
+      {
+        ...overrides,
+      },
+    );
   }
 
   async dcsEndAuction(
