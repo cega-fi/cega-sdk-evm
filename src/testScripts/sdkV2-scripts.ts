@@ -1,5 +1,7 @@
+/* eslint-disable no-await-in-loop */
 // eslint-disable-next-line import/no-extraneous-dependencies
 import * as dotenv from 'dotenv';
+import fs from 'fs';
 
 import { ethers } from 'ethers';
 import { CegaEvmSDKV2, EthereumAlchemyGasStation, types, GasStation } from '..';
@@ -42,16 +44,31 @@ const CONFIGS: Record<Network, any> = {
   },
   arbitrum: {
     RPC_URL: process.env.ARBITRUM_RPC_URL,
-    addressManager: '0x6E5679dCFE0113C0B335b4252046E268c4065a2d' as types.EvmAddress,
-    treasuryAddress: '0xf97E73aDfFDb2532C9b15Df52265093B1c27Fa23' as types.EvmAddress,
+    addressManager: '0x25b7A20B8E9B0676E596eDF4329d38459c3f9a87' as types.EvmAddress,
+    treasuryAddress: '0x475C4AF369B28997B25bd756eF92797AD3F69593' as types.EvmAddress,
     usdcAddress: '0xaf88d065e77c8cC2239327C5EDb3A432268e5831' as types.EvmAddress,
     stEth: '' as types.EvmAddress,
     gasStation: new GasStation(),
-    pythAdapterAddress: '0xa872D1Fd6E84b65998745738E094B03b0d18447c' as types.EvmAddress,
+    pythAdapterAddress: '0x939D97719dd97930d8D4C3b899e091CC7458E0Df' as types.EvmAddress,
   },
 };
 
 const CURRENT_NETWORK: Network = Network.arbitrum;
+
+function loadSettings(network: Network) {
+  const config = CONFIGS[network];
+  const provider = new ethers.providers.JsonRpcProvider(config.RPC_URL);
+  // const userSigner = new ethers.Wallet(ADMIN_ACCOUNTS.userPk, provider);
+
+  const sdk = new CegaEvmSDKV2(
+    config.addressManager,
+    config.treasuryAddress,
+    config.gasStation,
+    provider,
+    // userSigner,
+  );
+  return { sdk };
+}
 
 async function addDeposits(network: Network) {
   const config = CONFIGS[network];
@@ -127,26 +144,13 @@ async function bulkActions(network: Network) {
 }
 
 async function getQueues(network: Network) {
-  const config = CONFIGS[network];
-  const provider = new ethers.providers.JsonRpcProvider(config.RPC_URL);
-  // const userSigner = new ethers.Wallet(ADMIN_ACCOUNTS.userPk, provider);
-
-  const sdk = new CegaEvmSDKV2(
-    config.addressManager,
-    config.treasuryAddress,
-    config.gasStation,
-    provider,
-    // userSigner,
-    // config.pythAdapterAddress,
-  );
-
-  // console.log('get deposit queue');
+  const { sdk } = loadSettings(network);
 
   const productId = await sdk.getLatestProductId();
   // Get deposit queue
   for (let i = 1; i <= productId; i += 1) {
     // // eslint-disable-next-line no-await-in-loop
-    // const depositQueue = await sdk.dcsGetDepositQueue(i);
+    // const depositQueue = await sdk.getDepositQueue(i);
     // console.log('deposit queue for product: ', i, ', Deposit Queue: ', depositQueue);
   }
 
@@ -164,13 +168,111 @@ async function getQueues(network: Network) {
   };
   for (const vaultAddress of vaultsToCheck[network]) {
     // eslint-disable-next-line no-await-in-loop
-    const withdrawalQueue = await sdk.dcsGetWithdrawalQueue(vaultAddress);
+    const withdrawalQueue = await sdk.getWithdrawalQueue(vaultAddress);
     console.log('Withdrawal queue: ', vaultAddress, ':', withdrawalQueue);
   }
 }
 
+async function getProducts(network: Network, filename: string) {
+  const { sdk } = loadSettings(network);
+
+  const latestProductId = await sdk.getLatestProductId();
+  const products = [];
+  for (let productId = 1; productId <= latestProductId; productId += 1) {
+    // console.log(`Product: ${productId}`);
+    process.stdout.write('.');
+    const productMetadata = await sdk.getProductMetadata(productId);
+    const strategy = await sdk.getStrategyOfProduct(productId);
+    let strategyStr;
+    let productInfo;
+    if (strategy === 1) {
+      // DCS
+      strategyStr = 'DCS';
+      productInfo = await sdk.dcsGetProduct(productId);
+    } else if (strategy === 2) {
+      // FCN
+      strategyStr = 'FCNv2';
+      productInfo = await sdk.fcnGetProduct(productId);
+    } else {
+      throw new Error(`Invalid Strategy for Product: ${productId}`);
+    }
+    const product = {
+      name: productMetadata.name,
+      tradeWinnerNftImage: productMetadata.tradeWinnerNftImage,
+      strategy: strategyStr,
+      maxUnderlyingAmountLimit: productInfo.maxUnderlyingAmountLimit,
+      minDepositAmount: productInfo.minDepositAmount,
+      minWithdrawalAmount: productInfo.minWithdrawalAmount,
+      daysToStartLateFees: productInfo.daysToStartLateFees,
+      daysToStartAuctionDefault: productInfo.daysToStartAuctionDefault,
+      daysToStartSettlementDefault: productInfo.daysToStartSettlementDefault,
+      lateFeeBps: productInfo.lateFeeBps,
+      strikeBarrierBps: productInfo.strikeBarrierBps,
+      tenorInSeconds: productInfo.tenorInSeconds,
+      disputePeriodInHours: productInfo.disputePeriodInHours,
+      disputeGraceDelayInHours: productInfo.disputeGraceDelayInHours,
+      isDepositQueueOpen: productInfo.isDepositQueueOpen,
+
+      // DCS
+      quoteAssetAddress: productInfo.quoteAssetAddress,
+      baseAssetAddress: productInfo.baseAssetAddress,
+      dcsOptionType: productInfo.dcsOptionType,
+
+      // FCN:
+      underlyingAsset: productInfo.underlyingAsset,
+      leverage: productInfo.leverage,
+      isBondOption: productInfo.isBondOption,
+      observationIntervalInSeconds: productInfo.observationIntervalInSeconds,
+      optionBarriers: productInfo.optionBarriers,
+    };
+    products.push(product);
+  }
+
+  const columns = Object.keys(products[0]);
+  fs.writeFileSync(
+    `${filename}.csv`,
+    `${columns.join(',')}\n${products
+      .map((product) => columns.map((column) => product[column as keyof typeof product]).join(','))
+      .join('\n')}`,
+  );
+  return {
+    columns,
+    data: products,
+  };
+}
+
+async function getVaults(network: Network, vaultAddresses: EvmAddress[]) {
+  const { sdk } = loadSettings(network);
+
+  for (const vaultAddress of vaultAddresses) {
+    const vault = await sdk.getVault(vaultAddress);
+    const couponPayment = await sdk.dcsGetCouponPayment(vaultAddress);
+    console.log(
+      `
+        vaultAddress: ${vaultAddress},
+        totalAssets: ${vault.totalAssets},
+        couponPayment: ${couponPayment.toString()},
+        auctionWinnerTokenId: ${vault.auctionWinnerTokenId},
+        yieldFeeBps: ${vault.yieldFeeBps},
+        managementFeeBps: ${vault.managementFeeBps},
+        productId: ${vault.productId},
+        auctionWinner: ${vault.auctionWinner},
+        vaultStatus: ${vault.vaultStatus},
+      `,
+    );
+  }
+}
+
 async function main() {
-  await getQueues(Network.ethereum);
+  // const { columns: productColumns, data: productData } = await getProducts(
+  //   Network.ethereum,
+  //   'ethereum-products',
+  // );
+  // const { columns: productColumns, data: productData } = await getProducts(
+  //   Network.arbitrum,
+  //   'arbitrum-products',
+  // );
+  // await getQueues(Network.ethereum);
   // await addDeposits(CURRENT_NETWORK);
   // await bulkActions(CURRENT_NETWORK);
 }
