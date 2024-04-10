@@ -16,12 +16,14 @@ const config = {
     cegaStateAddress: '0x0730AA138062D8Cc54510aa939b533ba7c30f26B' as types.EvmAddress,
     usdcAddress: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48' as types.EvmAddress,
     gasStation: new EthereumAlchemyGasStation(process.env.ETH_ALCHEMY_API_KEY || ''),
+    bulkActionsEntryAddress: '0x5329b0aDDc61F00Fd9ca2bcD1DBfF1ee16202512' as types.EvmAddress,
   },
   arbitrum: {
     RPC_URL: process.env.ARBITRUM_RPC_URL,
     cegaStateAddress: '0x4a2ecDe314080D37d4654cf0eb7DBe6d1BC89211' as types.EvmAddress,
     usdcAddress: '0xaf88d065e77c8cC2239327C5EDb3A432268e5831' as types.EvmAddress, // native USDC
     gasStation: new ArbitrumAlchemyGasStation(process.env.ARBITRUM_ALCHEMY_API_KEY || ''),
+    bulkActionsEntryAddress: '0x1ee6b6Ce7B457Ae4E9cc42E57238618500F39340' as types.EvmAddress,
   },
 };
 

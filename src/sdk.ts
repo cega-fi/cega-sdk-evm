@@ -31,6 +31,7 @@ import {
 
 import { GasStation } from './GasStation';
 
+import BulkActionsEntryAbi from './abi/BulkActionsEntry.json';
 import CegaStateAbi from './abi/CegaState.json';
 import Erc20Abi from './abi/ERC20.json';
 import OracleAbi from './abi/Oracle.json';
@@ -118,6 +119,8 @@ export default class CegaEvmSDK {
 
   private _gasStation: GasStation;
 
+  private _bulkActionsEntryAddress: EvmAddress | undefined;
+
   private _cegaStateAddress: EvmAddress;
 
   private cache: SDKCache;
@@ -127,6 +130,7 @@ export default class CegaEvmSDK {
     gasStation: GasStation,
     provider: ethers.providers.Provider,
     signer: ethers.Signer | undefined = undefined,
+    bulkActionsEntryAddress: EvmAddress | undefined = undefined,
   ) {
     this._provider = provider;
     this._signer = signer;
@@ -134,6 +138,7 @@ export default class CegaEvmSDK {
     this._gasStation = gasStation;
 
     this._cegaStateAddress = cegaStateAddress;
+    this._bulkActionsEntryAddress = bulkActionsEntryAddress;
 
     this.cache = JSON.parse(JSON.stringify(defaultCache));
   }
@@ -157,6 +162,17 @@ export default class CegaEvmSDK {
   logCache(): SDKCache {
     console.log('[CACHE]', this.cache);
     return this.cache;
+  }
+
+  async loadBulkActionsEntryContract() {
+    if (!this._bulkActionsEntryAddress) {
+      throw new Error('No contract address for: BulkActionsEntry');
+    }
+    return new ethers.Contract(
+      this._bulkActionsEntryAddress,
+      BulkActionsEntryAbi.abi,
+      this._signer || this._provider,
+    );
   }
 
   async loadCegaStateContract() {
@@ -1465,7 +1481,7 @@ export default class CegaEvmSDK {
   async sendAssetsToTrade(
     productName: string,
     vaultAddress: EvmAddress,
-    receiver: string,
+    receiver: EvmAddress,
     amount: ethers.BigNumber,
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
@@ -1510,6 +1526,175 @@ export default class CegaEvmSDK {
   ): Promise<ethers.providers.TransactionResponse> {
     const product = await this.loadProductContract(productName);
     return product.calculateVaultFinalPayoff(vaultAddress, {
+      ...(await this._gasStation.getGasOraclePrices()),
+      ...overrides,
+    });
+  }
+
+  async bulkCalculateCurrentYield(
+    vaultAddresses: EvmAddress[],
+    overrides: TxOverrides = {},
+  ): Promise<ethers.providers.TransactionResponse> {
+    const bulkActionsEntry = await this.loadBulkActionsEntryContract();
+    return bulkActionsEntry.bulkCalculateCurrentYield(vaultAddresses, {
+      ...(await this._gasStation.getGasOraclePrices()),
+      ...overrides,
+    });
+  }
+
+  async bulkCalculateVaultFinalPayoffs(
+    vaultAddresses: EvmAddress[],
+    overrides: TxOverrides = {},
+  ): Promise<ethers.providers.TransactionResponse> {
+    const bulkActionsEntry = await this.loadBulkActionsEntryContract();
+    return bulkActionsEntry.bulkCalculateVaultFinalPayoffs(vaultAddresses, {
+      ...(await this._gasStation.getGasOraclePrices()),
+      ...overrides,
+    });
+  }
+
+  async bulkCheckBarriers(
+    vaultAddresses: EvmAddress[],
+    overrides: TxOverrides = {},
+  ): Promise<ethers.providers.TransactionResponse> {
+    const bulkActionsEntry = await this.loadBulkActionsEntryContract();
+    return bulkActionsEntry.bulkCheckBarriers(vaultAddresses, {
+      ...(await this._gasStation.getGasOraclePrices()),
+      ...overrides,
+    });
+  }
+
+  /*
+   * Bulk Trader Actions
+   */
+
+  async bulkOpenVaultDeposits(
+    vaultAddresses: EvmAddress[],
+    overrides: TxOverrides = {},
+  ): Promise<ethers.providers.TransactionResponse> {
+    const bulkActionsEntry = await this.loadBulkActionsEntryContract();
+    return bulkActionsEntry.bulkOpenVaultDeposits(vaultAddresses, {
+      ...(await this._gasStation.getGasOraclePrices()),
+      ...overrides,
+    });
+  }
+
+  async bulkProcessDepositQueues(
+    params: {
+      vaultAddress: EvmAddress;
+      maxProcessCount: ethers.BigNumberish;
+    }[],
+    overrides: TxOverrides = {},
+  ): Promise<ethers.providers.TransactionResponse> {
+    const bulkActionsEntry = await this.loadBulkActionsEntryContract();
+    return bulkActionsEntry.bulkProcessDepositQueues(params, {
+      ...(await this._gasStation.getGasOraclePrices()),
+      ...overrides,
+    });
+  }
+
+  async bulkSetTradeData(
+    params: {
+      vaultAddress: EvmAddress;
+      tradeDate: Date;
+      tradeExpiry: Date;
+      aprBps: number;
+      tenorInDays: number;
+    }[],
+    overrides: TxOverrides = {},
+  ): Promise<ethers.providers.TransactionResponse> {
+    const bulkActionsEntry = await this.loadBulkActionsEntryContract();
+    return bulkActionsEntry.bulkSetTradeData(
+      params.map((param) => ({
+        ...param,
+        tradeDate: Math.floor(param.tradeDate.getTime() / 1000),
+        tradeExpiry: Math.floor(param.tradeExpiry.getTime() / 1000),
+      })),
+      {
+        ...(await this._gasStation.getGasOraclePrices()),
+        ...overrides,
+      },
+    );
+  }
+
+  async bulkUpdateOptionBarriers(
+    params: {
+      vaultAddress: EvmAddress;
+      index: number;
+      asset: string;
+      strikeAbsoluteValue: ethers.BigNumber;
+      barrierAbsoluteValue: ethers.BigNumber;
+    }[],
+    overrides: TxOverrides = {},
+  ): Promise<ethers.providers.TransactionResponse> {
+    const bulkActionsEntry = await this.loadBulkActionsEntryContract();
+    return bulkActionsEntry.bulkUpdateOptionBarriers(params, {
+      ...(await this._gasStation.getGasOraclePrices()),
+      ...overrides,
+    });
+  }
+
+  async bulkSendAssetsToTrade(
+    params: {
+      vaultAddress: EvmAddress;
+      receiver: EvmAddress;
+      amount: ethers.BigNumber;
+    }[],
+    overrides: TxOverrides = {},
+  ): Promise<ethers.providers.TransactionResponse> {
+    const bulkActionsEntry = await this.loadBulkActionsEntryContract();
+    return bulkActionsEntry.bulkSendAssetsToTrade(params, {
+      ...(await this._gasStation.getGasOraclePrices()),
+      ...overrides,
+    });
+  }
+
+  async bulkMoveAssetsToProducts(
+    params: {
+      productName: string;
+      vaultAddress: EvmAddress;
+      amount: ethers.BigNumber;
+    }[],
+    overrides: TxOverrides = {},
+  ): Promise<ethers.providers.TransactionResponse> {
+    const bulkActionsEntry = await this.loadBulkActionsEntryContract();
+    return bulkActionsEntry.bulkMoveAssetsToProducts(params, {
+      ...(await this._gasStation.getGasOraclePrices()),
+      ...overrides,
+    });
+  }
+
+  async bulkCollectFees(
+    vaultAddresses: EvmAddress[],
+    overrides: TxOverrides = {},
+  ): Promise<ethers.providers.TransactionResponse> {
+    const bulkActionsEntry = await this.loadBulkActionsEntryContract();
+    return bulkActionsEntry.bulkCollectFees(vaultAddresses, {
+      ...(await this._gasStation.getGasOraclePrices()),
+      ...overrides,
+    });
+  }
+
+  async bulkProcessWithdrawalQueues(
+    params: {
+      vaultAddress: EvmAddress;
+      maxProcessCount: ethers.BigNumberish;
+    }[],
+    overrides: TxOverrides = {},
+  ): Promise<ethers.providers.TransactionResponse> {
+    const bulkActionsEntry = await this.loadBulkActionsEntryContract();
+    return bulkActionsEntry.bulkProcessWithdrawalQueues(params, {
+      ...(await this._gasStation.getGasOraclePrices()),
+      ...overrides,
+    });
+  }
+
+  async bulkRolloverVaults(
+    vaultAddresses: EvmAddress[],
+    overrides: TxOverrides = {},
+  ): Promise<ethers.providers.TransactionResponse> {
+    const bulkActionsEntry = await this.loadBulkActionsEntryContract();
+    return bulkActionsEntry.bulkRolloverVaults(vaultAddresses, {
       ...(await this._gasStation.getGasOraclePrices()),
       ...overrides,
     });
