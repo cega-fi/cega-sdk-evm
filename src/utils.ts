@@ -32,7 +32,7 @@ export function getEvmContractType(productName: string): EvmContractType {
 
 /**
  * This function will return the estimated gas limit for the transaction
- * with adding a buffer (`bufferPercentage`,default is 20%) to it (gas prices can fluctuate).
+ * with adding a buffer (`bufferPercentage`, default is 20%) to it (gas prices can fluctuate).
  * @returns {number} The estimated gas limit
  */
 export async function getEstimatedGasLimit(
@@ -48,7 +48,7 @@ export async function getEstimatedGasLimit(
       from: sender,
     });
 
-    // Add 20% buffer to the estimated gas limit
+    // Add buffer to the estimated gas limit
     const buffer = gasLimit.mul(bufferPercentage).div(100);
 
     return gasLimit.add(buffer).toNumber();
