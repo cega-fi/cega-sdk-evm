@@ -5,10 +5,12 @@ import * as dotenv from 'dotenv';
 
 import { ethers } from 'ethers';
 import { CegaEvmSDK, EthereumAlchemyGasStation, ArbitrumAlchemyGasStation, types } from '..';
+import CegaStateAbi from '../abi/LOVProduct.json';
+import { getEstimatedGasLimit } from '../utils';
 
 dotenv.config();
 
-const CURRENT_NETWORK = 'arbitrum';
+const CURRENT_NETWORK = 'ethereum';
 
 const config = {
   ethereum: {
@@ -41,6 +43,18 @@ async function execAsyncWithMetric(metricName: string, fn: () => Promise<any>): 
   const x = await fn();
   console.log(`[${metricName}]: ${Date.now() - startTime}`);
   return x;
+}
+
+async function testTxnWithESTGasLimit() {
+  console.log('Testing gas limit', RPC_URL);
+  const provider = new ethers.providers.JsonRpcProvider(RPC_URL);
+  const signer = new ethers.Wallet(ADMIN_ACCOUNTS.programAdminPk, provider);
+  const sdk = new CegaEvmSDK(cegaStateAddress, gasStation, provider, signer);
+  const amount = 0.0001;
+  const modifiedAmount = ethers.utils.parseUnits(amount.toString(), 18);
+  const tx = await sdk.addToDepositQueueFcn('67', modifiedAmount);
+  await tx.wait();
+  console.log('Deposit Response :', tx);
 }
 
 async function run() {
@@ -183,6 +197,7 @@ async function run() {
 
 async function main() {
   await run();
+  // await testTxnWithESTGasLimit(); // run this to test transaction w/ EST. gas limit
 }
 
 main();
