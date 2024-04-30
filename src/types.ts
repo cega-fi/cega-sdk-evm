@@ -180,11 +180,6 @@ export interface SDKCache {
 }
 
 export interface TxOverrides {
-  /**
-   * @deprecated we are going to calculate gas limit based on the transaction.
-   * This should be removed in the future. Use `getEstimatedGasLimit` function
-   * to calculate gas limit.
-   */
   gasLimit?: number;
   gasPrice?: number;
   maxFeePerGas?: number;
