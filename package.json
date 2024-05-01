@@ -1,6 +1,6 @@
 {
   "name": "@cega-fi/cega-sdk-evm",
-  "version": "1.1.6",
+  "version": "1.1.7",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "license": "MIT",
@@ -22,7 +22,7 @@
   "scripts": {
     "build": "tsc",
     "dev-sdkV1": "ts-node ./src/testScripts/sdkV1-getters.ts",
-    "dev-sdkV2": "ts-node ./src/testScripts/sdkV1-scripts.ts",
+    "dev-sdkV2": "ts-node ./src/testScripts/sdkV2-scripts.ts",
     "prepublishOnly": "npm run build",
     "start": "node ./dist/testScripts/sdkV1-getters.ts",
     "lint-fix": "npx prettier --write ."

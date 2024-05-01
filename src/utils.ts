@@ -40,19 +40,30 @@ export async function getEstimatedGasLimit(
   methodName: string,
   args: any[],
   signer?: ethers.Signer,
-  bufferPercentage = 20,
+  bufferPercentage = 50,
 ): Promise<number> {
-  const sender = signer ? await signer.getAddress() : null;
+  const from = signer ? await signer.getAddress() : null;
+  console.log('from', from);
+  console.log('args', args);
   try {
-    const gasLimit = await contract.estimateGas[methodName](...args, {
-      from: sender,
-    });
+    const gasLimit = await contract.estimateGas[methodName](...args);
 
     // Add buffer to the estimated gas limit
     const buffer = gasLimit.mul(bufferPercentage).div(100);
-
+    console.log(
+      `Estimated gas limit for ${methodName} with args:`,
+      args,
+      'is',
+      gasLimit.add(buffer).toNumber(),
+    );
     return gasLimit.add(buffer).toNumber();
   } catch (error) {
+    console.error(
+      `Failed to estimate gas limit for ${methodName} with args:`,
+      args,
+      'Error:',
+      error,
+    );
     return 0;
   }
 }

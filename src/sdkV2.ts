@@ -521,22 +521,26 @@ export default class CegaEvmSDKV2 {
 
     const chainConfig = await this.getChainConfig();
     if (chainConfig.name === 'ethereum-mainnet' && asset === chainConfig.tokens.stETH) {
+      console.log('addToDepositQueueProxy');
       return this.addToDepositQueueProxy(productId, amount, overrides);
     }
 
     const cegaEntry = await this.loadCegaEntry();
+    console.log('override: ', overrides);
     const gasLimit = await getEstimatedGasLimit(
       cegaEntry,
       'addToDepositQueue',
-      [productId, amount],
+      [productId, amount, await this._signer.getAddress()],
       this._signer,
     );
-    return cegaEntry.addToDepositQueue(productId, amount, await this._signer.getAddress(), {
-      ...(await this._gasStation.getGasOraclePrices()),
-      gasLimit,
-      ...overrides,
-      value: asset === ethers.constants.AddressZero ? amount : 0,
-    });
+    console.log({ gasLimit });
+    return {} as ethers.providers.TransactionResponse;
+    // return cegaEntry.addToDepositQueue(productId, amount, await this._signer.getAddress(), {
+    //   ...(await this._gasStation.getGasOraclePrices()),
+    //   gasLimit,
+    //   ...overrides,
+    //   value: asset === ethers.constants.AddressZero ? amount : 0,
+    // });
   }
 
   /**
