@@ -180,7 +180,7 @@ export interface SDKCache {
 }
 
 export interface TxOverrides {
-  gasLimit?: number;
+  gasLimit?: ethers.BigNumber | number;
   gasPrice?: number;
   maxFeePerGas?: number;
   maxPriorityFeePerGas?: number;
