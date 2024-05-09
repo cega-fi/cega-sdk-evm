@@ -10,7 +10,7 @@ import IWrappingProxyAbi from './abiV2/IWrappingProxy.json';
 import OracleEntryAbi from './abiV2/OracleEntry.json';
 import PythAdapterAbi from './abiV2/PythAdapter.json';
 import Chains, { IChainConfig, isValidChain } from './config/chains';
-import { getEstimatedGasLimit } from './utils';
+import { getOverridesWithEstimatedGasLimit } from './utils';
 
 export default class CegaEvmSDKV2 {
   private _provider: ethers.providers.Provider;
@@ -171,16 +171,16 @@ export default class CegaEvmSDKV2 {
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = await this.loadCegaEntry();
-    const gasLimit = await getEstimatedGasLimit(
-      cegaEntry,
-      'setProductName',
-      [productId, name],
-      this._signer,
-    );
+
     return cegaEntry.setProductName(productId, name, {
       ...(await this._gasStation.getGasOraclePrices()),
-      gasLimit,
-      ...overrides,
+      ...(await getOverridesWithEstimatedGasLimit(
+        cegaEntry,
+        'setProductName',
+        [productId, name],
+        this._signer,
+        overrides,
+      )),
     });
   }
 
@@ -190,16 +190,16 @@ export default class CegaEvmSDKV2 {
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = await this.loadCegaEntry();
-    const gasLimit = await getEstimatedGasLimit(
-      cegaEntry,
-      'setTradeWinnerNftImage',
-      [productId, imageUrl],
-      this._signer,
-    );
+
     return cegaEntry.setTradeWinnerNftImage(productId, imageUrl, {
       ...(await this._gasStation.getGasOraclePrices()),
-      gasLimit,
-      ...overrides,
+      ...(await getOverridesWithEstimatedGasLimit(
+        cegaEntry,
+        'setTradeWinnerNftImage',
+        [productId, imageUrl],
+        this._signer,
+        overrides,
+      )),
     });
   }
 
@@ -209,16 +209,16 @@ export default class CegaEvmSDKV2 {
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = await this.loadCegaEntry();
-    const gasLimit = await getEstimatedGasLimit(
-      cegaEntry,
-      'setManagementFee',
-      [vaultAddress, managementFeeBps],
-      this._signer,
-    );
+
     return cegaEntry.setManagementFee(vaultAddress, managementFeeBps, {
       ...(await this._gasStation.getGasOraclePrices()),
-      gasLimit,
-      ...overrides,
+      ...(await getOverridesWithEstimatedGasLimit(
+        cegaEntry,
+        'setManagementFee',
+        [vaultAddress, managementFeeBps],
+        this._signer,
+        overrides,
+      )),
     });
   }
 
@@ -228,16 +228,16 @@ export default class CegaEvmSDKV2 {
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = await this.loadCegaEntry();
-    const gasLimit = await getEstimatedGasLimit(
-      cegaEntry,
-      'setYieldFee',
-      [vaultAddress, yieldFeeBps],
-      this._signer,
-    );
+
     return cegaEntry.setYieldFee(vaultAddress, yieldFeeBps, {
       ...(await this._gasStation.getGasOraclePrices()),
-      gasLimit,
-      ...overrides,
+      ...(await getOverridesWithEstimatedGasLimit(
+        cegaEntry,
+        'setYieldFee',
+        [vaultAddress, yieldFeeBps],
+        this._signer,
+        overrides,
+      )),
     });
   }
 
@@ -309,16 +309,16 @@ export default class CegaEvmSDKV2 {
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = await this.loadCegaEntry();
-    const gasLimit = await getEstimatedGasLimit(
-      cegaEntry,
-      'fcnSetBondAllowList',
-      [receiver, isAllowed],
-      this._signer,
-    );
+
     return cegaEntry.fcnSetBondAllowList(receiver, isAllowed, {
       ...(await this._gasStation.getGasOraclePrices()),
-      gasLimit,
-      ...overrides,
+      ...(await getOverridesWithEstimatedGasLimit(
+        cegaEntry,
+        'fcnSetBondAllowList',
+        [receiver, isAllowed],
+        this._signer,
+        overrides,
+      )),
     });
   }
 
@@ -428,16 +428,16 @@ export default class CegaEvmSDKV2 {
   ): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = await this.loadCegaEntry();
     const erc20Contract = new ethers.Contract(asset, Erc20Abi.abi, this._signer);
-    const gasLimit = await getEstimatedGasLimit(
-      erc20Contract,
-      'approve',
-      [cegaEntry.address, amount],
-      this._signer,
-    );
+
     return erc20Contract.approve(cegaEntry.address, amount, {
       ...(await this._gasStation.getGasOraclePrices()),
-      gasLimit,
-      ...overrides,
+      ...(await getOverridesWithEstimatedGasLimit(
+        erc20Contract,
+        'approve',
+        [cegaEntry.address, amount],
+        this._signer,
+        overrides,
+      )),
     });
   }
 
@@ -448,16 +448,16 @@ export default class CegaEvmSDKV2 {
   ): Promise<ethers.providers.TransactionResponse> {
     const cegaWrappingProxy = await this.loadCegaWrappingProxy();
     const erc20Contract = new ethers.Contract(asset, Erc20Abi.abi, this._signer);
-    const gasLimit = await getEstimatedGasLimit(
-      erc20Contract,
-      'approve',
-      [cegaWrappingProxy.address, amount],
-      this._signer,
-    );
+
     return erc20Contract.approve(cegaWrappingProxy.address, amount, {
       ...(await this._gasStation.getGasOraclePrices()),
-      gasLimit,
-      ...overrides,
+      ...(await getOverridesWithEstimatedGasLimit(
+        erc20Contract,
+        'approve',
+        [cegaWrappingProxy.address, amount],
+        this._signer,
+        overrides,
+      )),
     });
   }
 
@@ -472,16 +472,16 @@ export default class CegaEvmSDKV2 {
   ): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = await this.loadCegaEntry();
     const erc20Contract = new ethers.Contract(asset, Erc20Abi.abi, this._signer);
-    const gasLimit = await getEstimatedGasLimit(
-      erc20Contract,
-      'increaseAllowance',
-      [cegaEntry.address, amount],
-      this._signer,
-    );
+
     return erc20Contract.increaseAllowance(cegaEntry.address, amount, {
       ...(await this._gasStation.getGasOraclePrices()),
-      gasLimit,
-      ...overrides,
+      ...(await getOverridesWithEstimatedGasLimit(
+        erc20Contract,
+        'increaseAllowance',
+        [cegaEntry.address, amount],
+        this._signer,
+        overrides,
+      )),
     });
   }
 
@@ -496,16 +496,16 @@ export default class CegaEvmSDKV2 {
   ): Promise<ethers.providers.TransactionResponse> {
     const cegaWrappingProxy = await this.loadCegaWrappingProxy();
     const erc20Contract = new ethers.Contract(asset, Erc20Abi.abi, this._signer);
-    const gasLimit = await getEstimatedGasLimit(
-      erc20Contract,
-      'increaseAllowance',
-      [cegaWrappingProxy.address, amount],
-      this._signer,
-    );
+
     return erc20Contract.increaseAllowance(cegaWrappingProxy.address, amount, {
       ...(await this._gasStation.getGasOraclePrices()),
-      gasLimit,
-      ...overrides,
+      ...(await getOverridesWithEstimatedGasLimit(
+        erc20Contract,
+        'increaseAllowance',
+        [cegaWrappingProxy.address, amount],
+        this._signer,
+        overrides,
+      )),
     });
   }
 
@@ -525,16 +525,16 @@ export default class CegaEvmSDKV2 {
     }
 
     const cegaEntry = await this.loadCegaEntry();
-    const gasLimit = await getEstimatedGasLimit(
-      cegaEntry,
-      'addToDepositQueue',
-      [productId, amount],
-      this._signer,
-    );
+
     return cegaEntry.addToDepositQueue(productId, amount, await this._signer.getAddress(), {
       ...(await this._gasStation.getGasOraclePrices()),
-      gasLimit,
-      ...overrides,
+      ...(await getOverridesWithEstimatedGasLimit(
+        cegaEntry,
+        'addToDepositQueue',
+        [productId, amount, await this._signer.getAddress()],
+        this._signer,
+        overrides,
+      )),
       value: asset === ethers.constants.AddressZero ? amount : 0,
     });
   }
@@ -558,16 +558,17 @@ export default class CegaEvmSDKV2 {
     }
 
     const cegaEntry = await this.loadCegaEntry();
-    const gasLimit = await getEstimatedGasLimit(
-      cegaEntry,
-      'dcsAddToDepositQueue',
-      [productId, amount],
-      this._signer,
-    );
-    return cegaEntry.dcsAddToDepositQueue(productId, amount, await this._signer.getAddress(), {
+    const address = await this._signer.getAddress();
+
+    return cegaEntry.dcsAddToDepositQueue(productId, amount, address, {
       ...(await this._gasStation.getGasOraclePrices()),
-      gasLimit,
-      ...overrides,
+      ...(await getOverridesWithEstimatedGasLimit(
+        cegaEntry,
+        'dcsAddToDepositQueue',
+        [productId, amount, address],
+        this._signer,
+        overrides,
+      )),
       value: asset === ethers.constants.AddressZero ? amount : 0,
     });
   }
@@ -581,16 +582,16 @@ export default class CegaEvmSDKV2 {
       throw new Error('Signer not defined');
     }
     const proxyEntry = await this.loadCegaWrappingProxy();
-    const gasLimit = await getEstimatedGasLimit(
-      proxyEntry,
-      'wrapAndAddToDepositQueue',
-      [productId, amount, await this._signer.getAddress()],
-      this._signer,
-    );
-    return proxyEntry.wrapAndAddToDepositQueue(productId, amount, await this._signer.getAddress(), {
+    const address = await this._signer.getAddress();
+    return proxyEntry.wrapAndAddToDepositQueue(productId, amount, address, {
       ...(await this._gasStation.getGasOraclePrices()),
-      gasLimit,
-      ...overrides,
+      ...(await getOverridesWithEstimatedGasLimit(
+        proxyEntry,
+        'wrapAndAddToDepositQueue',
+        [productId, amount, address],
+        this._signer,
+        overrides,
+      )),
     });
   }
 
@@ -606,22 +607,17 @@ export default class CegaEvmSDKV2 {
       throw new Error('Signer not defined');
     }
     const proxyEntry = await this.loadCegaWrappingProxy();
-    const gasLimit = await getEstimatedGasLimit(
-      proxyEntry,
-      'wrapAndAddToDCSDepositQueue',
-      [productId, amount, await this._signer.getAddress()],
-      this._signer,
-    );
-    return proxyEntry.wrapAndAddToDCSDepositQueue(
-      productId,
-      amount,
-      await this._signer.getAddress(),
-      {
-        ...(await this._gasStation.getGasOraclePrices()),
-        gasLimit,
-        ...overrides,
-      },
-    );
+    const address = await this._signer.getAddress();
+    return proxyEntry.wrapAndAddToDCSDepositQueue(productId, amount, address, {
+      ...(await this._gasStation.getGasOraclePrices()),
+      ...(await getOverridesWithEstimatedGasLimit(
+        proxyEntry,
+        'wrapAndAddToDCSDepositQueue',
+        [productId, amount, address],
+        this._signer,
+        overrides,
+      )),
+    });
   }
 
   async addToWithdrawalQueue(
@@ -636,16 +632,16 @@ export default class CegaEvmSDKV2 {
     }
 
     const cegaEntry = await this.loadCegaEntry();
-    const gasLimit = await getEstimatedGasLimit(
-      cegaEntry,
-      'addToWithdrawalQueue',
-      [vaultAddress, sharesAmount, nextProductId],
-      this._signer,
-    );
+
     return cegaEntry.addToWithdrawalQueue(vaultAddress, sharesAmount, nextProductId, {
       ...(await this._gasStation.getGasOraclePrices()),
-      gasLimit,
-      ...overrides,
+      ...(await getOverridesWithEstimatedGasLimit(
+        cegaEntry,
+        'addToWithdrawalQueue',
+        [vaultAddress, sharesAmount, nextProductId],
+        this._signer,
+        overrides,
+      )),
     });
   }
 
@@ -659,22 +655,18 @@ export default class CegaEvmSDKV2 {
     }
 
     const cegaEntry = await this.loadCegaEntry();
-    const gasLimit = await getEstimatedGasLimit(
-      cegaEntry,
-      'addToWithdrawalQueueWithProxy',
-      [vaultAddress, sharesAmount, await this._signer.getAddress()],
-      this._signer,
-    );
-    return cegaEntry.addToWithdrawalQueueWithProxy(
-      vaultAddress,
-      sharesAmount,
-      await this._signer.getAddress(),
-      {
-        ...(await this._gasStation.getGasOraclePrices()),
-        gasLimit,
-        ...overrides,
-      },
-    );
+    const address = await this._signer.getAddress();
+
+    return cegaEntry.addToWithdrawalQueueWithProxy(vaultAddress, sharesAmount, address, {
+      ...(await this._gasStation.getGasOraclePrices()),
+      ...(await getOverridesWithEstimatedGasLimit(
+        cegaEntry,
+        'addToWithdrawalQueueWithProxy',
+        [vaultAddress, sharesAmount, address],
+        this._signer,
+        overrides,
+      )),
+    });
   }
 
   /**
@@ -692,16 +684,16 @@ export default class CegaEvmSDKV2 {
     }
 
     const cegaEntry = await this.loadCegaEntry();
-    const gasLimit = await getEstimatedGasLimit(
-      cegaEntry,
-      'dcsAddToWithdrawalQueue',
-      [vaultAddress, sharesAmount, nextProductId],
-      this._signer,
-    );
+
     return cegaEntry.dcsAddToWithdrawalQueue(vaultAddress, sharesAmount, nextProductId, {
       ...(await this._gasStation.getGasOraclePrices()),
-      gasLimit,
-      ...overrides,
+      ...(await getOverridesWithEstimatedGasLimit(
+        cegaEntry,
+        'dcsAddToWithdrawalQueue',
+        [vaultAddress, sharesAmount, nextProductId],
+        this._signer,
+        overrides,
+      )),
     });
   }
 
@@ -718,22 +710,18 @@ export default class CegaEvmSDKV2 {
     }
 
     const cegaEntry = await this.loadCegaEntry();
-    const gasLimit = await getEstimatedGasLimit(
-      cegaEntry,
-      'dcsAddToWithdrawalQueueWithProxy',
-      [vaultAddress, sharesAmount, await this._signer.getAddress()],
-      this._signer,
-    );
-    return cegaEntry.dcsAddToWithdrawalQueueWithProxy(
-      vaultAddress,
-      sharesAmount,
-      await this._signer.getAddress(),
-      {
-        ...(await this._gasStation.getGasOraclePrices()),
-        gasLimit,
-        ...overrides,
-      },
-    );
+    const address = await this._signer.getAddress();
+
+    return cegaEntry.dcsAddToWithdrawalQueueWithProxy(vaultAddress, sharesAmount, address, {
+      ...(await this._gasStation.getGasOraclePrices()),
+      ...(await getOverridesWithEstimatedGasLimit(
+        cegaEntry,
+        'dcsAddToWithdrawalQueueWithProxy',
+        [vaultAddress, sharesAmount, address],
+        this._signer,
+        overrides,
+      )),
+    });
   }
 
   /**
@@ -753,15 +741,16 @@ export default class CegaEvmSDKV2 {
     }
     const treasury = await this.loadTreasury();
     const address = await this._signer.getAddress();
-    const gasLimit = await getEstimatedGasLimit(
-      treasury,
-      'withdrawStuckAssets',
-      [asset, address],
-      this._signer,
-    );
+
     return treasury.withdrawStuckAssets(asset, address, {
       ...(await this._gasStation.getGasOraclePrices()),
-      ...overrides,
+      ...(await getOverridesWithEstimatedGasLimit(
+        treasury,
+        'withdrawStuckAssets',
+        [asset, address],
+        this._signer,
+        overrides,
+      )),
     });
   }
 
@@ -780,18 +769,17 @@ export default class CegaEvmSDKV2 {
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = await this.loadCegaEntry();
-    const gasLimit = await getEstimatedGasLimit(
-      cegaEntry,
-      'dcsSetIsDepositQueueOpen',
-      [isDepositQueueOpen, productId],
-      this._signer,
-    );
 
     // TODO: asked SC to reorder these params to be consistent with FCN
     return cegaEntry.dcsSetIsDepositQueueOpen(isDepositQueueOpen, productId, {
       ...(await this._gasStation.getGasOraclePrices()),
-      gasLimit,
-      ...overrides,
+      ...(await getOverridesWithEstimatedGasLimit(
+        cegaEntry,
+        'dcsSetIsDepositQueueOpen',
+        [isDepositQueueOpen, productId],
+        this._signer,
+        overrides,
+      )),
     });
   }
 
@@ -801,17 +789,16 @@ export default class CegaEvmSDKV2 {
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = await this.loadCegaEntry();
-    const gasLimit = await getEstimatedGasLimit(
-      cegaEntry,
-      'fcnSetIsDepositQueueOpen',
-      [productId, isDepositQueueOpen],
-      this._signer,
-    );
 
     return cegaEntry.fcnSetIsDepositQueueOpen(productId, isDepositQueueOpen, {
       ...(await this._gasStation.getGasOraclePrices()),
-      gasLimit,
-      ...overrides,
+      ...(await getOverridesWithEstimatedGasLimit(
+        cegaEntry,
+        'fcnSetIsDepositQueueOpen',
+        [productId, isDepositQueueOpen],
+        this._signer,
+        overrides,
+      )),
     });
   }
 
@@ -820,16 +807,16 @@ export default class CegaEvmSDKV2 {
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = await this.loadCegaEntry();
-    const gasLimit = await getEstimatedGasLimit(
-      cegaEntry,
-      'bulkOpenVaultDeposits',
-      [vaultAddresses],
-      this._signer,
-    );
+
     return cegaEntry.bulkOpenVaultDeposits(vaultAddresses, {
       ...(await this._gasStation.getGasOraclePrices()),
-      gasLimit,
-      ...overrides,
+      ...(await getOverridesWithEstimatedGasLimit(
+        cegaEntry,
+        'bulkOpenVaultDeposits',
+        [vaultAddresses],
+        this._signer,
+        overrides,
+      )),
     });
   }
 
@@ -839,16 +826,16 @@ export default class CegaEvmSDKV2 {
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = await this.loadCegaEntry();
-    const gasLimit = await getEstimatedGasLimit(
-      cegaEntry,
-      'dcsBulkProcessDepositQueues',
-      [vaultAddresses, maxProcessCount],
-      this._signer,
-    );
+
     return cegaEntry.dcsBulkProcessDepositQueues(vaultAddresses, maxProcessCount, {
       ...(await this._gasStation.getGasOraclePrices()),
-      gasLimit,
-      ...overrides,
+      ...(await getOverridesWithEstimatedGasLimit(
+        cegaEntry,
+        'dcsBulkProcessDepositQueues',
+        [vaultAddresses, maxProcessCount],
+        this._signer,
+        overrides,
+      )),
     });
   }
 
@@ -858,16 +845,16 @@ export default class CegaEvmSDKV2 {
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = await this.loadCegaEntry();
-    const gasLimit = await getEstimatedGasLimit(
-      cegaEntry,
-      'fcnBulkProcessDepositQueues',
-      [vaultAddresses, maxProcessCount],
-      this._signer,
-    );
+
     return cegaEntry.fcnBulkProcessDepositQueues(vaultAddresses, maxProcessCount, {
       ...(await this._gasStation.getGasOraclePrices()),
-      gasLimit,
-      ...overrides,
+      ...(await getOverridesWithEstimatedGasLimit(
+        cegaEntry,
+        'fcnBulkProcessDepositQueues',
+        [vaultAddresses, maxProcessCount],
+        this._signer,
+        overrides,
+      )),
     });
   }
 
@@ -883,12 +870,6 @@ export default class CegaEvmSDKV2 {
     const tradesStartInSeconds = tradeStartDates.map((tradeStartDate) =>
       Math.floor(tradeStartDate.getTime() / 1000),
     );
-    const gasLimit = await getEstimatedGasLimit(
-      cegaEntry,
-      'dcsBulkEndAuctions',
-      [vaultAddresses, auctionWinners, tradesStartInSeconds, aprBpsList, oracleDataSources],
-      this._signer,
-    );
 
     return cegaEntry.dcsBulkEndAuctions(
       vaultAddresses,
@@ -897,8 +878,13 @@ export default class CegaEvmSDKV2 {
       aprBpsList,
       oracleDataSources,
       {
-        gasLimit,
-        ...overrides,
+        ...(await getOverridesWithEstimatedGasLimit(
+          cegaEntry,
+          'dcsBulkEndAuctions',
+          [vaultAddresses, auctionWinners, tradesStartInSeconds, aprBpsList, oracleDataSources],
+          this._signer,
+          overrides,
+        )),
       },
     );
   }
@@ -915,12 +901,6 @@ export default class CegaEvmSDKV2 {
     const tradesStartInSeconds = tradeStartDates.map((tradeStartDate) =>
       Math.floor(tradeStartDate.getTime() / 1000),
     );
-    const gasLimit = await getEstimatedGasLimit(
-      cegaEntry,
-      'fcnBulkEndAuctions',
-      [vaultAddresses, auctionWinners, tradesStartInSeconds, aprBpsList, oracleDataSources],
-      this._signer,
-    );
 
     return cegaEntry.fcnBulkEndAuctions(
       vaultAddresses,
@@ -929,8 +909,13 @@ export default class CegaEvmSDKV2 {
       aprBpsList,
       oracleDataSources,
       {
-        gasLimit,
-        ...overrides,
+        ...(await getOverridesWithEstimatedGasLimit(
+          cegaEntry,
+          'fcnBulkEndAuctions',
+          [vaultAddresses, auctionWinners, tradesStartInSeconds, aprBpsList, oracleDataSources],
+          this._signer,
+          overrides,
+        )),
       },
     );
   }
@@ -945,12 +930,6 @@ export default class CegaEvmSDKV2 {
   ): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = await this.loadCegaEntry();
     const tradeStartInSeconds = Math.floor(tradeStartDate.getTime() / 1000);
-    const gasLimit = await getEstimatedGasLimit(
-      cegaEntry,
-      'dcsEndAuction',
-      [vaultAddress, auctionWinner, tradeStartInSeconds, aprBps, oracleDataSource],
-      this._signer,
-    );
 
     return cegaEntry.dcsEndAuction(
       vaultAddress,
@@ -959,8 +938,13 @@ export default class CegaEvmSDKV2 {
       aprBps,
       oracleDataSource,
       {
-        gasLimit,
-        ...overrides,
+        ...(await getOverridesWithEstimatedGasLimit(
+          cegaEntry,
+          'dcsEndAuction',
+          [vaultAddress, auctionWinner, tradeStartInSeconds, aprBps, oracleDataSource],
+          this._signer,
+          overrides,
+        )),
       },
     );
   }
@@ -975,12 +959,6 @@ export default class CegaEvmSDKV2 {
   ): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = await this.loadCegaEntry();
     const tradeStartInSeconds = Math.floor(tradeStartDate.getTime() / 1000);
-    const gasLimit = await getEstimatedGasLimit(
-      cegaEntry,
-      'fcnEndAuction',
-      [vaultAddress, auctionWinner, tradeStartInSeconds, aprBps, oracleDataSources],
-      this._signer,
-    );
 
     return cegaEntry.fcnEndAuction(
       vaultAddress,
@@ -989,8 +967,13 @@ export default class CegaEvmSDKV2 {
       aprBps,
       oracleDataSources,
       {
-        gasLimit,
-        ...overrides,
+        ...(await getOverridesWithEstimatedGasLimit(
+          cegaEntry,
+          'fcnEndAuction',
+          [vaultAddress, auctionWinner, tradeStartInSeconds, aprBps, oracleDataSources],
+          this._signer,
+          overrides,
+        )),
       },
     );
   }
@@ -1005,16 +988,16 @@ export default class CegaEvmSDKV2 {
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = await this.loadCegaEntry();
-    const gasLimit = await getEstimatedGasLimit(
-      cegaEntry,
-      'dcsBulkStartTrades',
-      [vaultAddresses],
-      this._signer,
-    );
+
     return cegaEntry.dcsBulkStartTrades(vaultAddresses, {
       ...(await this._gasStation.getGasOraclePrices()),
-      gasLimit,
-      ...overrides,
+      ...(await getOverridesWithEstimatedGasLimit(
+        cegaEntry,
+        'dcsBulkStartTrades',
+        [vaultAddresses],
+        this._signer,
+        overrides,
+      )),
       value: nativeAssetTransferSummedAmount ?? 0,
     });
   }
@@ -1025,16 +1008,16 @@ export default class CegaEvmSDKV2 {
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = await this.loadCegaEntry();
-    const gasLimit = await getEstimatedGasLimit(
-      cegaEntry,
-      'fcnBulkStartTrades',
-      [vaultAddresses],
-      this._signer,
-    );
+
     return cegaEntry.fcnBulkStartTrades(vaultAddresses, {
       ...(await this._gasStation.getGasOraclePrices()),
-      gasLimit,
-      ...overrides,
+      ...(await getOverridesWithEstimatedGasLimit(
+        cegaEntry,
+        'fcnBulkStartTrades',
+        [vaultAddresses],
+        this._signer,
+        overrides,
+      )),
       value: nativeAssetTransferSummedAmount ?? 0,
     });
   }
@@ -1045,16 +1028,16 @@ export default class CegaEvmSDKV2 {
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = await this.loadCegaEntry();
-    const gasLimit = await getEstimatedGasLimit(
-      cegaEntry,
-      'dcsBulkSettleVaults',
-      [vaultAddresses],
-      this._signer,
-    );
+
     return cegaEntry.dcsBulkSettleVaults(vaultAddresses, {
       ...(await this._gasStation.getGasOraclePrices()),
-      gasLimit,
-      ...overrides,
+      ...(await getOverridesWithEstimatedGasLimit(
+        cegaEntry,
+        'dcsBulkSettleVaults',
+        [vaultAddresses],
+        this._signer,
+        overrides,
+      )),
       value: nativeAssetTransferSummedAmount ?? 0,
     });
   }
@@ -1065,16 +1048,16 @@ export default class CegaEvmSDKV2 {
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = await this.loadCegaEntry();
-    const gasLimit = await getEstimatedGasLimit(
-      cegaEntry,
-      'fcnBulkSettleVaults',
-      [vaultAddresses],
-      this._signer,
-    );
+
     return cegaEntry.fcnBulkSettleVaults(vaultAddresses, {
       ...(await this._gasStation.getGasOraclePrices()),
-      gasLimit,
-      ...overrides,
+      ...(await getOverridesWithEstimatedGasLimit(
+        cegaEntry,
+        'fcnBulkSettleVaults',
+        [vaultAddresses],
+        this._signer,
+        overrides,
+      )),
       value: nativeAssetTransferSummedAmount ?? 0,
     });
   }
@@ -1086,16 +1069,16 @@ export default class CegaEvmSDKV2 {
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = await this.loadCegaEntry();
-    const gasLimit = await getEstimatedGasLimit(
-      cegaEntry,
-      'fcnBulkRepayBonds',
-      [vaultAddresses, amounts],
-      this._signer,
-    );
+
     return cegaEntry.fcnBulkRepayBonds(vaultAddresses, amounts, {
       ...(await this._gasStation.getGasOraclePrices()),
-      gasLimit,
-      ...overrides,
+      ...(await getOverridesWithEstimatedGasLimit(
+        cegaEntry,
+        'fcnBulkRepayBonds',
+        [vaultAddresses, amounts],
+        this._signer,
+        overrides,
+      )),
       value: nativeAssetTransferSummedAmount ?? 0,
     });
   }
@@ -1109,16 +1092,16 @@ export default class CegaEvmSDKV2 {
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = await this.loadCegaEntry();
-    const gasLimit = await getEstimatedGasLimit(
-      cegaEntry,
-      'dcsBulkCollectFees',
-      [vaultAddresses],
-      this._signer,
-    );
+
     return cegaEntry.dcsBulkCollectFees(vaultAddresses, {
       ...(await this._gasStation.getGasOraclePrices()),
-      gasLimit,
-      ...overrides,
+      ...(await getOverridesWithEstimatedGasLimit(
+        cegaEntry,
+        'dcsBulkCollectFees',
+        [vaultAddresses],
+        this._signer,
+        overrides,
+      )),
     });
   }
 
@@ -1127,16 +1110,16 @@ export default class CegaEvmSDKV2 {
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = await this.loadCegaEntry();
-    const gasLimit = await getEstimatedGasLimit(
-      cegaEntry,
-      'fcnBulkCollectFees',
-      [vaultAddresses],
-      this._signer,
-    );
+
     return cegaEntry.fcnBulkCollectFees(vaultAddresses, {
       ...(await this._gasStation.getGasOraclePrices()),
-      gasLimit,
-      ...overrides,
+      ...(await getOverridesWithEstimatedGasLimit(
+        cegaEntry,
+        'fcnBulkCollectFees',
+        [vaultAddresses],
+        this._signer,
+        overrides,
+      )),
     });
   }
 
@@ -1146,16 +1129,16 @@ export default class CegaEvmSDKV2 {
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = await this.loadCegaEntry();
-    const gasLimit = await getEstimatedGasLimit(
-      cegaEntry,
-      'dcsBulkProcessWithdrawalQueues',
-      [vaultAddresses, maxProcessCount],
-      this._signer,
-    );
+
     return cegaEntry.dcsBulkProcessWithdrawalQueues(vaultAddresses, maxProcessCount, {
       ...(await this._gasStation.getGasOraclePrices()),
-      gasLimit,
-      ...overrides,
+      ...(await getOverridesWithEstimatedGasLimit(
+        cegaEntry,
+        'dcsBulkProcessWithdrawalQueues',
+        [vaultAddresses, maxProcessCount],
+        this._signer,
+        overrides,
+      )),
     });
   }
 
@@ -1165,16 +1148,16 @@ export default class CegaEvmSDKV2 {
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = await this.loadCegaEntry();
-    const gasLimit = await getEstimatedGasLimit(
-      cegaEntry,
-      'fcnBulkProcessWithdrawalQueues',
-      [vaultAddresses, maxProcessCount],
-      this._signer,
-    );
+
     return cegaEntry.fcnBulkProcessWithdrawalQueues(vaultAddresses, maxProcessCount, {
       ...(await this._gasStation.getGasOraclePrices()),
-      gasLimit,
-      ...overrides,
+      ...(await getOverridesWithEstimatedGasLimit(
+        cegaEntry,
+        'fcnBulkProcessWithdrawalQueues',
+        [vaultAddresses, maxProcessCount],
+        this._signer,
+        overrides,
+      )),
     });
   }
 
@@ -1183,16 +1166,16 @@ export default class CegaEvmSDKV2 {
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = await this.loadCegaEntry();
-    const gasLimit = await getEstimatedGasLimit(
-      cegaEntry,
-      'dcsBulkRolloverVaults',
-      [vaultAddresses],
-      this._signer,
-    );
+
     return cegaEntry.dcsBulkRolloverVaults(vaultAddresses, {
       ...(await this._gasStation.getGasOraclePrices()),
-      gasLimit,
-      ...overrides,
+      ...(await getOverridesWithEstimatedGasLimit(
+        cegaEntry,
+        'dcsBulkRolloverVaults',
+        [vaultAddresses],
+        this._signer,
+        overrides,
+      )),
     });
   }
 
@@ -1201,16 +1184,16 @@ export default class CegaEvmSDKV2 {
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = await this.loadCegaEntry();
-    const gasLimit = await getEstimatedGasLimit(
-      cegaEntry,
-      'fcnBulkRolloverVaults',
-      [vaultAddresses],
-      this._signer,
-    );
+
     return cegaEntry.fcnBulkRolloverVaults(vaultAddresses, {
       ...(await this._gasStation.getGasOraclePrices()),
-      gasLimit,
-      ...overrides,
+      ...(await getOverridesWithEstimatedGasLimit(
+        cegaEntry,
+        'fcnBulkRolloverVaults',
+        [vaultAddresses],
+        this._signer,
+        overrides,
+      )),
     });
   }
 
@@ -1223,16 +1206,16 @@ export default class CegaEvmSDKV2 {
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = await this.loadCegaEntry();
-    const gasLimit = await getEstimatedGasLimit(
-      cegaEntry,
-      'dcsSubmitDispute',
-      [vaultAddress],
-      this._signer,
-    );
+
     return cegaEntry.dcsSubmitDispute(vaultAddress, {
       ...(await this._gasStation.getGasOraclePrices()),
-      gasLimit,
-      ...overrides,
+      ...(await getOverridesWithEstimatedGasLimit(
+        cegaEntry,
+        'dcsSubmitDispute',
+        [vaultAddress],
+        this._signer,
+        overrides,
+      )),
     });
   }
 
@@ -1243,17 +1226,16 @@ export default class CegaEvmSDKV2 {
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = await this.loadCegaEntry();
-    const gasLimit = await getEstimatedGasLimit(
-      cegaEntry,
-      'fcnSubmitDispute',
-      [vaultAddress, barrierIndex, Math.floor(overrideDateTime.getTime() / 1000)],
-      this._signer,
-    );
     const overrideDateInSeconds = Math.floor(overrideDateTime.getTime() / 1000);
     return cegaEntry.fcnSubmitDispute(vaultAddress, barrierIndex, overrideDateInSeconds, {
       ...(await this._gasStation.getGasOraclePrices()),
-      gasLimit,
-      ...overrides,
+      ...(await getOverridesWithEstimatedGasLimit(
+        cegaEntry,
+        'fcnSubmitDispute',
+        [vaultAddress, barrierIndex, overrideDateInSeconds],
+        this._signer,
+        overrides,
+      )),
     });
   }
 
@@ -1263,16 +1245,16 @@ export default class CegaEvmSDKV2 {
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = await this.loadCegaEntry();
-    const gasLimit = await getEstimatedGasLimit(
-      cegaEntry,
-      'dcsProcessTradeDispute',
-      [vaultAddress, newPrice],
-      this._signer,
-    );
+
     return cegaEntry.dcsProcessTradeDispute(vaultAddress, newPrice, {
       ...(await this._gasStation.getGasOraclePrices()),
-      gasLimit,
-      ...overrides,
+      ...(await getOverridesWithEstimatedGasLimit(
+        cegaEntry,
+        'dcsProcessTradeDispute',
+        [vaultAddress, newPrice],
+        this._signer,
+        overrides,
+      )),
     });
   }
 
@@ -1285,12 +1267,7 @@ export default class CegaEvmSDKV2 {
   ): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = await this.loadCegaEntry();
     const overrideDateInSeconds = Math.floor(overrideDateTime.getTime() / 1000);
-    const gasLimit = await getEstimatedGasLimit(
-      cegaEntry,
-      'fcnProcessTradeDispute',
-      [vaultAddress, barrierIndex, overrideDateInSeconds, newPrice],
-      this._signer,
-    );
+
     return cegaEntry.fcnProcessTradeDispute(
       vaultAddress,
       barrierIndex,
@@ -1298,8 +1275,13 @@ export default class CegaEvmSDKV2 {
       newPrice,
       {
         ...(await this._gasStation.getGasOraclePrices()),
-        gasLimit,
-        ...overrides,
+        ...(await getOverridesWithEstimatedGasLimit(
+          cegaEntry,
+          'fcnProcessTradeDispute',
+          [vaultAddress, barrierIndex, overrideDateInSeconds, newPrice],
+          this._signer,
+          overrides,
+        )),
       },
     );
   }
@@ -1338,12 +1320,7 @@ export default class CegaEvmSDKV2 {
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = await this.loadCegaEntry();
-    const gasLimit = await getEstimatedGasLimit(
-      cegaEntry,
-      'dcsCreateVault',
-      [productId, tokenName, tokenSymbol, yieldFeeBps, managementFeeBps],
-      this._signer,
-    );
+
     return cegaEntry.dcsCreateVault(
       productId,
       {
@@ -1354,8 +1331,13 @@ export default class CegaEvmSDKV2 {
       },
       {
         ...(await this._gasStation.getGasOraclePrices()),
-        gasLimit,
-        ...overrides,
+        ...(await getOverridesWithEstimatedGasLimit(
+          cegaEntry,
+          'dcsCreateVault',
+          [productId, { tokenName, tokenSymbol, yieldFeeBps, managementFeeBps }],
+          this._signer,
+          overrides,
+        )),
       },
     );
   }
@@ -1369,12 +1351,7 @@ export default class CegaEvmSDKV2 {
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = await this.loadCegaEntry();
-    const gasLimit = await getEstimatedGasLimit(
-      cegaEntry,
-      'fcnCreateVault',
-      [productId, tokenName, tokenSymbol, yieldFeeBps, managementFeeBps],
-      this._signer,
-    );
+
     return cegaEntry.fcnCreateVault(
       productId,
       {
@@ -1385,8 +1362,13 @@ export default class CegaEvmSDKV2 {
       },
       {
         ...(await this._gasStation.getGasOraclePrices()),
-        gasLimit,
-        ...overrides,
+        ...(await getOverridesWithEstimatedGasLimit(
+          cegaEntry,
+          'fcnCreateVault',
+          [productId, { tokenName, tokenSymbol, yieldFeeBps, managementFeeBps }],
+          this._signer,
+          overrides,
+        )),
       },
     );
   }
@@ -1397,18 +1379,17 @@ export default class CegaEvmSDKV2 {
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = await this.loadCegaEntry();
-    const gasLimit = await getEstimatedGasLimit(
-      cegaEntry,
-      'dcsSetMaxUnderlyingAmount',
-      [maxUnderlyingAmount, productId],
-      this._signer,
-    );
 
     // TODO: asked SC to reorder these params to be consistent with FCN
     return cegaEntry.dcsSetMaxUnderlyingAmount(maxUnderlyingAmount, productId, {
       ...(await this._gasStation.getGasOraclePrices()),
-      gasLimit,
-      ...overrides,
+      ...(await getOverridesWithEstimatedGasLimit(
+        cegaEntry,
+        'dcsSetMaxUnderlyingAmount',
+        [maxUnderlyingAmount, productId],
+        this._signer,
+        overrides,
+      )),
     });
   }
 
@@ -1418,17 +1399,16 @@ export default class CegaEvmSDKV2 {
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = await this.loadCegaEntry();
-    const gasLimit = await getEstimatedGasLimit(
-      cegaEntry,
-      'fcnSetMaxUnderlyingAmount',
-      [productId, maxUnderlyingAmount],
-      this._signer,
-    );
 
     return cegaEntry.fcnSetMaxUnderlyingAmount(productId, maxUnderlyingAmount, {
       ...(await this._gasStation.getGasOraclePrices()),
-      gasLimit,
-      ...overrides,
+      ...(await getOverridesWithEstimatedGasLimit(
+        cegaEntry,
+        'fcnSetMaxUnderlyingAmount',
+        [productId, maxUnderlyingAmount],
+        this._signer,
+        overrides,
+      )),
     });
   }
 
@@ -1438,18 +1418,17 @@ export default class CegaEvmSDKV2 {
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = await this.loadCegaEntry();
-    const gasLimit = await getEstimatedGasLimit(
-      cegaEntry,
-      'dcsSetMinDepositAmount',
-      [minDepositAmount, productId],
-      this._signer,
-    );
 
     // TODO: asked SC to reorder these params to be consistent with FCN
     return cegaEntry.dcsSetMinDepositAmount(minDepositAmount, productId, {
       ...(await this._gasStation.getGasOraclePrices()),
-      gasLimit,
-      ...overrides,
+      ...(await getOverridesWithEstimatedGasLimit(
+        cegaEntry,
+        'dcsSetMinDepositAmount',
+        [minDepositAmount, productId],
+        this._signer,
+        overrides,
+      )),
     });
   }
 
@@ -1459,17 +1438,16 @@ export default class CegaEvmSDKV2 {
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = await this.loadCegaEntry();
-    const gasLimit = await getEstimatedGasLimit(
-      cegaEntry,
-      'fcnSetMinDepositAmount',
-      [productId, minDepositAmount],
-      this._signer,
-    );
 
     return cegaEntry.fcnSetMinDepositAmount(productId, minDepositAmount, {
       ...(await this._gasStation.getGasOraclePrices()),
-      gasLimit,
-      ...overrides,
+      ...(await getOverridesWithEstimatedGasLimit(
+        cegaEntry,
+        'fcnSetMinDepositAmount',
+        [productId, minDepositAmount],
+        this._signer,
+        overrides,
+      )),
     });
   }
 
@@ -1479,17 +1457,16 @@ export default class CegaEvmSDKV2 {
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = await this.loadCegaEntry();
-    const gasLimit = await getEstimatedGasLimit(
-      cegaEntry,
-      'dcsSetDaysToStartLateFees',
-      [daysToStartLateFees, productId],
-      this._signer,
-    );
 
     return cegaEntry.dcsSetDaysToStartLateFees(productId, daysToStartLateFees, {
       ...(await this._gasStation.getGasOraclePrices()),
-      gasLimit,
-      ...overrides,
+      ...(await getOverridesWithEstimatedGasLimit(
+        cegaEntry,
+        'dcsSetDaysToStartLateFees',
+        [productId, daysToStartLateFees],
+        this._signer,
+        overrides,
+      )),
     });
   }
 
@@ -1499,18 +1476,17 @@ export default class CegaEvmSDKV2 {
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = await this.loadCegaEntry();
-    const gasLimit = await getEstimatedGasLimit(
-      cegaEntry,
-      'dcsSetLateFeeBps',
-      [lateFeeBps, productId],
-      this._signer,
-    );
 
     // TODO: asked SC to reorder these params to be consistent with FCN
     return cegaEntry.dcsSetLateFeeBps(lateFeeBps, productId, {
       ...(await this._gasStation.getGasOraclePrices()),
-      gasLimit,
-      ...overrides,
+      ...(await getOverridesWithEstimatedGasLimit(
+        cegaEntry,
+        'dcsSetLateFeeBps',
+        [lateFeeBps, productId],
+        this._signer,
+        overrides,
+      )),
     });
   }
 
@@ -1520,17 +1496,16 @@ export default class CegaEvmSDKV2 {
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = await this.loadCegaEntry();
-    const gasLimit = await getEstimatedGasLimit(
-      cegaEntry,
-      'fcnSetLateFeeBps',
-      [productId, lateFeeBps],
-      this._signer,
-    );
 
     return cegaEntry.fcnSetLateFeeBps(productId, lateFeeBps, {
       ...(await this._gasStation.getGasOraclePrices()),
-      gasLimit,
-      ...overrides,
+      ...(await getOverridesWithEstimatedGasLimit(
+        cegaEntry,
+        'fcnSetLateFeeBps',
+        [productId, lateFeeBps],
+        this._signer,
+        overrides,
+      )),
     });
   }
 
@@ -1540,17 +1515,16 @@ export default class CegaEvmSDKV2 {
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = await this.loadCegaEntry();
-    const gasLimit = await getEstimatedGasLimit(
-      cegaEntry,
-      'dcsSetDaysToStartAuctionDefault',
-      [daysToStartAuctionDefault, productId],
-      this._signer,
-    );
 
     return cegaEntry.dcsSetDaysToStartAuctionDefault(productId, daysToStartAuctionDefault, {
       ...(await this._gasStation.getGasOraclePrices()),
-      gasLimit,
-      ...overrides,
+      ...(await getOverridesWithEstimatedGasLimit(
+        cegaEntry,
+        'dcsSetDaysToStartAuctionDefault',
+        [productId, daysToStartAuctionDefault],
+        this._signer,
+        overrides,
+      )),
     });
   }
 
@@ -1560,17 +1534,16 @@ export default class CegaEvmSDKV2 {
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = await this.loadCegaEntry();
-    const gasLimit = await getEstimatedGasLimit(
-      cegaEntry,
-      'fcnSetDaysToStartAuctionDefault',
-      [productId, daysToStartAuctionDefault],
-      this._signer,
-    );
 
     return cegaEntry.fcnSetDaysToStartAuctionDefault(productId, daysToStartAuctionDefault, {
       ...(await this._gasStation.getGasOraclePrices()),
-      gasLimit,
-      ...overrides,
+      ...(await getOverridesWithEstimatedGasLimit(
+        cegaEntry,
+        'fcnSetDaysToStartAuctionDefault',
+        [productId, daysToStartAuctionDefault],
+        this._signer,
+        overrides,
+      )),
     });
   }
 
@@ -1580,17 +1553,16 @@ export default class CegaEvmSDKV2 {
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = await this.loadCegaEntry();
-    const gasLimit = await getEstimatedGasLimit(
-      cegaEntry,
-      'dcsSetDaysToStartSettlementDefault',
-      [daysToStartSettlementDefault, productId],
-      this._signer,
-    );
 
     return cegaEntry.dcsSetDaysToStartSettlementDefault(productId, daysToStartSettlementDefault, {
       ...(await this._gasStation.getGasOraclePrices()),
-      gasLimit,
-      ...overrides,
+      ...(await getOverridesWithEstimatedGasLimit(
+        cegaEntry,
+        'dcsSetDaysToStartSettlementDefault',
+        [productId, daysToStartSettlementDefault],
+        this._signer,
+        overrides,
+      )),
     });
   }
 
@@ -1600,17 +1572,16 @@ export default class CegaEvmSDKV2 {
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = await this.loadCegaEntry();
-    const gasLimit = await getEstimatedGasLimit(
-      cegaEntry,
-      'fcnSetDaysToStartSettlementDefault',
-      [productId, daysToStartSettlementDefault],
-      this._signer,
-    );
 
     return cegaEntry.fcnSetDaysToStartSettlementDefault(productId, daysToStartSettlementDefault, {
       ...(await this._gasStation.getGasOraclePrices()),
-      gasLimit,
-      ...overrides,
+      ...(await getOverridesWithEstimatedGasLimit(
+        cegaEntry,
+        'fcnSetDaysToStartSettlementDefault',
+        [productId, daysToStartSettlementDefault],
+        this._signer,
+        overrides,
+      )),
     });
   }
 
@@ -1620,17 +1591,16 @@ export default class CegaEvmSDKV2 {
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = await this.loadCegaEntry();
-    const gasLimit = await getEstimatedGasLimit(
-      cegaEntry,
-      'dcsSetDisputeGraceDelayInHours',
-      [disputeGraceDelayInHours, productId],
-      this._signer,
-    );
 
     return cegaEntry.dcsSetDisputeGraceDelayInHours(productId, disputeGraceDelayInHours, {
       ...(await this._gasStation.getGasOraclePrices()),
-      gasLimit,
-      ...overrides,
+      ...(await getOverridesWithEstimatedGasLimit(
+        cegaEntry,
+        'dcsSetDisputeGraceDelayInHours',
+        [productId, disputeGraceDelayInHours],
+        this._signer,
+        overrides,
+      )),
     });
   }
 
@@ -1640,17 +1610,16 @@ export default class CegaEvmSDKV2 {
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = await this.loadCegaEntry();
-    const gasLimit = await getEstimatedGasLimit(
-      cegaEntry,
-      'fcnSetDisputeGraceDelayInHours',
-      [productId, disputeGraceDelayInHours],
-      this._signer,
-    );
 
     return cegaEntry.fcnSetDisputeGraceDelayInHours(productId, disputeGraceDelayInHours, {
       ...(await this._gasStation.getGasOraclePrices()),
-      gasLimit,
-      ...overrides,
+      ...(await getOverridesWithEstimatedGasLimit(
+        cegaEntry,
+        'fcnSetDisputeGraceDelayInHours',
+        [productId, disputeGraceDelayInHours],
+        this._signer,
+        overrides,
+      )),
     });
   }
 
@@ -1660,17 +1629,16 @@ export default class CegaEvmSDKV2 {
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = await this.loadCegaEntry();
-    const gasLimit = await getEstimatedGasLimit(
-      cegaEntry,
-      'dcsSetDisputePeriodInHours',
-      [disputePeriodInHours, productId],
-      this._signer,
-    );
 
     return cegaEntry.dcsSetDisputePeriodInHours(productId, disputePeriodInHours, {
       ...(await this._gasStation.getGasOraclePrices()),
-      gasLimit,
-      ...overrides,
+      ...(await getOverridesWithEstimatedGasLimit(
+        cegaEntry,
+        'dcsSetDisputePeriodInHours',
+        [productId, disputePeriodInHours],
+        this._signer,
+        overrides,
+      )),
     });
   }
 
@@ -1680,17 +1648,16 @@ export default class CegaEvmSDKV2 {
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = await this.loadCegaEntry();
-    const gasLimit = await getEstimatedGasLimit(
-      cegaEntry,
-      'fcnSetDisputePeriodInHours',
-      [productId, disputePeriodInHours],
-      this._signer,
-    );
 
     return cegaEntry.fcnSetDisputePeriodInHours(productId, disputePeriodInHours, {
       ...(await this._gasStation.getGasOraclePrices()),
-      gasLimit,
-      ...overrides,
+      ...(await getOverridesWithEstimatedGasLimit(
+        cegaEntry,
+        'fcnSetDisputePeriodInHours',
+        [productId, disputePeriodInHours],
+        this._signer,
+        overrides,
+      )),
     });
   }
 
@@ -1704,16 +1671,16 @@ export default class CegaEvmSDKV2 {
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = await this.loadCegaEntry();
-    const gasLimit = await getEstimatedGasLimit(
-      cegaEntry,
-      'fcnBulkCheckBarriers',
-      [vaultAddresses, maxObservations],
-      this._signer,
-    );
+
     return cegaEntry.fcnBulkCheckBarriers(vaultAddresses, maxObservations, {
       ...(await this._gasStation.getGasOraclePrices()),
-      gasLimit,
-      ...overrides,
+      ...(await getOverridesWithEstimatedGasLimit(
+        cegaEntry,
+        'fcnBulkCheckBarriers',
+        [vaultAddresses, maxObservations],
+        this._signer,
+        overrides,
+      )),
     });
   }
 
@@ -1722,16 +1689,16 @@ export default class CegaEvmSDKV2 {
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = await this.loadCegaEntry();
-    const gasLimit = await getEstimatedGasLimit(
-      cegaEntry,
-      'dcsBulkCheckAuctionDefault',
-      [vaultAddresses],
-      this._signer,
-    );
+
     return cegaEntry.dcsBulkCheckAuctionDefault(vaultAddresses, {
       ...(await this._gasStation.getGasOraclePrices()),
-      gasLimit,
-      ...overrides,
+      ...(await getOverridesWithEstimatedGasLimit(
+        cegaEntry,
+        'dcsBulkCheckAuctionDefault',
+        [vaultAddresses],
+        this._signer,
+        overrides,
+      )),
     });
   }
 
@@ -1740,16 +1707,16 @@ export default class CegaEvmSDKV2 {
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = await this.loadCegaEntry();
-    const gasLimit = await getEstimatedGasLimit(
-      cegaEntry,
-      'fcnBulkCheckAuctionDefault',
-      [vaultAddresses],
-      this._signer,
-    );
+
     return cegaEntry.fcnBulkCheckAuctionDefault(vaultAddresses, {
       ...(await this._gasStation.getGasOraclePrices()),
-      gasLimit,
-      ...overrides,
+      ...(await getOverridesWithEstimatedGasLimit(
+        cegaEntry,
+        'fcnBulkCheckAuctionDefault',
+        [vaultAddresses],
+        this._signer,
+        overrides,
+      )),
     });
   }
 
@@ -1758,16 +1725,16 @@ export default class CegaEvmSDKV2 {
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = await this.loadCegaEntry();
-    const gasLimit = await getEstimatedGasLimit(
-      cegaEntry,
-      'dcsBulkCheckSettlementDefault',
-      [vaultAddresses],
-      this._signer,
-    );
+
     return cegaEntry.dcsBulkCheckSettlementDefault(vaultAddresses, {
       ...(await this._gasStation.getGasOraclePrices()),
-      gasLimit,
-      ...overrides,
+      ...(await getOverridesWithEstimatedGasLimit(
+        cegaEntry,
+        'dcsBulkCheckSettlementDefault',
+        [vaultAddresses],
+        this._signer,
+        overrides,
+      )),
     });
   }
 
@@ -1776,16 +1743,16 @@ export default class CegaEvmSDKV2 {
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = await this.loadCegaEntry();
-    const gasLimit = await getEstimatedGasLimit(
-      cegaEntry,
-      'fcnBulkCheckSettlementDefault',
-      [vaultAddresses],
-      this._signer,
-    );
+
     return cegaEntry.fcnBulkCheckSettlementDefault(vaultAddresses, {
       ...(await this._gasStation.getGasOraclePrices()),
-      gasLimit,
-      ...overrides,
+      ...(await getOverridesWithEstimatedGasLimit(
+        cegaEntry,
+        'fcnBulkCheckSettlementDefault',
+        [vaultAddresses],
+        this._signer,
+        overrides,
+      )),
     });
   }
 
@@ -1794,16 +1761,16 @@ export default class CegaEvmSDKV2 {
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = await this.loadCegaEntry();
-    const gasLimit = await getEstimatedGasLimit(
-      cegaEntry,
-      'dcsBulkCheckTradesExpiry',
-      [vaultAddresses],
-      this._signer,
-    );
+
     return cegaEntry.dcsBulkCheckTradesExpiry(vaultAddresses, {
       ...(await this._gasStation.getGasOraclePrices()),
-      gasLimit,
-      ...overrides,
+      ...(await getOverridesWithEstimatedGasLimit(
+        cegaEntry,
+        'dcsBulkCheckTradesExpiry',
+        [vaultAddresses],
+        this._signer,
+        overrides,
+      )),
     });
   }
 
@@ -1812,16 +1779,16 @@ export default class CegaEvmSDKV2 {
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = await this.loadCegaEntry();
-    const gasLimit = await getEstimatedGasLimit(
-      cegaEntry,
-      'fcnBulkCheckTradesExpiry',
-      [vaultAddresses],
-      this._signer,
-    );
+
     return cegaEntry.fcnBulkCheckTradesExpiry(vaultAddresses, {
       ...(await this._gasStation.getGasOraclePrices()),
-      gasLimit,
-      ...overrides,
+      ...(await getOverridesWithEstimatedGasLimit(
+        cegaEntry,
+        'fcnBulkCheckTradesExpiry',
+        [vaultAddresses],
+        this._signer,
+        overrides,
+      )),
     });
   }
 
@@ -1856,17 +1823,22 @@ export default class CegaEvmSDKV2 {
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     const pythAdapter = await this.loadPythAdapter();
-    const gasLimit = await getEstimatedGasLimit(
-      pythAdapter,
-      'updateAssetPrices',
-      [Math.floor(timestamp.getTime() / 1000), assetAddresses, updates],
-      this._signer,
-    );
+
     return pythAdapter.updateAssetPrices(
       Math.floor(timestamp.getTime() / 1000),
       assetAddresses,
       updates,
-      { value: fee, ...(await this._gasStation.getGasOraclePrices()), gasLimit, ...overrides },
+      {
+        value: fee,
+        ...(await this._gasStation.getGasOraclePrices()),
+        ...(await getOverridesWithEstimatedGasLimit(
+          pythAdapter,
+          'updateAssetPrices',
+          [Math.floor(timestamp.getTime() / 1000), assetAddresses, updates],
+          this._signer,
+          overrides,
+        )),
+      },
     );
   }
 }

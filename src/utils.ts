@@ -1,5 +1,5 @@
 import { ethers } from 'ethers';
-import { ProductNameLeverageTuple, pnlTupleDelimiter, EvmContractType } from './types';
+import { ProductNameLeverageTuple, pnlTupleDelimiter, EvmContractType, TxOverrides } from './types';
 
 export function splitArrayIntoChunks<Type>(inputArray: Type[], chunkSize: number): Type[][] {
   const result = [];
@@ -31,28 +31,35 @@ export function getEvmContractType(productName: string): EvmContractType {
 }
 
 /**
- * This function will return the estimated gas limit for the transaction
- * with adding a buffer (`bufferPercentage`, default is 20%) to it (gas prices can fluctuate).
+ * This function will estimate the gas limit for a transaction. If the gas estimation fails,
+ * it will use the manual gas limit provided in the overrides.
+ * And then it will return the overrides object with the estimated/ manual gas limit.
  * @returns {number} The estimated gas limit
  */
-export async function getEstimatedGasLimit(
+export async function getOverridesWithEstimatedGasLimit(
   contract: ethers.Contract,
   methodName: string,
   args: any[],
   signer?: ethers.Signer,
+  overrides: TxOverrides = {},
   bufferPercentage = 20,
-): Promise<number> {
-  const sender = signer ? await signer.getAddress() : null;
+): Promise<TxOverrides> {
+  const { gasLimit: customGasLimit, ...rest } = overrides;
+
+  let gasLimit;
   try {
-    const gasLimit = await contract.estimateGas[methodName](...args, {
-      from: sender,
-    });
+    const from = signer ? await signer.getAddress() : null;
+    gasLimit = await contract.estimateGas[methodName](...args, { from });
 
     // Add buffer to the estimated gas limit
     const buffer = gasLimit.mul(bufferPercentage).div(100);
-
-    return gasLimit.add(buffer).toNumber();
+    gasLimit.add(buffer);
   } catch (error) {
-    return 0;
+    if (customGasLimit) {
+      // gas estimation failed, use custom gas limit
+      gasLimit = customGasLimit;
+    }
   }
+
+  return { ...rest, gasLimit };
 }

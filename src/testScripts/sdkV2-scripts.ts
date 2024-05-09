@@ -58,7 +58,7 @@ const CURRENT_NETWORK: Network = Network.arbitrum;
 function loadSettings(network: Network) {
   const config = CONFIGS[network];
   const provider = new ethers.providers.JsonRpcProvider(config.RPC_URL);
-  // const userSigner = new ethers.Wallet(ADMIN_ACCOUNTS.userPk, provider);
+  // const userSigner = new ethers.Wallet(ADMIN_ACCOUNTS.programAdminPk, provider);
 
   const sdk = new CegaEvmSDKV2(
     config.addressManager,
@@ -123,6 +123,18 @@ async function addDeposits(network: Network) {
   // console.log('increaseAllowance stETH: ', txReceipt.transactionHash);
   // txResponse = await sdk.dcsAddToDepositQueue(stethProductId, amount, config.stEth);
   // console.log('deposit stETH: ', txResponse.hash);
+}
+
+async function depositUsingESTGasLimit() {
+  const { sdk } = loadSettings(CURRENT_NETWORK);
+
+  const amount = ethers.utils.parseUnits('0.0004', 18);
+  const txResponse = await sdk.addToDepositQueue(
+    67,
+    amount,
+    '0x0000000000000000000000000000000000000000',
+  );
+  console.log('TxResponse:', txResponse);
 }
 
 async function bulkActions(network: Network) {
@@ -275,6 +287,7 @@ async function main() {
   // await getQueues(Network.ethereum);
   // await addDeposits(CURRENT_NETWORK);
   // await bulkActions(CURRENT_NETWORK);
+  // await depositUsingESTGasLimit();
 }
 
 main();
