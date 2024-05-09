@@ -533,6 +533,7 @@ export default class CegaEvmSDKV2 {
         'addToDepositQueue',
         [productId, amount, await this._signer.getAddress()],
         this._signer,
+        overrides,
       )),
       value: asset === ethers.constants.AddressZero ? amount : 0,
     });
@@ -1017,7 +1018,6 @@ export default class CegaEvmSDKV2 {
         this._signer,
         overrides,
       )),
-      ...overrides,
       value: nativeAssetTransferSummedAmount ?? 0,
     });
   }
