@@ -36,7 +36,7 @@ export function getEvmContractType(productName: string): EvmContractType {
  * And then it will return the overrides object with the estimated/ manual gas limit.
  * @returns {number} The estimated gas limit
  */
-export async function getEstimatedGasLimitWithOverrides(
+export async function getOverridesWithEstimatedGasLimit(
   contract: ethers.Contract,
   methodName: string,
   args: any[],

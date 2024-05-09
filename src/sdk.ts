@@ -23,7 +23,7 @@ import {
 } from './types';
 
 import {
-  getEstimatedGasLimitWithOverrides,
+  getOverridesWithEstimatedGasLimit,
   getEvmContractType,
   productNameLeverageTuple,
   splitArrayIntoChunks,
@@ -241,7 +241,7 @@ export default class CegaEvmSDK {
 
     return cegaState.addOracle(oracleName, oracleAddress, {
       ...(await this._gasStation.getGasOraclePrices()),
-      ...(await getEstimatedGasLimitWithOverrides(
+      ...(await getOverridesWithEstimatedGasLimit(
         cegaState,
         'addOracle',
         [oracleName, oracleAddress],
@@ -259,7 +259,7 @@ export default class CegaEvmSDK {
 
     return cegaState.removeOracle(oracleName, {
       ...(await this._gasStation.getGasOraclePrices()),
-      ...(await getEstimatedGasLimitWithOverrides(
+      ...(await getOverridesWithEstimatedGasLimit(
         cegaState,
         'removeOracle',
         [oracleName],
@@ -278,7 +278,7 @@ export default class CegaEvmSDK {
 
     return oracle.addNextRoundData(nextRoundData, {
       ...(await this._gasStation.getGasOraclePrices()),
-      ...(await getEstimatedGasLimitWithOverrides(
+      ...(await getOverridesWithEstimatedGasLimit(
         oracle,
         'addNextRoundData',
         [nextRoundData],
@@ -298,7 +298,7 @@ export default class CegaEvmSDK {
 
     return oracle.updateRoundData(roundId, roundData, {
       ...(await this._gasStation.getGasOraclePrices()),
-      ...(await getEstimatedGasLimitWithOverrides(
+      ...(await getOverridesWithEstimatedGasLimit(
         oracle,
         'updateRoundData',
         [roundId, roundData],
@@ -345,7 +345,7 @@ export default class CegaEvmSDK {
 
     return cegaState.updateMarketMakerPermission(marketMakerAddress, allow, {
       ...(await this._gasStation.getGasOraclePrices()),
-      ...(await getEstimatedGasLimitWithOverrides(
+      ...(await getOverridesWithEstimatedGasLimit(
         cegaState,
         'updateMarketMakerPermission',
         [marketMakerAddress, allow],
@@ -373,7 +373,7 @@ export default class CegaEvmSDK {
 
     return cegaState.setFeeRecipient(feeRecipient, {
       ...(await this._gasStation.getGasOraclePrices()),
-      ...(await getEstimatedGasLimitWithOverrides(
+      ...(await getOverridesWithEstimatedGasLimit(
         cegaState,
         'setFeeRecipient',
         [feeRecipient],
@@ -393,7 +393,7 @@ export default class CegaEvmSDK {
 
     return cegaState.moveAssetsToProduct(productName, vaultAddress, amount, {
       ...(await this._gasStation.getGasOraclePrices()),
-      ...(await getEstimatedGasLimitWithOverrides(
+      ...(await getOverridesWithEstimatedGasLimit(
         cegaState,
         'moveAssetsToProduct',
         [productName, vaultAddress, amount],
@@ -416,7 +416,7 @@ export default class CegaEvmSDK {
 
     return cegaState.addProduct(productName, productAddress, {
       ...(await this._gasStation.getGasOraclePrices()),
-      ...(await getEstimatedGasLimitWithOverrides(
+      ...(await getOverridesWithEstimatedGasLimit(
         cegaState,
         'addProduct',
         [productName, productAddress],
@@ -434,7 +434,7 @@ export default class CegaEvmSDK {
 
     return cegaState.removeProduct(productName, {
       ...(await this._gasStation.getGasOraclePrices()),
-      ...(await getEstimatedGasLimitWithOverrides(
+      ...(await getOverridesWithEstimatedGasLimit(
         cegaState,
         'removeProduct',
         [productName],
@@ -1085,7 +1085,7 @@ export default class CegaEvmSDK {
 
     return product.setManagementFeeBps(managementFeeBps, {
       ...(await this._gasStation.getGasOraclePrices()),
-      ...(await getEstimatedGasLimitWithOverrides(
+      ...(await getOverridesWithEstimatedGasLimit(
         product,
         'setManagementFeeBps',
         [managementFeeBps],
@@ -1110,7 +1110,7 @@ export default class CegaEvmSDK {
 
     return product.setYieldFeeBps(yieldFeeBps, {
       ...(await this._gasStation.getGasOraclePrices()),
-      ...(await getEstimatedGasLimitWithOverrides(
+      ...(await getOverridesWithEstimatedGasLimit(
         product,
         'setYieldFeeBps',
         [yieldFeeBps],
@@ -1135,7 +1135,7 @@ export default class CegaEvmSDK {
 
     return product.setIsDepositQueueOpen(isDepositQueueOpen, {
       ...(await this._gasStation.getGasOraclePrices()),
-      ...(await getEstimatedGasLimitWithOverrides(
+      ...(await getOverridesWithEstimatedGasLimit(
         product,
         'setIsDepositQueueOpen',
         [isDepositQueueOpen],
@@ -1155,7 +1155,7 @@ export default class CegaEvmSDK {
 
     return product.setIsDepositQueueOpen(leverage, isDepositQueueOpen, {
       ...(await this._gasStation.getGasOraclePrices()),
-      ...(await getEstimatedGasLimitWithOverrides(
+      ...(await getOverridesWithEstimatedGasLimit(
         product,
         'setIsDepositQueueOpen',
         [leverage, isDepositQueueOpen],
@@ -1181,7 +1181,7 @@ export default class CegaEvmSDK {
 
     return product.setMaxDepositAmountLimit(maxDepositAmountLimit, {
       ...(await this._gasStation.getGasOraclePrices()),
-      ...(await getEstimatedGasLimitWithOverrides(
+      ...(await getOverridesWithEstimatedGasLimit(
         product,
         'setMaxDepositAmountLimit',
         [maxDepositAmountLimit],
@@ -1201,7 +1201,7 @@ export default class CegaEvmSDK {
 
     return product.setMaxDepositAmountLimit(leverage, maxDepositAmountLimit, {
       ...(await this._gasStation.getGasOraclePrices()),
-      ...(await getEstimatedGasLimitWithOverrides(
+      ...(await getOverridesWithEstimatedGasLimit(
         product,
         'setMaxDepositAmountLimit',
         [leverage, maxDepositAmountLimit],
@@ -1224,7 +1224,7 @@ export default class CegaEvmSDK {
 
     return product.createVault(tokenName, tokenSymbol, vaultStartInSeconds, {
       ...(await this._gasStation.getGasOraclePrices()),
-      ...(await getEstimatedGasLimitWithOverrides(
+      ...(await getOverridesWithEstimatedGasLimit(
         product,
         'createVault',
         [tokenName, tokenSymbol, vaultStartInSeconds],
@@ -1247,7 +1247,7 @@ export default class CegaEvmSDK {
 
     return product.createVault(tokenName, tokenSymbol, vaultStartInSeconds, leverage, {
       ...(await this._gasStation.getGasOraclePrices()),
-      ...(await getEstimatedGasLimitWithOverrides(
+      ...(await getOverridesWithEstimatedGasLimit(
         product,
         'createVault',
         [tokenName, tokenSymbol, vaultStartInSeconds, leverage],
@@ -1271,7 +1271,7 @@ export default class CegaEvmSDK {
     }
     return product.removeVault(vaultIndex, {
       ...(await this._gasStation.getGasOraclePrices()),
-      ...(await getEstimatedGasLimitWithOverrides(
+      ...(await getOverridesWithEstimatedGasLimit(
         product,
         'removeVault',
         [vaultIndex],
@@ -1296,7 +1296,7 @@ export default class CegaEvmSDK {
 
     return product.removeVault(leverage, vaultIndex, {
       ...(await this._gasStation.getGasOraclePrices()),
-      ...(await getEstimatedGasLimitWithOverrides(
+      ...(await getOverridesWithEstimatedGasLimit(
         product,
         'removeVault',
         [leverage, vaultIndex],
@@ -1325,7 +1325,7 @@ export default class CegaEvmSDK {
       tenorInDays,
       {
         ...(await this._gasStation.getGasOraclePrices()),
-        ...(await getEstimatedGasLimitWithOverrides(
+        ...(await getOverridesWithEstimatedGasLimit(
           product,
           'setTradeData',
           [
@@ -1352,7 +1352,7 @@ export default class CegaEvmSDK {
 
     return product.addOptionBarrier(vaultAddress, optionBarrier, {
       ...(await this._gasStation.getGasOraclePrices()),
-      ...(await getEstimatedGasLimitWithOverrides(
+      ...(await getOverridesWithEstimatedGasLimit(
         product,
         'addOptionBarrier',
         [vaultAddress, optionBarrier],
@@ -1381,7 +1381,7 @@ export default class CegaEvmSDK {
       barrierAbsoluteValue,
       {
         ...(await this._gasStation.getGasOraclePrices()),
-        ...(await getEstimatedGasLimitWithOverrides(
+        ...(await getOverridesWithEstimatedGasLimit(
           product,
           'updateOptionBarrier',
           [vaultAddress, index, asset, strikeAbsoluteValue, barrierAbsoluteValue],
@@ -1404,7 +1404,7 @@ export default class CegaEvmSDK {
 
     return product.updateOptionBarrierOracle(vaultAddress, index, asset, newOracleName, {
       ...(await this._gasStation.getGasOraclePrices()),
-      ...(await getEstimatedGasLimitWithOverrides(
+      ...(await getOverridesWithEstimatedGasLimit(
         product,
         'updateOptionBarrierOracle',
         [vaultAddress, index, asset, newOracleName],
@@ -1425,7 +1425,7 @@ export default class CegaEvmSDK {
 
     return product.removeOptionBarrier(vaultAddress, index, asset, {
       ...(await this._gasStation.getGasOraclePrices()),
-      ...(await getEstimatedGasLimitWithOverrides(
+      ...(await getOverridesWithEstimatedGasLimit(
         product,
         'removeOptionBarrier',
         [vaultAddress, index, asset],
@@ -1445,7 +1445,7 @@ export default class CegaEvmSDK {
 
     return product.setVaultStatus(vaultAddress, vaultStatus, {
       ...(await this._gasStation.getGasOraclePrices()),
-      ...(await getEstimatedGasLimitWithOverrides(
+      ...(await getOverridesWithEstimatedGasLimit(
         product,
         'setVaultStatus',
         [vaultAddress, vaultStatus],
@@ -1464,7 +1464,7 @@ export default class CegaEvmSDK {
 
     return product.openVaultDeposits(vaultAddress, {
       ...(await this._gasStation.getGasOraclePrices()),
-      ...(await getEstimatedGasLimitWithOverrides(
+      ...(await getOverridesWithEstimatedGasLimit(
         product,
         'openVaultDeposits',
         [vaultAddress],
@@ -1484,7 +1484,7 @@ export default class CegaEvmSDK {
 
     return product.setKnockInStatus(vaultAddress, newState, {
       ...(await this._gasStation.getGasOraclePrices()),
-      ...(await getEstimatedGasLimitWithOverrides(
+      ...(await getOverridesWithEstimatedGasLimit(
         product,
         'setKnockInStatus',
         [vaultAddress, newState],
@@ -1520,7 +1520,7 @@ export default class CegaEvmSDK {
 
     return erc20Contract.approve(product.address, amount, {
       ...(await this._gasStation.getGasOraclePrices()),
-      ...(await getEstimatedGasLimitWithOverrides(
+      ...(await getOverridesWithEstimatedGasLimit(
         erc20Contract,
         'approve',
         [product.address, amount],
@@ -1543,7 +1543,7 @@ export default class CegaEvmSDK {
 
     return erc20Contract.increaseAllowance(product.address, amount, {
       ...(await this._gasStation.getGasOraclePrices()),
-      ...(await getEstimatedGasLimitWithOverrides(
+      ...(await getOverridesWithEstimatedGasLimit(
         erc20Contract,
         'increaseAllowance',
         [product.address, amount],
@@ -1563,7 +1563,7 @@ export default class CegaEvmSDK {
 
     return product.addToDepositQueue(amount, {
       ...(await this._gasStation.getGasOraclePrices()),
-      ...(await getEstimatedGasLimitWithOverrides(
+      ...(await getOverridesWithEstimatedGasLimit(
         product,
         'addToDepositQueue',
         [amount],
@@ -1583,7 +1583,7 @@ export default class CegaEvmSDK {
 
     return product.addToDepositQueue(leverage, amount, {
       ...(await this._gasStation.getGasOraclePrices()),
-      ...(await getEstimatedGasLimitWithOverrides(
+      ...(await getOverridesWithEstimatedGasLimit(
         product,
         'addToDepositQueue',
         [leverage, amount],
@@ -1603,7 +1603,7 @@ export default class CegaEvmSDK {
 
     return product.processDepositQueue(vaultAddress, maxProcessCount, {
       ...(await this._gasStation.getGasOraclePrices()),
-      ...(await getEstimatedGasLimitWithOverrides(
+      ...(await getOverridesWithEstimatedGasLimit(
         product,
         'processDepositQueue',
         [vaultAddress, maxProcessCount],
@@ -1639,7 +1639,7 @@ export default class CegaEvmSDK {
 
     return vault.approve(product.address, amountShares, {
       ...(await this._gasStation.getGasOraclePrices()),
-      ...(await getEstimatedGasLimitWithOverrides(
+      ...(await getOverridesWithEstimatedGasLimit(
         vault,
         'approve',
         [product.address, amountShares],
@@ -1661,7 +1661,7 @@ export default class CegaEvmSDK {
 
     return vault.increaseAllowance(product.address, amountShares, {
       ...(await this._gasStation.getGasOraclePrices()),
-      ...(await getEstimatedGasLimitWithOverrides(
+      ...(await getOverridesWithEstimatedGasLimit(
         vault,
         'increaseAllowance',
         [product.address, amountShares],
@@ -1681,7 +1681,7 @@ export default class CegaEvmSDK {
 
     return product.addToWithdrawalQueue(vaultAddress, amountShares, {
       ...(await this._gasStation.getGasOraclePrices()),
-      ...(await getEstimatedGasLimitWithOverrides(
+      ...(await getOverridesWithEstimatedGasLimit(
         product,
         'addToWithdrawalQueue',
         [vaultAddress, amountShares],
@@ -1700,7 +1700,7 @@ export default class CegaEvmSDK {
 
     return product.collectFees(vaultAddress, {
       ...(await this._gasStation.getGasOraclePrices()),
-      ...(await getEstimatedGasLimitWithOverrides(
+      ...(await getOverridesWithEstimatedGasLimit(
         product,
         'collectFees',
         [vaultAddress],
@@ -1720,7 +1720,7 @@ export default class CegaEvmSDK {
 
     return product.processWithdrawalQueue(vaultAddress, maxProcessCount, {
       ...(await this._gasStation.getGasOraclePrices()),
-      ...(await getEstimatedGasLimitWithOverrides(
+      ...(await getOverridesWithEstimatedGasLimit(
         product,
         'processWithdrawalQueue',
         [vaultAddress, maxProcessCount],
@@ -1739,7 +1739,7 @@ export default class CegaEvmSDK {
 
     return product.rolloverVault(vaultAddress, {
       ...(await this._gasStation.getGasOraclePrices()),
-      ...(await getEstimatedGasLimitWithOverrides(
+      ...(await getOverridesWithEstimatedGasLimit(
         product,
         'rolloverVault',
         [vaultAddress],
@@ -1760,7 +1760,7 @@ export default class CegaEvmSDK {
 
     return product.sendAssetsToTrade(vaultAddress, receiver, amount, {
       ...(await this._gasStation.getGasOraclePrices()),
-      ...(await getEstimatedGasLimitWithOverrides(
+      ...(await getOverridesWithEstimatedGasLimit(
         product,
         'sendAssetsToTrade',
         [vaultAddress, receiver, amount],
@@ -1782,7 +1782,7 @@ export default class CegaEvmSDK {
 
     return product.checkBarriers(vaultAddress, {
       ...(await this._gasStation.getGasOraclePrices()),
-      ...(await getEstimatedGasLimitWithOverrides(
+      ...(await getOverridesWithEstimatedGasLimit(
         product,
         'checkBarriers',
         [vaultAddress],
@@ -1801,7 +1801,7 @@ export default class CegaEvmSDK {
 
     return product.calculateCurrentYield(vaultAddress, {
       ...(await this._gasStation.getGasOraclePrices()),
-      ...(await getEstimatedGasLimitWithOverrides(
+      ...(await getOverridesWithEstimatedGasLimit(
         product,
         'calculateCurrentYield',
         [vaultAddress],
@@ -1820,7 +1820,7 @@ export default class CegaEvmSDK {
 
     return product.calculateVaultFinalPayoff(vaultAddress, {
       ...(await this._gasStation.getGasOraclePrices()),
-      ...(await getEstimatedGasLimitWithOverrides(
+      ...(await getOverridesWithEstimatedGasLimit(
         product,
         'calculateVaultFinalPayoff',
         [vaultAddress],
@@ -1838,7 +1838,7 @@ export default class CegaEvmSDK {
 
     return bulkActionsEntry.bulkCalculateCurrentYield(vaultAddresses, {
       ...(await this._gasStation.getGasOraclePrices()),
-      ...(await getEstimatedGasLimitWithOverrides(
+      ...(await getOverridesWithEstimatedGasLimit(
         bulkActionsEntry,
         'bulkCalculateCurrentYield',
         [vaultAddresses],
@@ -1856,7 +1856,7 @@ export default class CegaEvmSDK {
 
     return bulkActionsEntry.bulkCalculateVaultFinalPayoffs(vaultAddresses, {
       ...(await this._gasStation.getGasOraclePrices()),
-      ...(await getEstimatedGasLimitWithOverrides(
+      ...(await getOverridesWithEstimatedGasLimit(
         bulkActionsEntry,
         'bulkCalculateVaultFinalPayoffs',
         [vaultAddresses],
@@ -1874,7 +1874,7 @@ export default class CegaEvmSDK {
 
     return bulkActionsEntry.bulkCheckBarriers(vaultAddresses, {
       ...(await this._gasStation.getGasOraclePrices()),
-      ...(await getEstimatedGasLimitWithOverrides(
+      ...(await getOverridesWithEstimatedGasLimit(
         bulkActionsEntry,
         'bulkCheckBarriers',
         [vaultAddresses],
@@ -1896,7 +1896,7 @@ export default class CegaEvmSDK {
 
     return bulkActionsEntry.bulkOpenVaultDeposits(vaultAddresses, {
       ...(await this._gasStation.getGasOraclePrices()),
-      ...(await getEstimatedGasLimitWithOverrides(
+      ...(await getOverridesWithEstimatedGasLimit(
         bulkActionsEntry,
         'bulkOpenVaultDeposits',
         [vaultAddresses],
@@ -1917,7 +1917,7 @@ export default class CegaEvmSDK {
 
     return bulkActionsEntry.bulkProcessDepositQueues(params, {
       ...(await this._gasStation.getGasOraclePrices()),
-      ...(await getEstimatedGasLimitWithOverrides(
+      ...(await getOverridesWithEstimatedGasLimit(
         bulkActionsEntry,
         'bulkProcessDepositQueues',
         [params],
@@ -1946,7 +1946,7 @@ export default class CegaEvmSDK {
 
     return bulkActionsEntry.bulkSetTradeData(accumulatedParams, {
       ...(await this._gasStation.getGasOraclePrices()),
-      ...(await getEstimatedGasLimitWithOverrides(
+      ...(await getOverridesWithEstimatedGasLimit(
         bulkActionsEntry,
         'bulkSetTradeData',
         [accumulatedParams],
@@ -1970,7 +1970,7 @@ export default class CegaEvmSDK {
 
     return bulkActionsEntry.bulkUpdateOptionBarriers(params, {
       ...(await this._gasStation.getGasOraclePrices()),
-      ...(await getEstimatedGasLimitWithOverrides(
+      ...(await getOverridesWithEstimatedGasLimit(
         bulkActionsEntry,
         'bulkUpdateOptionBarriers',
         [params],
@@ -1992,7 +1992,7 @@ export default class CegaEvmSDK {
 
     return bulkActionsEntry.bulkSendAssetsToTrade(params, {
       ...(await this._gasStation.getGasOraclePrices()),
-      ...(await getEstimatedGasLimitWithOverrides(
+      ...(await getOverridesWithEstimatedGasLimit(
         bulkActionsEntry,
         'bulkSendAssetsToTrade',
         [params],
@@ -2014,7 +2014,7 @@ export default class CegaEvmSDK {
 
     return bulkActionsEntry.bulkMoveAssetsToProducts(params, {
       ...(await this._gasStation.getGasOraclePrices()),
-      ...(await getEstimatedGasLimitWithOverrides(
+      ...(await getOverridesWithEstimatedGasLimit(
         bulkActionsEntry,
         'bulkMoveAssetsToProducts',
         [params],
@@ -2032,7 +2032,7 @@ export default class CegaEvmSDK {
 
     return bulkActionsEntry.bulkCollectFees(vaultAddresses, {
       ...(await this._gasStation.getGasOraclePrices()),
-      ...(await getEstimatedGasLimitWithOverrides(
+      ...(await getOverridesWithEstimatedGasLimit(
         bulkActionsEntry,
         'bulkCollectFees',
         [vaultAddresses],
@@ -2053,7 +2053,7 @@ export default class CegaEvmSDK {
 
     return bulkActionsEntry.bulkProcessWithdrawalQueues(params, {
       ...(await this._gasStation.getGasOraclePrices()),
-      ...(await getEstimatedGasLimitWithOverrides(
+      ...(await getOverridesWithEstimatedGasLimit(
         bulkActionsEntry,
         'bulkProcessWithdrawalQueues',
         [params],
@@ -2071,7 +2071,7 @@ export default class CegaEvmSDK {
 
     return bulkActionsEntry.bulkRolloverVaults(vaultAddresses, {
       ...(await this._gasStation.getGasOraclePrices()),
-      ...(await getEstimatedGasLimitWithOverrides(
+      ...(await getOverridesWithEstimatedGasLimit(
         bulkActionsEntry,
         'bulkRolloverVaults',
         [vaultAddresses],
