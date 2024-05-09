@@ -58,14 +58,14 @@ const CURRENT_NETWORK: Network = Network.arbitrum;
 function loadSettings(network: Network) {
   const config = CONFIGS[network];
   const provider = new ethers.providers.JsonRpcProvider(config.RPC_URL);
-  const userSigner = new ethers.Wallet(ADMIN_ACCOUNTS.programAdminPk, provider);
+  // const userSigner = new ethers.Wallet(ADMIN_ACCOUNTS.programAdminPk, provider);
 
   const sdk = new CegaEvmSDKV2(
     config.addressManager,
     config.treasuryAddress,
     config.gasStation,
     provider,
-    userSigner,
+    // userSigner,
   );
   return { sdk };
 }
@@ -287,7 +287,7 @@ async function main() {
   // await getQueues(Network.ethereum);
   // await addDeposits(CURRENT_NETWORK);
   // await bulkActions(CURRENT_NETWORK);
+  // await depositUsingESTGasLimit();
 }
 
 main();
-depositUsingESTGasLimit();
