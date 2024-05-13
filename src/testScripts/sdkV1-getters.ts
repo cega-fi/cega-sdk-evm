@@ -5,8 +5,6 @@ import * as dotenv from 'dotenv';
 
 import { ethers } from 'ethers';
 import { CegaEvmSDK, EthereumAlchemyGasStation, ArbitrumAlchemyGasStation, types } from '..';
-import CegaStateAbi from '../abi/LOVProduct.json';
-import { getEstimatedGasLimit } from '../utils';
 
 dotenv.config();
 
