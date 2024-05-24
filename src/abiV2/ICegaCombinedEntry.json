@@ -9,6 +9,25 @@
         {
           "indexed": true,
           "internalType": "address",
+          "name": "receiver",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "bool",
+          "name": "value",
+          "type": "bool"
+        }
+      ],
+      "name": "BondAllowListUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
           "name": "vaultAddress",
           "type": "address"
         },
@@ -77,7 +96,7 @@
         {
           "indexed": false,
           "internalType": "uint8",
-          "name": "daysToStartAuctionDefault",
+          "name": "hoursToStartAuctionDefault",
           "type": "uint8"
         }
       ],
@@ -96,7 +115,7 @@
         {
           "indexed": false,
           "internalType": "uint8",
-          "name": "daysToStartLateFees",
+          "name": "hoursToStartLateFees",
           "type": "uint8"
         }
       ],
@@ -115,7 +134,7 @@
         {
           "indexed": false,
           "internalType": "uint8",
-          "name": "daysToStartSettlementDefault",
+          "name": "hoursToStartSettlementDefault",
           "type": "uint8"
         }
       ],
@@ -728,7 +747,7 @@
         {
           "indexed": false,
           "internalType": "uint8",
-          "name": "daysToStartAuctionDefault",
+          "name": "hoursToStartAuctionDefault",
           "type": "uint8"
         }
       ],
@@ -747,7 +766,7 @@
         {
           "indexed": false,
           "internalType": "uint8",
-          "name": "daysToStartLateFees",
+          "name": "hoursToStartLateFees",
           "type": "uint8"
         }
       ],
@@ -766,7 +785,7 @@
         {
           "indexed": false,
           "internalType": "uint8",
-          "name": "daysToStartSettlementDefault",
+          "name": "hoursToStartSettlementDefault",
           "type": "uint8"
         }
       ],
@@ -1227,6 +1246,456 @@
         }
       ],
       "name": "ProductNameUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "auctionWinner",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint40",
+          "name": "tradeStartDate",
+          "type": "uint40"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint16",
+          "name": "lendingAprBps",
+          "type": "uint16"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint16",
+          "name": "maxAprBps",
+          "type": "uint16"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint128[]",
+          "name": "initialSpotPrices",
+          "type": "uint128[]"
+        }
+      ],
+      "name": "SFNAuctionEnded",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint8",
+          "name": "disputeGraceDelayInHours",
+          "type": "uint8"
+        }
+      ],
+      "name": "SFNDisputeGraceDelayInHoursUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint8",
+          "name": "disputePeriodInHours",
+          "type": "uint8"
+        }
+      ],
+      "name": "SFNDisputePeriodInHoursUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint40",
+          "name": "timestamp",
+          "type": "uint40"
+        },
+        {
+          "indexed": false,
+          "internalType": "bool",
+          "name": "isDisputeAccepted",
+          "type": "bool"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint128[]",
+          "name": "newPrices",
+          "type": "uint128[]"
+        }
+      ],
+      "name": "SFNDisputeProcessed",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint40",
+          "name": "timestamp",
+          "type": "uint40"
+        }
+      ],
+      "name": "SFNDisputeSubmitted",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint8",
+          "name": "daysToStartAuctionDefault",
+          "type": "uint8"
+        }
+      ],
+      "name": "SFNHoursToStartAuctionDefaultUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint8",
+          "name": "daysToStartLateFees",
+          "type": "uint8"
+        }
+      ],
+      "name": "SFNHoursToStartLateFeesUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint8",
+          "name": "daysToStartSettlementDefault",
+          "type": "uint8"
+        }
+      ],
+      "name": "SFNHoursToStartSettlementDefaultUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "indexed": false,
+          "internalType": "bool",
+          "name": "isDepositQueueOpen",
+          "type": "bool"
+        }
+      ],
+      "name": "SFNIsDepositQueueOpenUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "bool",
+          "name": "isKnockedOut",
+          "type": "bool"
+        }
+      ],
+      "name": "SFNIsKnockedOutUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint16",
+          "name": "lateFeeBps",
+          "type": "uint16"
+        }
+      ],
+      "name": "SFNLateFeeBpsUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint128",
+          "name": "feeAmount",
+          "type": "uint128"
+        }
+      ],
+      "name": "SFNLateFeePaid",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint128",
+          "name": "maxUnderlyingAmountLimit",
+          "type": "uint128"
+        }
+      ],
+      "name": "SFNMaxUnderlyingAmountLimitUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint128",
+          "name": "minDepositAmount",
+          "type": "uint128"
+        }
+      ],
+      "name": "SFNMinDepositAmountUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint128",
+          "name": "minWithdrawalAmount",
+          "type": "uint128"
+        }
+      ],
+      "name": "SFNMinWithdrawalAmountUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        }
+      ],
+      "name": "SFNProductCreated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "auctionWinner",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint128",
+          "name": "notionalAmount",
+          "type": "uint128"
+        }
+      ],
+      "name": "SFNTradeStarted",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "components": [
+            {
+              "internalType": "string",
+              "name": "tokenName",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "tokenSymbol",
+              "type": "string"
+            },
+            {
+              "internalType": "uint16",
+              "name": "yieldFeeBps",
+              "type": "uint16"
+            },
+            {
+              "internalType": "uint16",
+              "name": "managementFeeBps",
+              "type": "uint16"
+            }
+          ],
+          "indexed": false,
+          "internalType": "struct VaultCreationParams",
+          "name": "creationParams",
+          "type": "tuple"
+        }
+      ],
+      "name": "SFNVaultCreated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint128",
+          "name": "totalFees",
+          "type": "uint128"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint128",
+          "name": "managementFee",
+          "type": "uint128"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint128",
+          "name": "yieldFee",
+          "type": "uint128"
+        }
+      ],
+      "name": "SFNVaultFeesCollected",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        }
+      ],
+      "name": "SFNVaultRolledOver",
       "type": "event"
     },
     {
@@ -1879,17 +2348,17 @@
             },
             {
               "internalType": "uint8",
-              "name": "daysToStartLateFees",
+              "name": "hoursToStartLateFees",
               "type": "uint8"
             },
             {
               "internalType": "uint8",
-              "name": "daysToStartAuctionDefault",
+              "name": "hoursToStartAuctionDefault",
               "type": "uint8"
             },
             {
               "internalType": "uint8",
-              "name": "daysToStartSettlementDefault",
+              "name": "hoursToStartSettlementDefault",
               "type": "uint8"
             },
             {
@@ -2091,7 +2560,7 @@
             },
             {
               "internalType": "uint8",
-              "name": "daysToStartLateFees",
+              "name": "hoursToStartLateFees",
               "type": "uint8"
             },
             {
@@ -2106,12 +2575,12 @@
             },
             {
               "internalType": "uint8",
-              "name": "daysToStartAuctionDefault",
+              "name": "hoursToStartAuctionDefault",
               "type": "uint8"
             },
             {
               "internalType": "uint8",
-              "name": "daysToStartSettlementDefault",
+              "name": "hoursToStartSettlementDefault",
               "type": "uint8"
             },
             {
@@ -2331,7 +2800,7 @@
         },
         {
           "internalType": "uint8",
-          "name": "daysToStartAuctionDefault",
+          "name": "hoursToStartAuctionDefault",
           "type": "uint8"
         }
       ],
@@ -2349,7 +2818,7 @@
         },
         {
           "internalType": "uint8",
-          "name": "daysToStartLateFees",
+          "name": "hoursToStartLateFees",
           "type": "uint8"
         }
       ],
@@ -2367,7 +2836,7 @@
         },
         {
           "internalType": "uint8",
-          "name": "daysToStartSettlementDefault",
+          "name": "hoursToStartSettlementDefault",
           "type": "uint8"
         }
       ],
@@ -3041,17 +3510,17 @@
             },
             {
               "internalType": "uint8",
-              "name": "daysToStartLateFees",
+              "name": "hoursToStartLateFees",
               "type": "uint8"
             },
             {
               "internalType": "uint8",
-              "name": "daysToStartAuctionDefault",
+              "name": "hoursToStartAuctionDefault",
               "type": "uint8"
             },
             {
               "internalType": "uint8",
-              "name": "daysToStartSettlementDefault",
+              "name": "hoursToStartSettlementDefault",
               "type": "uint8"
             },
             {
@@ -3299,17 +3768,17 @@
             },
             {
               "internalType": "uint8",
-              "name": "daysToStartLateFees",
+              "name": "hoursToStartLateFees",
               "type": "uint8"
             },
             {
               "internalType": "uint8",
-              "name": "daysToStartAuctionDefault",
+              "name": "hoursToStartAuctionDefault",
               "type": "uint8"
             },
             {
               "internalType": "uint8",
-              "name": "daysToStartSettlementDefault",
+              "name": "hoursToStartSettlementDefault",
               "type": "uint8"
             },
             {
@@ -3586,31 +4055,13 @@
     {
       "inputs": [
         {
-          "internalType": "address",
-          "name": "receiver",
-          "type": "address"
-        },
-        {
-          "internalType": "bool",
-          "name": "value",
-          "type": "bool"
-        }
-      ],
-      "name": "fcnSetBondAllowList",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
           "internalType": "uint32",
           "name": "productId",
           "type": "uint32"
         },
         {
           "internalType": "uint8",
-          "name": "daysToStartAuctionDefault",
+          "name": "hoursToStartAuctionDefault",
           "type": "uint8"
         }
       ],
@@ -3628,7 +4079,7 @@
         },
         {
           "internalType": "uint8",
-          "name": "daysToStartLateFees",
+          "name": "hoursToStartLateFees",
           "type": "uint8"
         }
       ],
@@ -3646,7 +4097,7 @@
         },
         {
           "internalType": "uint8",
-          "name": "daysToStartSettlementDefault",
+          "name": "hoursToStartSettlementDefault",
           "type": "uint8"
         }
       ],
@@ -3834,16 +4285,16 @@
       "inputs": [
         {
           "internalType": "address",
-          "name": "vaultAddress",
+          "name": "receiver",
           "type": "address"
         }
       ],
-      "name": "getDaysLate",
+      "name": "getBondAllowList",
       "outputs": [
         {
-          "internalType": "uint256",
+          "internalType": "bool",
           "name": "",
-          "type": "uint256"
+          "type": "bool"
         }
       ],
       "stateMutability": "view",
@@ -3873,6 +4324,25 @@
           "internalType": "uint128",
           "name": "totalAmount",
           "type": "uint128"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        }
+      ],
+      "name": "getHoursLate",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
         }
       ],
       "stateMutability": "view",
@@ -3942,6 +4412,25 @@
           "internalType": "uint128",
           "name": "",
           "type": "uint128"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        }
+      ],
+      "name": "getProductDepositAsset",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
         }
       ],
       "stateMutability": "view",
@@ -4220,6 +4709,24 @@
       "inputs": [
         {
           "internalType": "address",
+          "name": "receiver",
+          "type": "address"
+        },
+        {
+          "internalType": "bool",
+          "name": "value",
+          "type": "bool"
+        }
+      ],
+      "name": "setBondAllowList",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
           "name": "vaultAddress",
           "type": "address"
         },
@@ -4333,6 +4840,1117 @@
         }
       ],
       "name": "setYieldFee",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "internalType": "uint128",
+          "name": "amount",
+          "type": "uint128"
+        },
+        {
+          "internalType": "address",
+          "name": "receiver",
+          "type": "address"
+        }
+      ],
+      "name": "sfnAddToDepositQueue",
+      "outputs": [],
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "internalType": "uint128",
+          "name": "sharesAmount",
+          "type": "uint128"
+        },
+        {
+          "internalType": "uint32",
+          "name": "nextProductId",
+          "type": "uint32"
+        }
+      ],
+      "name": "sfnAddToWithdrawalQueue",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "internalType": "uint128",
+          "name": "sharesAmount",
+          "type": "uint128"
+        }
+      ],
+      "name": "sfnAddToWithdrawalQueueWithProxy",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address[]",
+          "name": "vaultAddresses",
+          "type": "address[]"
+        }
+      ],
+      "name": "sfnBulkCheckAuctionDefault",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address[]",
+          "name": "vaultAddresses",
+          "type": "address[]"
+        },
+        {
+          "internalType": "uint16",
+          "name": "maxObservations",
+          "type": "uint16"
+        }
+      ],
+      "name": "sfnBulkCheckBarriers",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address[]",
+          "name": "vaultAddresses",
+          "type": "address[]"
+        }
+      ],
+      "name": "sfnBulkCheckSettlementDefault",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address[]",
+          "name": "vaultAddresses",
+          "type": "address[]"
+        }
+      ],
+      "name": "sfnBulkCheckTradesExpiry",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address[]",
+          "name": "vaultAddresses",
+          "type": "address[]"
+        }
+      ],
+      "name": "sfnBulkCollectFees",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address[]",
+          "name": "vaultAddresses",
+          "type": "address[]"
+        },
+        {
+          "internalType": "address[]",
+          "name": "auctionWinners",
+          "type": "address[]"
+        },
+        {
+          "internalType": "uint40[]",
+          "name": "tradeStartDates",
+          "type": "uint40[]"
+        },
+        {
+          "internalType": "uint16[]",
+          "name": "lendingAprBps",
+          "type": "uint16[]"
+        },
+        {
+          "internalType": "uint16[]",
+          "name": "maxAprBps",
+          "type": "uint16[]"
+        },
+        {
+          "internalType": "enum IOracleEntry.DataSource[][]",
+          "name": "dataSources",
+          "type": "uint8[][]"
+        }
+      ],
+      "name": "sfnBulkEndAuctions",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address[]",
+          "name": "vaultAddresses",
+          "type": "address[]"
+        },
+        {
+          "internalType": "uint256",
+          "name": "maxProcessCount",
+          "type": "uint256"
+        }
+      ],
+      "name": "sfnBulkProcessDepositQueues",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address[]",
+          "name": "vaultAddresses",
+          "type": "address[]"
+        },
+        {
+          "internalType": "uint256",
+          "name": "maxProcessCount",
+          "type": "uint256"
+        }
+      ],
+      "name": "sfnBulkProcessWithdrawalQueues",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address[]",
+          "name": "vaultAddresses",
+          "type": "address[]"
+        }
+      ],
+      "name": "sfnBulkRolloverVaults",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address[]",
+          "name": "vaultAddresses",
+          "type": "address[]"
+        }
+      ],
+      "name": "sfnBulkSettleVaults",
+      "outputs": [],
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address[]",
+          "name": "vaultAddresses",
+          "type": "address[]"
+        }
+      ],
+      "name": "sfnBulkStartTrades",
+      "outputs": [],
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        }
+      ],
+      "name": "sfnCalculateLateFee",
+      "outputs": [
+        {
+          "internalType": "uint128",
+          "name": "",
+          "type": "uint128"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        }
+      ],
+      "name": "sfnCalculateVaultFinalPayoff",
+      "outputs": [
+        {
+          "internalType": "uint128",
+          "name": "",
+          "type": "uint128"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "internalType": "uint40",
+          "name": "timestamp",
+          "type": "uint40"
+        }
+      ],
+      "name": "sfnCalculateVaultFinalPayoffAt",
+      "outputs": [
+        {
+          "internalType": "uint128",
+          "name": "",
+          "type": "uint128"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        }
+      ],
+      "name": "sfnCalculateVaultSettlementAmount",
+      "outputs": [
+        {
+          "internalType": "uint128",
+          "name": "",
+          "type": "uint128"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "internalType": "uint16",
+          "name": "maxObservations",
+          "type": "uint16"
+        }
+      ],
+      "name": "sfnCheckBarriers",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "components": [
+            {
+              "internalType": "uint128",
+              "name": "minDepositAmount",
+              "type": "uint128"
+            },
+            {
+              "internalType": "uint128",
+              "name": "minWithdrawalAmount",
+              "type": "uint128"
+            },
+            {
+              "internalType": "uint128",
+              "name": "maxUnderlyingAmountLimit",
+              "type": "uint128"
+            },
+            {
+              "internalType": "address",
+              "name": "underlyingAsset",
+              "type": "address"
+            },
+            {
+              "internalType": "uint64",
+              "name": "leverage",
+              "type": "uint64"
+            },
+            {
+              "internalType": "uint40",
+              "name": "tenorInSeconds",
+              "type": "uint40"
+            },
+            {
+              "internalType": "uint8",
+              "name": "hoursToStartLateFees",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint8",
+              "name": "hoursToStartAuctionDefault",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint8",
+              "name": "hoursToStartSettlementDefault",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint8",
+              "name": "disputePeriodInHours",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint8",
+              "name": "disputeGraceDelayInHours",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint16",
+              "name": "lateFeeBps",
+              "type": "uint16"
+            },
+            {
+              "internalType": "string",
+              "name": "name",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "tradeWinnerNftImage",
+              "type": "string"
+            },
+            {
+              "internalType": "uint24",
+              "name": "observationIntervalInSeconds",
+              "type": "uint24"
+            },
+            {
+              "internalType": "address[]",
+              "name": "trackedAssets",
+              "type": "address[]"
+            },
+            {
+              "internalType": "enum SFNPayoffType",
+              "name": "payoffType",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint16",
+              "name": "knockOutBps",
+              "type": "uint16"
+            },
+            {
+              "internalType": "uint16",
+              "name": "strikeBps",
+              "type": "uint16"
+            },
+            {
+              "internalType": "enum SFNOptionType",
+              "name": "optionType",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint16",
+              "name": "guaranteedAprBps",
+              "type": "uint16"
+            },
+            {
+              "internalType": "uint16",
+              "name": "minAprBps",
+              "type": "uint16"
+            },
+            {
+              "internalType": "uint16",
+              "name": "rebateBps",
+              "type": "uint16"
+            }
+          ],
+          "internalType": "struct SFNProductCreationParams",
+          "name": "creationParams",
+          "type": "tuple"
+        }
+      ],
+      "name": "sfnCreateProduct",
+      "outputs": [
+        {
+          "internalType": "uint32",
+          "name": "",
+          "type": "uint32"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "components": [
+            {
+              "internalType": "string",
+              "name": "tokenName",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "tokenSymbol",
+              "type": "string"
+            },
+            {
+              "internalType": "uint16",
+              "name": "yieldFeeBps",
+              "type": "uint16"
+            },
+            {
+              "internalType": "uint16",
+              "name": "managementFeeBps",
+              "type": "uint16"
+            }
+          ],
+          "internalType": "struct VaultCreationParams",
+          "name": "creationParams",
+          "type": "tuple"
+        }
+      ],
+      "name": "sfnCreateVault",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "auctionWinner",
+          "type": "address"
+        },
+        {
+          "internalType": "uint40",
+          "name": "tradeStartDate",
+          "type": "uint40"
+        },
+        {
+          "internalType": "uint16",
+          "name": "lendingAprBps",
+          "type": "uint16"
+        },
+        {
+          "internalType": "uint16",
+          "name": "maxAprBps",
+          "type": "uint16"
+        },
+        {
+          "internalType": "enum IOracleEntry.DataSource[]",
+          "name": "dataSources",
+          "type": "uint8[]"
+        }
+      ],
+      "name": "sfnEndAuction",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        }
+      ],
+      "name": "sfnGetCouponPayment",
+      "outputs": [
+        {
+          "internalType": "uint128",
+          "name": "",
+          "type": "uint128"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        }
+      ],
+      "name": "sfnGetProduct",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "uint128",
+              "name": "minDepositAmount",
+              "type": "uint128"
+            },
+            {
+              "internalType": "uint128",
+              "name": "minWithdrawalAmount",
+              "type": "uint128"
+            },
+            {
+              "internalType": "uint128",
+              "name": "maxUnderlyingAmountLimit",
+              "type": "uint128"
+            },
+            {
+              "internalType": "uint128",
+              "name": "sumVaultUnderlyingAmounts",
+              "type": "uint128"
+            },
+            {
+              "internalType": "address",
+              "name": "underlyingAsset",
+              "type": "address"
+            },
+            {
+              "internalType": "uint64",
+              "name": "leverage",
+              "type": "uint64"
+            },
+            {
+              "internalType": "uint40",
+              "name": "tenorInSeconds",
+              "type": "uint40"
+            },
+            {
+              "internalType": "uint8",
+              "name": "hoursToStartLateFees",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint8",
+              "name": "hoursToStartAuctionDefault",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint8",
+              "name": "hoursToStartSettlementDefault",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint8",
+              "name": "disputePeriodInHours",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint8",
+              "name": "disputeGraceDelayInHours",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint16",
+              "name": "lateFeeBps",
+              "type": "uint16"
+            },
+            {
+              "internalType": "bool",
+              "name": "isDepositQueueOpen",
+              "type": "bool"
+            },
+            {
+              "internalType": "uint24",
+              "name": "observationIntervalInSeconds",
+              "type": "uint24"
+            },
+            {
+              "internalType": "address[]",
+              "name": "trackedAssets",
+              "type": "address[]"
+            },
+            {
+              "internalType": "enum SFNPayoffType",
+              "name": "payoffType",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint16",
+              "name": "knockOutBps",
+              "type": "uint16"
+            },
+            {
+              "internalType": "uint16",
+              "name": "strikeBps",
+              "type": "uint16"
+            },
+            {
+              "internalType": "enum SFNOptionType",
+              "name": "optionType",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint16",
+              "name": "guaranteedAprBps",
+              "type": "uint16"
+            },
+            {
+              "internalType": "uint16",
+              "name": "minAprBps",
+              "type": "uint16"
+            },
+            {
+              "internalType": "uint16",
+              "name": "rebateBps",
+              "type": "uint16"
+            },
+            {
+              "internalType": "address[]",
+              "name": "vaults",
+              "type": "address[]"
+            }
+          ],
+          "internalType": "struct SFNProduct",
+          "name": "",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        }
+      ],
+      "name": "sfnGetProductDepositAsset",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        }
+      ],
+      "name": "sfnGetVault",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "uint128",
+              "name": "notional",
+              "type": "uint128"
+            },
+            {
+              "internalType": "uint128",
+              "name": "totalYield",
+              "type": "uint128"
+            },
+            {
+              "internalType": "uint16",
+              "name": "maxAprBps",
+              "type": "uint16"
+            },
+            {
+              "internalType": "uint16",
+              "name": "lendingAprBps",
+              "type": "uint16"
+            },
+            {
+              "internalType": "bool",
+              "name": "isKnockedOut",
+              "type": "bool"
+            },
+            {
+              "internalType": "uint16",
+              "name": "observationsDone",
+              "type": "uint16"
+            },
+            {
+              "internalType": "uint96",
+              "name": "buffer",
+              "type": "uint96"
+            },
+            {
+              "components": [
+                {
+                  "internalType": "uint128",
+                  "name": "initialSpotPrice",
+                  "type": "uint128"
+                },
+                {
+                  "internalType": "enum IOracleEntry.DataSource",
+                  "name": "dataSource",
+                  "type": "uint8"
+                }
+              ],
+              "internalType": "struct SFNTrackedAssetsData[]",
+              "name": "trackedAssetsData",
+              "type": "tuple[]"
+            }
+          ],
+          "internalType": "struct SFNVault",
+          "name": "",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "maxProcessCount",
+          "type": "uint256"
+        }
+      ],
+      "name": "sfnProcessDepositQueue",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "internalType": "uint40",
+          "name": "timestamp",
+          "type": "uint40"
+        },
+        {
+          "internalType": "bool",
+          "name": "accept",
+          "type": "bool"
+        },
+        {
+          "internalType": "uint128[]",
+          "name": "newPrices",
+          "type": "uint128[]"
+        }
+      ],
+      "name": "sfnProcessTradeDispute",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "maxProcessCount",
+          "type": "uint256"
+        }
+      ],
+      "name": "sfnProcessWithdrawalQueue",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "internalType": "uint128",
+          "name": "amount",
+          "type": "uint128"
+        }
+      ],
+      "name": "sfnRemoveFromDepositQueue",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "internalType": "uint8",
+          "name": "disputeGraceDelayInHours",
+          "type": "uint8"
+        }
+      ],
+      "name": "sfnSetDisputeGraceDelayInHours",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "internalType": "uint8",
+          "name": "disputePeriodInHours",
+          "type": "uint8"
+        }
+      ],
+      "name": "sfnSetDisputePeriodInHours",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "internalType": "uint8",
+          "name": "hoursToStartAuctionDefault",
+          "type": "uint8"
+        }
+      ],
+      "name": "sfnSetHoursToStartAuctionDefault",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "internalType": "uint8",
+          "name": "hoursToStartLateFees",
+          "type": "uint8"
+        }
+      ],
+      "name": "sfnSetHoursToStartLateFees",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "internalType": "uint8",
+          "name": "hoursToStartSettlementDefault",
+          "type": "uint8"
+        }
+      ],
+      "name": "sfnSetHoursToStartSettlementDefault",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "internalType": "bool",
+          "name": "isDepositQueueOpen",
+          "type": "bool"
+        }
+      ],
+      "name": "sfnSetIsDepositQueueOpen",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "internalType": "uint16",
+          "name": "lateFeeBps",
+          "type": "uint16"
+        }
+      ],
+      "name": "sfnSetLateFeeBps",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "internalType": "uint128",
+          "name": "maxUnderlyingAmountLimit",
+          "type": "uint128"
+        }
+      ],
+      "name": "sfnSetMaxUnderlyingAmountLimit",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "internalType": "uint128",
+          "name": "minDepositAmount",
+          "type": "uint128"
+        }
+      ],
+      "name": "sfnSetMinDepositAmount",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "internalType": "uint128",
+          "name": "minWithdrawalAmount",
+          "type": "uint128"
+        }
+      ],
+      "name": "sfnSetMinWithdrawalAmount",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        }
+      ],
+      "name": "sfnStartTrade",
+      "outputs": [],
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "internalType": "uint40",
+          "name": "timestamp",
+          "type": "uint40"
+        }
+      ],
+      "name": "sfnSubmitDispute",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
