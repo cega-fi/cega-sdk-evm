@@ -96,7 +96,7 @@
         {
           "indexed": false,
           "internalType": "uint8",
-          "name": "hoursToStartAuctionDefault",
+          "name": "daysToStartAuctionDefault",
           "type": "uint8"
         }
       ],
@@ -115,7 +115,7 @@
         {
           "indexed": false,
           "internalType": "uint8",
-          "name": "hoursToStartLateFees",
+          "name": "daysToStartLateFees",
           "type": "uint8"
         }
       ],
@@ -134,7 +134,7 @@
         {
           "indexed": false,
           "internalType": "uint8",
-          "name": "hoursToStartSettlementDefault",
+          "name": "daysToStartSettlementDefault",
           "type": "uint8"
         }
       ],
@@ -221,6 +221,63 @@
         }
       ],
       "name": "DCSDisputeSubmitted",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint8",
+          "name": "hoursToStartAuctionDefault",
+          "type": "uint8"
+        }
+      ],
+      "name": "DCSHoursToStartAuctionDefaultUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint8",
+          "name": "hoursToStartLateFees",
+          "type": "uint8"
+        }
+      ],
+      "name": "DCSHoursToStartLateFeesUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint8",
+          "name": "hoursToStartSettlementDefault",
+          "type": "uint8"
+        }
+      ],
+      "name": "DCSHoursToStartSettlementDefaultUpdated",
       "type": "event"
     },
     {
@@ -890,6 +947,63 @@
         }
       ],
       "name": "FCNDisputeSubmitted",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint8",
+          "name": "hoursToStartAuctionDefault",
+          "type": "uint8"
+        }
+      ],
+      "name": "FCNHoursToStartAuctionDefaultUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint8",
+          "name": "hoursToStartLateFees",
+          "type": "uint8"
+        }
+      ],
+      "name": "FCNHoursToStartLateFeesUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint8",
+          "name": "hoursToStartSettlementDefault",
+          "type": "uint8"
+        }
+      ],
+      "name": "FCNHoursToStartSettlementDefaultUpdated",
       "type": "event"
     },
     {
@@ -2800,60 +2914,6 @@
         },
         {
           "internalType": "uint8",
-          "name": "hoursToStartAuctionDefault",
-          "type": "uint8"
-        }
-      ],
-      "name": "dcsSetDaysToStartAuctionDefault",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "uint32",
-          "name": "productId",
-          "type": "uint32"
-        },
-        {
-          "internalType": "uint8",
-          "name": "hoursToStartLateFees",
-          "type": "uint8"
-        }
-      ],
-      "name": "dcsSetDaysToStartLateFees",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "uint32",
-          "name": "productId",
-          "type": "uint32"
-        },
-        {
-          "internalType": "uint8",
-          "name": "hoursToStartSettlementDefault",
-          "type": "uint8"
-        }
-      ],
-      "name": "dcsSetDaysToStartSettlementDefault",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "uint32",
-          "name": "productId",
-          "type": "uint32"
-        },
-        {
-          "internalType": "uint8",
           "name": "disputeGraceDelayInHours",
           "type": "uint8"
         }
@@ -2877,6 +2937,60 @@
         }
       ],
       "name": "dcsSetDisputePeriodInHours",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "internalType": "uint8",
+          "name": "hoursToStartAuctionDefault",
+          "type": "uint8"
+        }
+      ],
+      "name": "dcsSetHoursToStartAuctionDefault",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "internalType": "uint8",
+          "name": "hoursToStartLateFees",
+          "type": "uint8"
+        }
+      ],
+      "name": "dcsSetHoursToStartLateFees",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "internalType": "uint8",
+          "name": "hoursToStartSettlementDefault",
+          "type": "uint8"
+        }
+      ],
+      "name": "dcsSetHoursToStartSettlementDefault",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -4061,60 +4175,6 @@
         },
         {
           "internalType": "uint8",
-          "name": "hoursToStartAuctionDefault",
-          "type": "uint8"
-        }
-      ],
-      "name": "fcnSetDaysToStartAuctionDefault",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "uint32",
-          "name": "productId",
-          "type": "uint32"
-        },
-        {
-          "internalType": "uint8",
-          "name": "hoursToStartLateFees",
-          "type": "uint8"
-        }
-      ],
-      "name": "fcnSetDaysToStartLateFees",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "uint32",
-          "name": "productId",
-          "type": "uint32"
-        },
-        {
-          "internalType": "uint8",
-          "name": "hoursToStartSettlementDefault",
-          "type": "uint8"
-        }
-      ],
-      "name": "fcnSetDaysToStartSettlementDefault",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "uint32",
-          "name": "productId",
-          "type": "uint32"
-        },
-        {
-          "internalType": "uint8",
           "name": "disputeGraceDelayInHours",
           "type": "uint8"
         }
@@ -4138,6 +4198,60 @@
         }
       ],
       "name": "fcnSetDisputePeriodInHours",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "internalType": "uint8",
+          "name": "hoursToStartAuctionDefault",
+          "type": "uint8"
+        }
+      ],
+      "name": "fcnSetHoursToStartAuctionDefault",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "internalType": "uint8",
+          "name": "hoursToStartLateFees",
+          "type": "uint8"
+        }
+      ],
+      "name": "fcnSetHoursToStartLateFees",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "internalType": "uint8",
+          "name": "hoursToStartSettlementDefault",
+          "type": "uint8"
+        }
+      ],
+      "name": "fcnSetHoursToStartSettlementDefault",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
