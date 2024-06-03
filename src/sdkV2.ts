@@ -2027,9 +2027,13 @@ export default class CegaEvmSDKV2 {
     return cegaEntry.sfnCalculateVaultFinalPayoff(vaultAddress);
   }
 
-  async sfnCalculateVaultFinalPayoffAt(vaultAddress: EvmAddress): Promise<ethers.BigNumber> {
+  async sfnCalculateVaultFinalPayoffAt(
+    vaultAddress: EvmAddress,
+    dateTime: Date,
+  ): Promise<ethers.BigNumber> {
     const cegaEntry = await this.loadCegaEntry();
-    return cegaEntry.sfnCalculateVaultFinalPayoffAt(vaultAddress);
+    const timestamp = Math.floor(dateTime.getTime() / 1000);
+    return cegaEntry.sfnCalculateVaultFinalPayoffAt(vaultAddress, timestamp);
   }
 
   async sfnCalculateVaultSettlementAmount(vaultAddress: EvmAddress): Promise<ethers.BigNumber> {
