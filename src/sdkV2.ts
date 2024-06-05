@@ -2272,24 +2272,6 @@ export default class CegaEvmSDKV2 {
     });
   }
 
-  async sfnCheckTradeExpiry(
-    vaultAddress: EvmAddress,
-    overrides: TxOverrides = {},
-  ): Promise<ethers.providers.TransactionResponse> {
-    const cegaEntry = await this.loadCegaEntry();
-
-    return cegaEntry.sfnCheckTradeExpiry(vaultAddress, {
-      ...(await this._gasStation.getGasOraclePrices()),
-      ...(await getOverridesWithEstimatedGasLimit(
-        cegaEntry,
-        'sfnCheckTradeExpiry',
-        [vaultAddress],
-        this._signer,
-        overrides,
-      )),
-    });
-  }
-
   /** ===== SFN Methods End ====== */
 
   /**
