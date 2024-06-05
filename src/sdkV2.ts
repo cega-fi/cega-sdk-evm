@@ -1,5 +1,5 @@
 import { BigNumberish, ethers } from 'ethers';
-import { EvmAddress, OracleDataSource, TxOverrides } from './types';
+import { EvmAddress, OracleDataSource, SFNEndAuctionParam, TxOverrides } from './types';
 import { GasStation } from './GasStation';
 
 import Erc20Abi from './abi/ERC20.json';
@@ -1886,43 +1886,24 @@ export default class CegaEvmSDKV2 {
   }
 
   async sfnBulkEndAuctions(
-    vaultAddresses: EvmAddress[],
-    auctionWinners: EvmAddress[],
-    tradeStartDates: Date[],
-    lendingAprBps: number[],
-    maxAprBps: number[],
-    oracleDataSources: OracleDataSource[][],
+    endAuctionParams: SFNEndAuctionParam[],
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = await this.loadCegaEntry();
-    const tradesStartInSeconds = tradeStartDates.map((tradeStartDate) =>
-      Math.floor(tradeStartDate.getTime() / 1000),
-    );
+    const params = endAuctionParams.map((param) => ({
+      ...param,
+      tradeStartDates: Math.floor(param.tradeStartDate.getTime() / 1000),
+    }));
 
-    return cegaEntry.sfnBulkEndAuctions(
-      vaultAddresses,
-      auctionWinners,
-      tradesStartInSeconds,
-      lendingAprBps,
-      maxAprBps,
-      oracleDataSources,
-      {
-        ...(await getOverridesWithEstimatedGasLimit(
-          cegaEntry,
-          'sfnBulkEndAuctions',
-          [
-            vaultAddresses,
-            auctionWinners,
-            tradesStartInSeconds,
-            lendingAprBps,
-            maxAprBps,
-            oracleDataSources,
-          ],
-          this._signer,
-          overrides,
-        )),
-      },
-    );
+    return cegaEntry.sfnBulkEndAuctions(params, {
+      ...(await getOverridesWithEstimatedGasLimit(
+        cegaEntry,
+        'sfnBulkEndAuctions',
+        [params],
+        this._signer,
+        overrides,
+      )),
+    });
   }
 
   async sfnBulkProcessDepositQueues(
@@ -2025,15 +2006,6 @@ export default class CegaEvmSDKV2 {
   async sfnCalculateVaultFinalPayoff(vaultAddress: EvmAddress): Promise<ethers.BigNumber> {
     const cegaEntry = await this.loadCegaEntry();
     return cegaEntry.sfnCalculateVaultFinalPayoff(vaultAddress);
-  }
-
-  async sfnCalculateVaultFinalPayoffAt(
-    vaultAddress: EvmAddress,
-    dateTime: Date,
-  ): Promise<ethers.BigNumber> {
-    const cegaEntry = await this.loadCegaEntry();
-    const timestamp = Math.floor(dateTime.getTime() / 1000);
-    return cegaEntry.sfnCalculateVaultFinalPayoffAt(vaultAddress, timestamp);
   }
 
   async sfnCalculateVaultSettlementAmount(vaultAddress: EvmAddress): Promise<ethers.BigNumber> {
@@ -2294,6 +2266,114 @@ export default class CegaEvmSDKV2 {
         cegaEntry,
         'sfnSubmitDispute',
         [vaultAddress, overrideDateInSeconds],
+        this._signer,
+        overrides,
+      )),
+    });
+  }
+
+  async sfnSettleVault(
+    vaultAddress: EvmAddress,
+    overrides: TxOverrides = {},
+  ): Promise<ethers.providers.TransactionResponse> {
+    const cegaEntry = await this.loadCegaEntry();
+
+    return cegaEntry.sfnSettleVault(vaultAddress, {
+      ...(await this._gasStation.getGasOraclePrices()),
+      ...(await getOverridesWithEstimatedGasLimit(
+        cegaEntry,
+        'sfnSettleVault',
+        [vaultAddress],
+        this._signer,
+        overrides,
+      )),
+    });
+  }
+
+  async sfnRolloverVault(
+    vaultAddress: EvmAddress,
+    overrides: TxOverrides = {},
+  ): Promise<ethers.providers.TransactionResponse> {
+    const cegaEntry = await this.loadCegaEntry();
+
+    return cegaEntry.sfnRolloverVault(vaultAddress, {
+      ...(await this._gasStation.getGasOraclePrices()),
+      ...(await getOverridesWithEstimatedGasLimit(
+        cegaEntry,
+        'sfnRolloverVault',
+        [vaultAddress],
+        this._signer,
+        overrides,
+      )),
+    });
+  }
+
+  async sfnCollectVaultFees(
+    vaultAddress: EvmAddress,
+    overrides: TxOverrides = {},
+  ): Promise<ethers.providers.TransactionResponse> {
+    const cegaEntry = await this.loadCegaEntry();
+
+    return cegaEntry.sfnCollectVaultFees(vaultAddress, {
+      ...(await this._gasStation.getGasOraclePrices()),
+      ...(await getOverridesWithEstimatedGasLimit(
+        cegaEntry,
+        'sfnCollectVaultFees',
+        [vaultAddress],
+        this._signer,
+        overrides,
+      )),
+    });
+  }
+
+  async sfnCheckTradeExpiry(
+    vaultAddress: EvmAddress,
+    overrides: TxOverrides = {},
+  ): Promise<ethers.providers.TransactionResponse> {
+    const cegaEntry = await this.loadCegaEntry();
+
+    return cegaEntry.sfnCheckTradeExpiry(vaultAddress, {
+      ...(await this._gasStation.getGasOraclePrices()),
+      ...(await getOverridesWithEstimatedGasLimit(
+        cegaEntry,
+        'sfnCheckTradeExpiry',
+        [vaultAddress],
+        this._signer,
+        overrides,
+      )),
+    });
+  }
+
+  async sfnCheckSettlementDefault(
+    vaultAddress: EvmAddress,
+    overrides: TxOverrides = {},
+  ): Promise<ethers.providers.TransactionResponse> {
+    const cegaEntry = await this.loadCegaEntry();
+
+    return cegaEntry.sfnCheckSettlementDefault(vaultAddress, {
+      ...(await this._gasStation.getGasOraclePrices()),
+      ...(await getOverridesWithEstimatedGasLimit(
+        cegaEntry,
+        'sfnCheckSettlementDefault',
+        [vaultAddress],
+        this._signer,
+        overrides,
+      )),
+    });
+  }
+
+  async sfnCheckAuctionDefault(
+    vaultAddress: EvmAddress,
+    overrides: TxOverrides = {},
+  ): Promise<ethers.providers.TransactionResponse> {
+    const cegaEntry = await this.loadCegaEntry();
+
+    return cegaEntry.sfnCheckAuctionDefault(vaultAddress, {
+      ...(await this._gasStation.getGasOraclePrices()),
+      ...(await getOverridesWithEstimatedGasLimit(
+        cegaEntry,
+        'sfnCheckAuctionDefault',
+        [vaultAddress],
         this._signer,
         overrides,
       )),
