@@ -1,5 +1,11 @@
 import { BigNumberish, ethers } from 'ethers';
-import { EvmAddress, OracleDataSource, SFNEndAuctionParam, TxOverrides } from './types';
+import {
+  EvmAddress,
+  OracleDataSource,
+  SFNEndAuctionParam,
+  SFNEndAuctionParamForContract,
+  TxOverrides,
+} from './types';
 import { GasStation } from './GasStation';
 
 import Erc20Abi from './abi/ERC20.json';
@@ -1890,9 +1896,9 @@ export default class CegaEvmSDKV2 {
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = await this.loadCegaEntry();
-    const params = endAuctionParams.map((param) => ({
+    const params: SFNEndAuctionParamForContract[] = endAuctionParams.map((param) => ({
       ...param,
-      tradeStartDates: Math.floor(param.tradeStartDate.getTime() / 1000),
+      tradeStartDate: Math.floor(param.tradeStartDate.getTime() / 1000),
     }));
 
     return cegaEntry.sfnBulkEndAuctions(params, {

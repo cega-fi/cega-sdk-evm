@@ -204,3 +204,7 @@ export interface SFNEndAuctionParam {
   maxAprBps: number;
   dataSources: OracleDataSource[];
 }
+
+export interface SFNEndAuctionParamForContract extends Omit<SFNEndAuctionParam, 'tradeStartDate'> {
+  tradeStartDate: ethers.BigNumberish;
+}
