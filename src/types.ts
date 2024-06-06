@@ -195,3 +195,16 @@ export enum DCSOptionType {
   BuyLow,
   SellHigh,
 }
+
+export interface SFNEndAuctionParam {
+  vaultAddress: EvmAddress;
+  auctionWinner: EvmAddress;
+  tradeStartDate: Date;
+  lendingAprBps: number;
+  maxAprBps: number;
+  dataSources: OracleDataSource[];
+}
+
+export interface SFNEndAuctionParamForContract extends Omit<SFNEndAuctionParam, 'tradeStartDate'> {
+  tradeStartDate: ethers.BigNumberish;
+}

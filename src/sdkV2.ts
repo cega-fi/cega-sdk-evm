@@ -1,5 +1,11 @@
 import { BigNumberish, ethers } from 'ethers';
-import { EvmAddress, OracleDataSource, TxOverrides } from './types';
+import {
+  EvmAddress,
+  OracleDataSource,
+  SFNEndAuctionParam,
+  SFNEndAuctionParamForContract,
+  TxOverrides,
+} from './types';
 import { GasStation } from './GasStation';
 
 import Erc20Abi from './abi/ERC20.json';
@@ -1886,43 +1892,24 @@ export default class CegaEvmSDKV2 {
   }
 
   async sfnBulkEndAuctions(
-    vaultAddresses: EvmAddress[],
-    auctionWinners: EvmAddress[],
-    tradeStartDates: Date[],
-    lendingAprBps: number[],
-    maxAprBps: number[],
-    oracleDataSources: OracleDataSource[][],
+    endAuctionParams: SFNEndAuctionParam[],
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = await this.loadCegaEntry();
-    const tradesStartInSeconds = tradeStartDates.map((tradeStartDate) =>
-      Math.floor(tradeStartDate.getTime() / 1000),
-    );
+    const params: SFNEndAuctionParamForContract[] = endAuctionParams.map((param) => ({
+      ...param,
+      tradeStartDate: Math.floor(param.tradeStartDate.getTime() / 1000),
+    }));
 
-    return cegaEntry.sfnBulkEndAuctions(
-      vaultAddresses,
-      auctionWinners,
-      tradesStartInSeconds,
-      lendingAprBps,
-      maxAprBps,
-      oracleDataSources,
-      {
-        ...(await getOverridesWithEstimatedGasLimit(
-          cegaEntry,
-          'sfnBulkEndAuctions',
-          [
-            vaultAddresses,
-            auctionWinners,
-            tradesStartInSeconds,
-            lendingAprBps,
-            maxAprBps,
-            oracleDataSources,
-          ],
-          this._signer,
-          overrides,
-        )),
-      },
-    );
+    return cegaEntry.sfnBulkEndAuctions(params, {
+      ...(await getOverridesWithEstimatedGasLimit(
+        cegaEntry,
+        'sfnBulkEndAuctions',
+        [params],
+        this._signer,
+        overrides,
+      )),
+    });
   }
 
   async sfnBulkProcessDepositQueues(
@@ -2025,15 +2012,6 @@ export default class CegaEvmSDKV2 {
   async sfnCalculateVaultFinalPayoff(vaultAddress: EvmAddress): Promise<ethers.BigNumber> {
     const cegaEntry = await this.loadCegaEntry();
     return cegaEntry.sfnCalculateVaultFinalPayoff(vaultAddress);
-  }
-
-  async sfnCalculateVaultFinalPayoffAt(
-    vaultAddress: EvmAddress,
-    dateTime: Date,
-  ): Promise<ethers.BigNumber> {
-    const cegaEntry = await this.loadCegaEntry();
-    const timestamp = Math.floor(dateTime.getTime() / 1000);
-    return cegaEntry.sfnCalculateVaultFinalPayoffAt(vaultAddress, timestamp);
   }
 
   async sfnCalculateVaultSettlementAmount(vaultAddress: EvmAddress): Promise<ethers.BigNumber> {

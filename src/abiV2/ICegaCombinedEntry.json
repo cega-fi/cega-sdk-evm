@@ -1,7 +1,7 @@
 {
   "_format": "hh-sol-artifact-1",
   "contractName": "ICegaCombinedEntry",
-  "sourceName": "contracts/common/interfaces/ICegaCombinedEntry.sol",
+  "sourceName": "contracts/cega-strategies/common/interfaces/ICegaCombinedEntry.sol",
   "abi": [
     {
       "anonymous": false,
@@ -804,7 +804,7 @@
         {
           "indexed": false,
           "internalType": "uint8",
-          "name": "hoursToStartAuctionDefault",
+          "name": "daysToStartAuctionDefault",
           "type": "uint8"
         }
       ],
@@ -823,7 +823,7 @@
         {
           "indexed": false,
           "internalType": "uint8",
-          "name": "hoursToStartLateFees",
+          "name": "daysToStartLateFees",
           "type": "uint8"
         }
       ],
@@ -842,7 +842,7 @@
         {
           "indexed": false,
           "internalType": "uint8",
-          "name": "hoursToStartSettlementDefault",
+          "name": "daysToStartSettlementDefault",
           "type": "uint8"
         }
       ],
@@ -1505,7 +1505,7 @@
         {
           "indexed": false,
           "internalType": "uint8",
-          "name": "daysToStartAuctionDefault",
+          "name": "hoursToStartAuctionDefault",
           "type": "uint8"
         }
       ],
@@ -1524,7 +1524,7 @@
         {
           "indexed": false,
           "internalType": "uint8",
-          "name": "daysToStartLateFees",
+          "name": "hoursToStartLateFees",
           "type": "uint8"
         }
       ],
@@ -1543,7 +1543,7 @@
         {
           "indexed": false,
           "internalType": "uint8",
-          "name": "daysToStartSettlementDefault",
+          "name": "hoursToStartSettlementDefault",
           "type": "uint8"
         }
       ],
@@ -1715,6 +1715,12 @@
           "indexed": false,
           "internalType": "uint128",
           "name": "notionalAmount",
+          "type": "uint128"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint128",
+          "name": "yieldAmount",
           "type": "uint128"
         }
       ],
@@ -5095,34 +5101,41 @@
     {
       "inputs": [
         {
-          "internalType": "address[]",
-          "name": "vaultAddresses",
-          "type": "address[]"
-        },
-        {
-          "internalType": "address[]",
-          "name": "auctionWinners",
-          "type": "address[]"
-        },
-        {
-          "internalType": "uint40[]",
-          "name": "tradeStartDates",
-          "type": "uint40[]"
-        },
-        {
-          "internalType": "uint16[]",
-          "name": "lendingAprBps",
-          "type": "uint16[]"
-        },
-        {
-          "internalType": "uint16[]",
-          "name": "maxAprBps",
-          "type": "uint16[]"
-        },
-        {
-          "internalType": "enum IOracleEntry.DataSource[][]",
-          "name": "dataSources",
-          "type": "uint8[][]"
+          "components": [
+            {
+              "internalType": "address",
+              "name": "vaultAddress",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "auctionWinner",
+              "type": "address"
+            },
+            {
+              "internalType": "uint40",
+              "name": "tradeStartDate",
+              "type": "uint40"
+            },
+            {
+              "internalType": "uint16",
+              "name": "lendingAprBps",
+              "type": "uint16"
+            },
+            {
+              "internalType": "uint16",
+              "name": "maxAprBps",
+              "type": "uint16"
+            },
+            {
+              "internalType": "enum IOracleEntry.DataSource[]",
+              "name": "dataSources",
+              "type": "uint8[]"
+            }
+          ],
+          "internalType": "struct SFNEndAuctionParams[]",
+          "name": "params",
+          "type": "tuple[]"
         }
       ],
       "name": "sfnBulkEndAuctions",
@@ -5249,30 +5262,6 @@
           "internalType": "address",
           "name": "vaultAddress",
           "type": "address"
-        },
-        {
-          "internalType": "uint40",
-          "name": "timestamp",
-          "type": "uint40"
-        }
-      ],
-      "name": "sfnCalculateVaultFinalPayoffAt",
-      "outputs": [
-        {
-          "internalType": "uint128",
-          "name": "",
-          "type": "uint128"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "vaultAddress",
-          "type": "address"
         }
       ],
       "name": "sfnCalculateVaultSettlementAmount",
@@ -5292,6 +5281,19 @@
           "internalType": "address",
           "name": "vaultAddress",
           "type": "address"
+        }
+      ],
+      "name": "sfnCheckAuctionDefault",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
         },
         {
           "internalType": "uint16",
@@ -5300,6 +5302,45 @@
         }
       ],
       "name": "sfnCheckBarriers",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        }
+      ],
+      "name": "sfnCheckSettlementDefault",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        }
+      ],
+      "name": "sfnCheckTradeExpiry",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        }
+      ],
+      "name": "sfnCollectVaultFees",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -5394,14 +5435,14 @@
               "type": "uint8"
             },
             {
-              "internalType": "uint16",
+              "internalType": "uint24",
               "name": "knockOutBps",
-              "type": "uint16"
+              "type": "uint24"
             },
             {
-              "internalType": "uint16",
+              "internalType": "uint24",
               "name": "strikeBps",
-              "type": "uint16"
+              "type": "uint24"
             },
             {
               "internalType": "enum SFNOptionType",
@@ -5409,19 +5450,19 @@
               "type": "uint8"
             },
             {
-              "internalType": "uint16",
-              "name": "guaranteedAprBps",
-              "type": "uint16"
+              "internalType": "uint24",
+              "name": "guaranteedAprRatioBps",
+              "type": "uint24"
             },
             {
-              "internalType": "uint16",
-              "name": "minAprBps",
-              "type": "uint16"
+              "internalType": "uint24",
+              "name": "minAprRatioBps",
+              "type": "uint24"
             },
             {
-              "internalType": "uint16",
-              "name": "rebateBps",
-              "type": "uint16"
+              "internalType": "uint24",
+              "name": "rebateAprRatioBps",
+              "type": "uint24"
             }
           ],
           "internalType": "struct SFNProductCreationParams",
@@ -5489,34 +5530,41 @@
     {
       "inputs": [
         {
-          "internalType": "address",
-          "name": "vaultAddress",
-          "type": "address"
-        },
-        {
-          "internalType": "address",
-          "name": "auctionWinner",
-          "type": "address"
-        },
-        {
-          "internalType": "uint40",
-          "name": "tradeStartDate",
-          "type": "uint40"
-        },
-        {
-          "internalType": "uint16",
-          "name": "lendingAprBps",
-          "type": "uint16"
-        },
-        {
-          "internalType": "uint16",
-          "name": "maxAprBps",
-          "type": "uint16"
-        },
-        {
-          "internalType": "enum IOracleEntry.DataSource[]",
-          "name": "dataSources",
-          "type": "uint8[]"
+          "components": [
+            {
+              "internalType": "address",
+              "name": "vaultAddress",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "auctionWinner",
+              "type": "address"
+            },
+            {
+              "internalType": "uint40",
+              "name": "tradeStartDate",
+              "type": "uint40"
+            },
+            {
+              "internalType": "uint16",
+              "name": "lendingAprBps",
+              "type": "uint16"
+            },
+            {
+              "internalType": "uint16",
+              "name": "maxAprBps",
+              "type": "uint16"
+            },
+            {
+              "internalType": "enum IOracleEntry.DataSource[]",
+              "name": "dataSources",
+              "type": "uint8[]"
+            }
+          ],
+          "internalType": "struct SFNEndAuctionParams",
+          "name": "params",
+          "type": "tuple"
         }
       ],
       "name": "sfnEndAuction",
@@ -5641,14 +5689,14 @@
               "type": "uint8"
             },
             {
-              "internalType": "uint16",
+              "internalType": "uint24",
               "name": "knockOutBps",
-              "type": "uint16"
+              "type": "uint24"
             },
             {
-              "internalType": "uint16",
+              "internalType": "uint24",
               "name": "strikeBps",
-              "type": "uint16"
+              "type": "uint24"
             },
             {
               "internalType": "enum SFNOptionType",
@@ -5656,19 +5704,19 @@
               "type": "uint8"
             },
             {
-              "internalType": "uint16",
-              "name": "guaranteedAprBps",
-              "type": "uint16"
+              "internalType": "uint24",
+              "name": "guaranteedAprRatioBps",
+              "type": "uint24"
             },
             {
-              "internalType": "uint16",
-              "name": "minAprBps",
-              "type": "uint16"
+              "internalType": "uint24",
+              "name": "minAprRatioBps",
+              "type": "uint24"
             },
             {
-              "internalType": "uint16",
-              "name": "rebateBps",
-              "type": "uint16"
+              "internalType": "uint24",
+              "name": "rebateAprRatioBps",
+              "type": "uint24"
             },
             {
               "internalType": "address[]",
@@ -5726,14 +5774,14 @@
               "type": "uint128"
             },
             {
-              "internalType": "uint16",
+              "internalType": "uint24",
               "name": "maxAprBps",
-              "type": "uint16"
+              "type": "uint24"
             },
             {
-              "internalType": "uint16",
+              "internalType": "uint24",
               "name": "lendingAprBps",
-              "type": "uint16"
+              "type": "uint24"
             },
             {
               "internalType": "bool",
@@ -5854,6 +5902,19 @@
         }
       ],
       "name": "sfnRemoveFromDepositQueue",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        }
+      ],
+      "name": "sfnRolloverVault",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -6036,6 +6097,19 @@
       "name": "sfnSetMinWithdrawalAmount",
       "outputs": [],
       "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        }
+      ],
+      "name": "sfnSettleVault",
+      "outputs": [],
+      "stateMutability": "payable",
       "type": "function"
     },
     {
