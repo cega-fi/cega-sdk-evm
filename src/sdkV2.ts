@@ -1970,6 +1970,7 @@ export default class CegaEvmSDKV2 {
 
   async sfnBulkSettleVaults(
     vaultAddresses: EvmAddress[],
+    nativeAssetTransferSummedAmount?: ethers.BigNumber,
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = await this.loadCegaEntry();
@@ -1983,6 +1984,7 @@ export default class CegaEvmSDKV2 {
         this._signer,
         overrides,
       )),
+      value: nativeAssetTransferSummedAmount ?? 0,
     });
   }
 
