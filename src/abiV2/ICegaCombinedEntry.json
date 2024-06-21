@@ -2076,6 +2076,63 @@
           "internalType": "address",
           "name": "vaultAddress",
           "type": "address"
+        }
+      ],
+      "name": "calculateLateFee",
+      "outputs": [
+        {
+          "internalType": "uint128",
+          "name": "",
+          "type": "uint128"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        }
+      ],
+      "name": "calculateVaultFinalPayoff",
+      "outputs": [
+        {
+          "internalType": "uint128",
+          "name": "",
+          "type": "uint128"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        }
+      ],
+      "name": "calculateVaultSettlementAmount",
+      "outputs": [
+        {
+          "internalType": "uint128",
+          "name": "",
+          "type": "uint128"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
         },
         {
           "internalType": "uint256",
@@ -4423,6 +4480,25 @@
     {
       "inputs": [
         {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        }
+      ],
+      "name": "getCouponPayment",
+      "outputs": [
+        {
+          "internalType": "uint128",
+          "name": "",
+          "type": "uint128"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
           "internalType": "uint32",
           "name": "productId",
           "type": "uint32"
@@ -4696,6 +4772,25 @@
           "internalType": "uint32",
           "name": "",
           "type": "uint32"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        }
+      ],
+      "name": "getVaultSettlementAsset",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
         }
       ],
       "stateMutability": "view",
@@ -5629,11 +5724,6 @@
               "type": "address"
             },
             {
-              "internalType": "uint64",
-              "name": "leverage",
-              "type": "uint64"
-            },
-            {
               "internalType": "uint40",
               "name": "tenorInSeconds",
               "type": "uint40"
@@ -5669,24 +5759,14 @@
               "type": "uint16"
             },
             {
-              "internalType": "bool",
-              "name": "isDepositQueueOpen",
-              "type": "bool"
+              "internalType": "uint64",
+              "name": "leverage",
+              "type": "uint64"
             },
             {
               "internalType": "uint24",
               "name": "observationIntervalInSeconds",
               "type": "uint24"
-            },
-            {
-              "internalType": "address[]",
-              "name": "trackedAssets",
-              "type": "address[]"
-            },
-            {
-              "internalType": "enum SFNPayoffType",
-              "name": "payoffType",
-              "type": "uint8"
             },
             {
               "internalType": "uint24",
@@ -5697,11 +5777,6 @@
               "internalType": "uint24",
               "name": "strikeBps",
               "type": "uint24"
-            },
-            {
-              "internalType": "enum SFNOptionType",
-              "name": "optionType",
-              "type": "uint8"
             },
             {
               "internalType": "uint24",
@@ -5717,6 +5792,26 @@
               "internalType": "uint24",
               "name": "rebateAprRatioBps",
               "type": "uint24"
+            },
+            {
+              "internalType": "enum SFNPayoffType",
+              "name": "payoffType",
+              "type": "uint8"
+            },
+            {
+              "internalType": "enum SFNOptionType",
+              "name": "optionType",
+              "type": "uint8"
+            },
+            {
+              "internalType": "bool",
+              "name": "isDepositQueueOpen",
+              "type": "bool"
+            },
+            {
+              "internalType": "address[]",
+              "name": "trackedAssets",
+              "type": "address[]"
             },
             {
               "internalType": "address[]",
