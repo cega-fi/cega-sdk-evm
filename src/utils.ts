@@ -42,7 +42,7 @@ export async function getOverridesWithEstimatedGasLimit(
   args: any[],
   signer?: ethers.Signer,
   overrides: TxOverrides = {},
-  bufferPercentage = 20,
+  bufferPercentage = 30,
 ): Promise<TxOverrides> {
   const { gasLimit: customGasLimit, ...rest } = overrides;
 
