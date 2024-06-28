@@ -189,6 +189,7 @@ export interface TxOverrides {
 export enum OracleDataSource {
   None,
   Pyth,
+  Pendle,
 }
 
 export enum DCSOptionType {
