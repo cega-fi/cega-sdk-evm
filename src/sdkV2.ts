@@ -15,6 +15,7 @@ import TreasuryAbi from './abiV2/Treasury.json';
 import IWrappingProxyAbi from './abiV2/IWrappingProxy.json';
 import OracleEntryAbi from './abiV2/OracleEntry.json';
 import PythAdapterAbi from './abiV2/PythAdapter.json';
+import PendleAdapter from './abiV2/PendleAdapter.json';
 import Chains, { IChainConfig, isValidChain } from './config/chains';
 import { getOverridesWithEstimatedGasLimit } from './utils';
 
@@ -31,6 +32,8 @@ export default class CegaEvmSDKV2 {
 
   private _pythAdapterAddress: EvmAddress | undefined;
 
+  private _pendleAdapterAddress: EvmAddress | undefined;
+
   constructor(
     addressManager: EvmAddress,
     treasuryAddress: EvmAddress,
@@ -38,6 +41,7 @@ export default class CegaEvmSDKV2 {
     provider: ethers.providers.Provider,
     signer: ethers.Signer | undefined = undefined,
     pythAdapterAddress: EvmAddress | undefined = undefined,
+    pendleAdapterAddress: EvmAddress | undefined = undefined,
   ) {
     this._provider = provider;
     this._signer = signer;
@@ -45,6 +49,7 @@ export default class CegaEvmSDKV2 {
     this._addressManagerAddress = addressManager;
     this._treasuryAddress = treasuryAddress;
     this._pythAdapterAddress = pythAdapterAddress;
+    this._pendleAdapterAddress = pendleAdapterAddress;
   }
 
   setProvider(provider: ethers.providers.Provider) {
@@ -124,6 +129,17 @@ export default class CegaEvmSDKV2 {
     return new ethers.Contract(
       this._pythAdapterAddress,
       PythAdapterAbi.abi,
+      this._signer || this._provider,
+    );
+  }
+
+  async loadPendleAdapter(): Promise<ethers.Contract> {
+    if (!this._pendleAdapterAddress) {
+      throw new Error('pendleAdapterAddress not defined');
+    }
+    return new ethers.Contract(
+      this._pendleAdapterAddress,
+      PendleAdapter.abi,
       this._signer || this._provider,
     );
   }
@@ -2332,5 +2348,42 @@ export default class CegaEvmSDKV2 {
         )),
       },
     );
+  }
+
+  async pendleUpdateAssetPrices(
+    timestamp: BigNumberish,
+    assetAddresses: { baseAsset: string; quoteAsset: string }[],
+    overrides: TxOverrides = {},
+  ): Promise<ethers.providers.TransactionResponse> {
+    const pendleAdapter = await this.loadPendleAdapter();
+
+    return pendleAdapter.updateAssetPrices(timestamp, assetAddresses, {
+      ...(await getOverridesWithEstimatedGasLimit(
+        pendleAdapter,
+        'updateAssetPrices',
+        [timestamp, assetAddresses],
+        this._signer,
+        overrides,
+      )),
+    });
+  }
+
+  async pendleUpdateAssetPricesByCega(
+    timestamp: BigNumberish,
+    assetAddresses: { baseAsset: string; quoteAsset: string }[],
+    assetPrices: BigNumberish[],
+    overrides: TxOverrides = {},
+  ): Promise<ethers.providers.TransactionResponse> {
+    const pendleAdapter = await this.loadPendleAdapter();
+
+    return pendleAdapter.updateAssetPricesByCega(timestamp, assetAddresses, assetPrices, {
+      ...(await getOverridesWithEstimatedGasLimit(
+        pendleAdapter,
+        'updateAssetPricesByCega',
+        [timestamp, assetAddresses, assetPrices],
+        this._signer,
+        overrides,
+      )),
+    });
   }
 }
