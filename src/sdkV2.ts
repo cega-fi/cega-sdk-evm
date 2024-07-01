@@ -2351,8 +2351,8 @@ export default class CegaEvmSDKV2 {
   }
 
   async pendleUpdateAssetPrices(
-    timestamp: BigNumberish,
-    assetAddresses: { baseAsset: string; quoteAsset: string }[],
+    timestamp: Date,
+    assetAddresses: { baseAsset: EvmAddress; quoteAsset: EvmAddress }[],
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     const pendleAdapter = await this.loadPendleAdapter();
@@ -2369,8 +2369,8 @@ export default class CegaEvmSDKV2 {
   }
 
   async pendleUpdateAssetPricesByCega(
-    timestamp: BigNumberish,
-    assetAddresses: { baseAsset: string; quoteAsset: string }[],
+    timestamp: Date,
+    assetAddresses: { baseAsset: EvmAddress; quoteAsset: EvmAddress }[],
     assetPrices: BigNumberish[],
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
