@@ -14,14 +14,14 @@ export default class PendleSdk {
 
   constructor(
     provider: ethers.providers.Provider,
-    signer: ethers.Signer | undefined = undefined,
     pendlePYLpOracleAddress: EvmAddress | undefined = undefined,
     pendleAdapterAddress: EvmAddress | undefined = undefined,
+    signer: ethers.Signer | undefined = undefined,
   ) {
     this._provider = provider;
-    this._signer = signer;
     this._pendlePYLpOracleAddress = pendlePYLpOracleAddress;
     this._pendleAdapterAddress = pendleAdapterAddress;
+    this._signer = signer;
   }
 
   setProvider(provider: ethers.providers.Provider) {
