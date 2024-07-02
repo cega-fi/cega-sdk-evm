@@ -1,5 +1,6 @@
 import CegaEvmSDK from './sdk';
 import CegaEvmSDKV2 from './sdkV2';
+import PendleSdk from './sdkPendle';
 import {
   GasStation,
   EthereumAlchemyGasStation,
@@ -23,4 +24,5 @@ export {
   ArbitrumInfuraGasStation,
   types,
   CegaEvmSDKV2,
+  PendleSdk,
 };

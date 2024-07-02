@@ -1,0 +1,14 @@
+{
+  "abi": [
+    {
+      "inputs": [
+        { "internalType": "address", "name": "market", "type": "address" },
+        { "internalType": "uint32", "name": "duration", "type": "uint32" }
+      ],
+      "name": "getYtToAssetRate",
+      "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ]
+}

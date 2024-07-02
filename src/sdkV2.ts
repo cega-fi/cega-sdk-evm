@@ -15,7 +15,7 @@ import TreasuryAbi from './abiV2/Treasury.json';
 import IWrappingProxyAbi from './abiV2/IWrappingProxy.json';
 import OracleEntryAbi from './abiV2/OracleEntry.json';
 import PythAdapterAbi from './abiV2/PythAdapter.json';
-import PendleAdapter from './abiV2/PendleAdapter.json';
+import PendleAdapter from './abiPendle/PendleAdapter.json';
 import Chains, { IChainConfig, isValidChain } from './config/chains';
 import { getOverridesWithEstimatedGasLimit } from './utils';
 
