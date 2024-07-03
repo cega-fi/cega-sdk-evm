@@ -1,13 +1,16 @@
 import { ethers } from 'ethers';
 import { EvmAddress } from './types';
 import PendlePYLpOracleAbi from './abiPendle/PendlePYLpOracle.json';
-import PendleAdapter from './abiPendle/PendleAdapter.json';
+import PendleAdapter from './abiV2/PendleAdapter.json';
 
 export default class PendleSdk {
   private _provider: ethers.providers.Provider;
 
   private _signer: ethers.Signer | undefined;
 
+  // PendlePYLpOracle address (Pendle Deployer)
+  // https://arbiscan.io/address/0x14418800e0b4c971905423aa873e83355922428c
+  // https://etherscan.io/address/0x14418800e0b4c971905423aa873e83355922428c
   private _pendlePYLpOracleAddress: EvmAddress | undefined;
 
   private _pendleAdapterAddress: EvmAddress | undefined;
