@@ -17,7 +17,7 @@ import OracleEntryAbi from './abiV2/OracleEntry.json';
 import PythAdapterAbi from './abiV2/PythAdapter.json';
 import PendleAdapter from './abiV2/PendleAdapter.json';
 import Chains, { IChainConfig, isValidChain } from './config/chains';
-import { getOverridesWithEstimatedGasLimit } from './utils';
+import { dateToSeconds, getOverridesWithEstimatedGasLimit } from './utils';
 
 export default class CegaEvmSDKV2 {
   private _provider: ethers.providers.Provider;
@@ -2356,12 +2356,13 @@ export default class CegaEvmSDKV2 {
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     const pendleAdapter = await this.loadPendleAdapter();
+    const timestampInSecs = dateToSeconds(timestamp);
 
-    return pendleAdapter.updateAssetPrices(timestamp, assetAddresses, {
+    return pendleAdapter.updateAssetPrices(timestampInSecs, assetAddresses, {
       ...(await getOverridesWithEstimatedGasLimit(
         pendleAdapter,
         'updateAssetPrices',
-        [timestamp, assetAddresses],
+        [timestampInSecs, assetAddresses],
         this._signer,
         overrides,
       )),
@@ -2375,12 +2376,13 @@ export default class CegaEvmSDKV2 {
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     const pendleAdapter = await this.loadPendleAdapter();
+    const timestampInSecs = dateToSeconds(timestamp);
 
-    return pendleAdapter.updateAssetPricesByCega(timestamp, assetAddresses, assetPrices, {
+    return pendleAdapter.updateAssetPricesByCega(timestampInSecs, assetAddresses, assetPrices, {
       ...(await getOverridesWithEstimatedGasLimit(
         pendleAdapter,
         'updateAssetPricesByCega',
-        [timestamp, assetAddresses, assetPrices],
+        [timestampInSecs, assetAddresses, assetPrices],
         this._signer,
         overrides,
       )),

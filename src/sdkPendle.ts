@@ -59,7 +59,7 @@ export default class PendleSdk {
 
   async pendleGetYtToAssetRate(
     assetAddresses: { baseAsset: EvmAddress; quoteAsset: EvmAddress },
-    duration: number,
+    duration: number = 300,
   ): Promise<ethers.BigNumber> {
     const pendleOracle = await this.loadPendleOracle();
     const pendleAdapter = await this.loadPendleAdapter();
