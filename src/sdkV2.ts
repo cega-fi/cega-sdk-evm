@@ -418,18 +418,18 @@ export default class CegaEvmSDKV2 {
   async claimPendleYield(
     asset: EvmAddress,
     ownerAddress: EvmAddress,
-    amount: ethers.BigNumber,
+    totalAssetAccrued: ethers.BigNumber,
     signature: ethers.BytesLike,
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = await this.loadCegaEntry();
 
-    return cegaEntry.claimPendleYield(asset, ownerAddress, amount, signature, {
+    return cegaEntry.claimPendleYield(asset, ownerAddress, totalAssetAccrued, signature, {
       ...(await this._gasStation.getGasOraclePrices()),
       ...(await getOverridesWithEstimatedGasLimit(
         cegaEntry,
         'claimPendleYield',
-        [asset, ownerAddress, amount, signature],
+        [asset, ownerAddress, totalAssetAccrued, signature],
         this._signer,
         overrides,
       )),
