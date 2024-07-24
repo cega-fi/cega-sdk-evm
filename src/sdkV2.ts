@@ -415,6 +415,27 @@ export default class CegaEvmSDKV2 {
     return this.approveErc20ForCegaEntry(amount, asset, overrides);
   }
 
+  async claimPendleYield(
+    asset: EvmAddress,
+    ownerAddress: EvmAddress,
+    amount: ethers.BigNumber,
+    signature: ethers.BytesLike,
+    overrides: TxOverrides = {},
+  ): Promise<ethers.providers.TransactionResponse> {
+    const cegaEntry = await this.loadCegaEntry();
+
+    return cegaEntry.claimPendleYield(asset, ownerAddress, amount, signature, {
+      ...(await this._gasStation.getGasOraclePrices()),
+      ...(await getOverridesWithEstimatedGasLimit(
+        cegaEntry,
+        'claimPendleYield',
+        [asset, ownerAddress, amount, signature],
+        this._signer,
+        overrides,
+      )),
+    });
+  }
+
   /**
    * @deprecated increaseAllowanceErc20 should not be used. Use approveErc20 instead
    */
