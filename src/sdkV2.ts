@@ -375,6 +375,28 @@ export default class CegaEvmSDKV2 {
   }
 
   /**
+   * PENDLE GETTER METHODS
+   */
+  async getUserClaimedYieldAmount(
+    token: EvmAddress,
+    user: EvmAddress,
+    overrides: TxOverrides = {},
+  ): Promise<ethers.BigNumber> {
+    const cegaEntry = await this.loadCegaEntry();
+
+    return cegaEntry.getUserClaimedYieldAmount(token, user, {
+      ...(await this._gasStation.getGasOraclePrices()),
+      ...(await getOverridesWithEstimatedGasLimit(
+        cegaEntry,
+        'getUserClaimedYieldAmount',
+        [token, user],
+        this._signer,
+        overrides,
+      )),
+    });
+  }
+
+  /**
    * USER FACING METHODS
    */
 
