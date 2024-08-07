@@ -749,6 +749,38 @@ export default class CegaEvmSDKV2 {
     });
   }
 
+  private async dcsAddToDepositQueueAndSetRotationStrategiesProxy(
+    productId: ethers.BigNumberish,
+    amount: ethers.BigNumber,
+    receiver: EvmAddress,
+    rotationStrategyParams: Array<{
+      productId: number;
+      rotationStrategy: { nextProductId: number };
+    }>,
+    overrides: TxOverrides = {},
+  ): Promise<ethers.providers.TransactionResponse> {
+    if (!this._signer) {
+      throw new Error('Signer not defined');
+    }
+    const proxyEntry = await this.loadCegaWrappingProxy();
+    return proxyEntry.dcsAddToDepositQueueAndSetRotationStrategies(
+      productId,
+      amount,
+      receiver,
+      rotationStrategyParams,
+      {
+        ...(await this._gasStation.getGasOraclePrices()),
+        ...(await getOverridesWithEstimatedGasLimit(
+          proxyEntry,
+          'dcsAddToDepositQueueAndSetRotationStrategies',
+          [productId, amount, receiver, rotationStrategyParams],
+          this._signer,
+          overrides,
+        )),
+      },
+    );
+  }
+
   async addToWithdrawalQueue(
     vaultAddress: EvmAddress,
     sharesAmount: ethers.BigNumber,
