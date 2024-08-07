@@ -39,29 +39,6 @@
           "type": "address"
         }
       ],
-      "name": "wrapAndAddToDCSDepositQueue",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "uint32",
-          "name": "productId",
-          "type": "uint32"
-        },
-        {
-          "internalType": "uint128",
-          "name": "amount",
-          "type": "uint128"
-        },
-        {
-          "internalType": "address",
-          "name": "receiver",
-          "type": "address"
-        }
-      ],
       "name": "wrapAndAddToDepositQueue",
       "outputs": [],
       "stateMutability": "nonpayable",
@@ -83,9 +60,33 @@
           "internalType": "address",
           "name": "receiver",
           "type": "address"
+        },
+        {
+          "components": [
+            {
+              "internalType": "uint32",
+              "name": "productId",
+              "type": "uint32"
+            },
+            {
+              "components": [
+                {
+                  "internalType": "uint32",
+                  "name": "nextProductId",
+                  "type": "uint32"
+                }
+              ],
+              "internalType": "struct RotationStrategy",
+              "name": "rotationStrategy",
+              "type": "tuple"
+            }
+          ],
+          "internalType": "struct RotationStrategyParams[]",
+          "name": "rotationStrategyParams",
+          "type": "tuple[]"
         }
       ],
-      "name": "wrapAndAddToFCNDepositQueue",
+      "name": "wrapAndAddToDepositQueueAndSetRotationStrategies",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
