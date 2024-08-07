@@ -1861,6 +1861,95 @@
       "inputs": [
         {
           "indexed": true,
+          "internalType": "address",
+          "name": "user",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        }
+      ],
+      "name": "UserAddedIntoVaultRotationList",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "user",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint128",
+          "name": "amount",
+          "type": "uint128"
+        },
+        {
+          "components": [
+            {
+              "internalType": "uint32",
+              "name": "nextProductId",
+              "type": "uint32"
+            }
+          ],
+          "indexed": false,
+          "internalType": "struct RotationStrategy",
+          "name": "rotationStrategy",
+          "type": "tuple"
+        }
+      ],
+      "name": "UserAssetsRotated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "user",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "components": [
+            {
+              "internalType": "uint32",
+              "name": "nextProductId",
+              "type": "uint32"
+            }
+          ],
+          "indexed": false,
+          "internalType": "struct RotationStrategy",
+          "name": "rotationStrategy",
+          "type": "tuple"
+        }
+      ],
+      "name": "UserRotationStrategySet",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
           "internalType": "uint32",
           "name": "productId",
           "type": "uint32"
@@ -2044,6 +2133,53 @@
         }
       ],
       "name": "addToDepositQueue",
+      "outputs": [],
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "internalType": "uint128",
+          "name": "amount",
+          "type": "uint128"
+        },
+        {
+          "internalType": "address",
+          "name": "receiver",
+          "type": "address"
+        },
+        {
+          "components": [
+            {
+              "internalType": "uint32",
+              "name": "productId",
+              "type": "uint32"
+            },
+            {
+              "components": [
+                {
+                  "internalType": "uint32",
+                  "name": "nextProductId",
+                  "type": "uint32"
+                }
+              ],
+              "internalType": "struct RotationStrategy",
+              "name": "rotationStrategy",
+              "type": "tuple"
+            }
+          ],
+          "internalType": "struct RotationStrategyParams[]",
+          "name": "rotationStrategyParams",
+          "type": "tuple[]"
+        }
+      ],
+      "name": "addToDepositQueueAndSetRotationStrategies",
       "outputs": [],
       "stateMutability": "payable",
       "type": "function"
@@ -2261,6 +2397,53 @@
     {
       "inputs": [
         {
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "internalType": "uint128",
+          "name": "amount",
+          "type": "uint128"
+        },
+        {
+          "internalType": "address",
+          "name": "receiver",
+          "type": "address"
+        },
+        {
+          "components": [
+            {
+              "internalType": "uint32",
+              "name": "productId",
+              "type": "uint32"
+            },
+            {
+              "components": [
+                {
+                  "internalType": "uint32",
+                  "name": "nextProductId",
+                  "type": "uint32"
+                }
+              ],
+              "internalType": "struct RotationStrategy",
+              "name": "rotationStrategy",
+              "type": "tuple"
+            }
+          ],
+          "internalType": "struct RotationStrategyParams[]",
+          "name": "rotationStrategyParams",
+          "type": "tuple[]"
+        }
+      ],
+      "name": "dcsAddToDepositQueueAndSetRotationStrategies",
+      "outputs": [],
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
           "internalType": "address",
           "name": "vault",
           "type": "address"
@@ -2426,6 +2609,11 @@
           "internalType": "address[]",
           "name": "vaultAddresses",
           "type": "address[]"
+        },
+        {
+          "internalType": "uint256",
+          "name": "maxProcessCount",
+          "type": "uint256"
         }
       ],
       "name": "dcsBulkRolloverVaults",
@@ -3021,10 +3209,21 @@
           "internalType": "address",
           "name": "vaultAddress",
           "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "maxProcessCount",
+          "type": "uint256"
         }
       ],
       "name": "dcsRolloverVault",
-      "outputs": [],
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "processCount",
+          "type": "uint256"
+        }
+      ],
       "stateMutability": "nonpayable",
       "type": "function"
     },
@@ -4637,6 +4836,30 @@
       "type": "function"
     },
     {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "user",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        }
+      ],
+      "name": "getIsUserAddedToVaultRotationList",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
       "inputs": [],
       "name": "getLatestProductId",
       "outputs": [
@@ -4770,6 +4993,37 @@
       "inputs": [
         {
           "internalType": "address",
+          "name": "user",
+          "type": "address"
+        },
+        {
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        }
+      ],
+      "name": "getUserRotationStrategy",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "uint32",
+              "name": "nextProductId",
+              "type": "uint32"
+            }
+          ],
+          "internalType": "struct RotationStrategy",
+          "name": "",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
           "name": "vaultAddress",
           "type": "address"
         }
@@ -4875,6 +5129,25 @@
           "internalType": "address",
           "name": "",
           "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        }
+      ],
+      "name": "getVaultUsersWithRotations",
+      "outputs": [
+        {
+          "internalType": "address[]",
+          "name": "",
+          "type": "address[]"
         }
       ],
       "stateMutability": "view",
@@ -5116,6 +5389,43 @@
         }
       ],
       "name": "setTradeWinnerNftImage",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "components": [
+            {
+              "internalType": "uint32",
+              "name": "productId",
+              "type": "uint32"
+            },
+            {
+              "components": [
+                {
+                  "internalType": "uint32",
+                  "name": "nextProductId",
+                  "type": "uint32"
+                }
+              ],
+              "internalType": "struct RotationStrategy",
+              "name": "rotationStrategy",
+              "type": "tuple"
+            }
+          ],
+          "internalType": "struct RotationStrategyParams[]",
+          "name": "rotationStrategyParams",
+          "type": "tuple[]"
+        },
+        {
+          "internalType": "address[]",
+          "name": "vaultAddresses",
+          "type": "address[]"
+        }
+      ],
+      "name": "setUserRotationStrategies",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
