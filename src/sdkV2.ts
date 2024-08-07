@@ -316,6 +316,19 @@ export default class CegaEvmSDKV2 {
     return cegaEntry.dcsCalculateVaultFinalPayoff(vaultAddress);
   }
 
+  async dcsGetUserRotationStrategy(
+    user: EvmAddress,
+    productId: number,
+  ): Promise<{ nextProductId: number }> {
+    if (!this._signer) {
+      throw new Error('Signer not defined');
+    }
+
+    const cegaEntry = await this.loadCegaEntry();
+
+    return cegaEntry.getUserRotationStrategy(user, productId);
+  }
+
   /**
    * FCN GETTER & SETTER METHODS
    */
@@ -581,6 +594,78 @@ export default class CegaEvmSDKV2 {
       )),
       value: asset === ethers.constants.AddressZero ? amount : 0,
     });
+  }
+
+  async dcsSetUserRotationStrategies(
+    rotationStrategyParams: Array<{
+      productId: number;
+      rotationStrategy: { nextProductId: number };
+    }>,
+    vaultAddresses: EvmAddress[],
+    overrides: TxOverrides = {},
+  ): Promise<ethers.providers.TransactionResponse> {
+    if (!this._signer) {
+      throw new Error('Signer not defined');
+    }
+    const cegaEntry = await this.loadCegaEntry();
+
+    return cegaEntry.setUserRotationStrategies(rotationStrategyParams, vaultAddresses, {
+      ...(await this._gasStation.getGasOraclePrices()),
+      ...(await getOverridesWithEstimatedGasLimit(
+        cegaEntry,
+        'setUserRotationStrategies',
+        [rotationStrategyParams, vaultAddresses],
+        this._signer,
+        overrides,
+      )),
+    });
+  }
+
+  async dcsAddToDepositQueueAndSetRotationStrategies(
+    productId: number,
+    amount: ethers.BigNumber,
+    receiver: EvmAddress,
+    rotationStrategyParams: Array<{
+      productId: number;
+      rotationStrategy: { nextProductId: number };
+    }>,
+    overrides: TxOverrides = {},
+  ): Promise<ethers.providers.TransactionResponse> {
+    if (!this._signer) {
+      throw new Error('Signer not defined');
+    }
+
+    const chainConfig = await this.getChainConfig();
+    if (chainConfig.name === 'ethereum-mainnet' && receiver === chainConfig.tokens.stETH) {
+      return this.dcsAddToDepositQueueAndSetRotationStrategiesProxy(
+        productId,
+        amount,
+        receiver,
+        rotationStrategyParams,
+        overrides,
+      );
+    }
+
+    const cegaEntry = await this.loadCegaEntry();
+
+    return cegaEntry.dcsAddToDepositQueueAndSetRotationStrategies(
+      productId,
+      amount,
+      receiver,
+      rotationStrategyParams,
+      {
+        ...(await this._gasStation.getGasOraclePrices()),
+        ...(await getOverridesWithEstimatedGasLimit(
+          cegaEntry,
+          'dcsAddToDepositQueueAndSetRotationStrategies',
+          [productId, amount, receiver, rotationStrategyParams],
+          this._signer,
+          overrides,
+          50,
+        )),
+        value: receiver === ethers.constants.AddressZero ? amount : 0,
+      },
+    );
   }
 
   /**
