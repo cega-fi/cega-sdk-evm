@@ -601,7 +601,7 @@ export default class CegaEvmSDKV2 {
       productId: number;
       rotationStrategy: { nextProductId: number };
     }>,
-    vaultAddresses: EvmAddress[],
+    vaultAddresses: EvmAddress[] | [],
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     if (!this._signer) {
