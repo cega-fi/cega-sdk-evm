@@ -329,6 +329,19 @@ export default class CegaEvmSDKV2 {
     return cegaEntry.getUserRotationStrategy(user, productId);
   }
 
+  async dcsGetIsUserAddedToVaultRotationList(
+    user: EvmAddress,
+    vaultAddress: EvmAddress,
+  ): Promise<boolean> {
+    if (!this._signer) {
+      throw new Error('Signer not defined');
+    }
+
+    const cegaEntry = await this.loadCegaEntry();
+
+    return cegaEntry.getIsUserAddedToVaultRotationList(user, vaultAddress);
+  }
+
   /**
    * FCN GETTER & SETTER METHODS
    */
