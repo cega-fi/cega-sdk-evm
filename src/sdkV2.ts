@@ -637,11 +637,11 @@ export default class CegaEvmSDKV2 {
   async dcsAddToDepositQueueAndSetRotationStrategies(
     productId: number,
     amount: ethers.BigNumber,
-    receiver: EvmAddress,
     rotationStrategyParams: Array<{
       productId: number;
       rotationStrategy: { nextProductId: number };
     }>,
+    asset: EvmAddress = ethers.constants.AddressZero,
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     if (!this._signer) {
@@ -649,11 +649,10 @@ export default class CegaEvmSDKV2 {
     }
 
     const chainConfig = await this.getChainConfig();
-    if (chainConfig.name === 'ethereum-mainnet' && receiver === chainConfig.tokens.stETH) {
+    if (chainConfig.name === 'ethereum-mainnet' && asset === chainConfig.tokens.stETH) {
       return this.dcsAddToDepositQueueAndSetRotationStrategiesProxy(
         productId,
         amount,
-        receiver,
         rotationStrategyParams,
         overrides,
       );
@@ -664,19 +663,19 @@ export default class CegaEvmSDKV2 {
     return cegaEntry.dcsAddToDepositQueueAndSetRotationStrategies(
       productId,
       amount,
-      receiver,
+      this._signer,
       rotationStrategyParams,
       {
         ...(await this._gasStation.getGasOraclePrices()),
         ...(await getOverridesWithEstimatedGasLimit(
           cegaEntry,
           'dcsAddToDepositQueueAndSetRotationStrategies',
-          [productId, amount, receiver, rotationStrategyParams],
+          [productId, amount, this._signer, rotationStrategyParams],
           this._signer,
           overrides,
           50,
         )),
-        value: receiver === ethers.constants.AddressZero ? amount : 0,
+        value: asset === ethers.constants.AddressZero ? amount : 0,
       },
     );
   }
@@ -765,7 +764,6 @@ export default class CegaEvmSDKV2 {
   private async dcsAddToDepositQueueAndSetRotationStrategiesProxy(
     productId: ethers.BigNumberish,
     amount: ethers.BigNumber,
-    receiver: EvmAddress,
     rotationStrategyParams: Array<{
       productId: number;
       rotationStrategy: { nextProductId: number };
@@ -779,14 +777,14 @@ export default class CegaEvmSDKV2 {
     return proxyEntry.dcsAddToDepositQueueAndSetRotationStrategies(
       productId,
       amount,
-      receiver,
+      this._signer,
       rotationStrategyParams,
       {
         ...(await this._gasStation.getGasOraclePrices()),
         ...(await getOverridesWithEstimatedGasLimit(
           proxyEntry,
           'dcsAddToDepositQueueAndSetRotationStrategies',
-          [productId, amount, receiver, rotationStrategyParams],
+          [productId, amount, this._signer, rotationStrategyParams],
           this._signer,
           overrides,
         )),
