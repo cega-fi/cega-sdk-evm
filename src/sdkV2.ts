@@ -658,20 +658,19 @@ export default class CegaEvmSDKV2 {
       );
     }
 
-    const receiver = await this._signer.getAddress();
     const cegaEntry = await this.loadCegaEntry();
 
     return cegaEntry.dcsAddToDepositQueueAndSetRotationStrategies(
       productId,
       amount,
-      receiver, // Pass the signer address as the receiver
+      this._signer.getAddress(),
       rotationStrategyParams,
       {
         ...(await this._gasStation.getGasOraclePrices()),
         ...(await getOverridesWithEstimatedGasLimit(
           cegaEntry,
           'dcsAddToDepositQueueAndSetRotationStrategies',
-          [productId, amount, receiver, rotationStrategyParams],
+          [productId, amount, await this._signer.getAddress(), rotationStrategyParams],
           this._signer,
           overrides,
           50,
