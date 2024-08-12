@@ -641,7 +641,7 @@ export default class CegaEvmSDKV2 {
       productId: number;
       rotationStrategy: { nextProductId: number };
     }>,
-    asset: EvmAddress = ethers.constants.AddressZero,
+    asset: EvmAddress,
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     if (!this._signer) {
