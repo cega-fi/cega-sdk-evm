@@ -603,7 +603,7 @@ export default class CegaEvmSDKV2 {
         [productId, amount, await this._signer.getAddress()],
         this._signer,
         overrides,
-        50,
+        80,
       )),
       value: asset === ethers.constants.AddressZero ? amount : 0,
     });
