@@ -1335,11 +1335,12 @@ export default class CegaEvmSDKV2 {
 
   async dcsBulkRolloverVaults(
     vaultAddresses: EvmAddress[],
+    maxProcessCount: number,
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = await this.loadCegaEntry();
 
-    return cegaEntry.dcsBulkRolloverVaults(vaultAddresses, {
+    return cegaEntry.dcsBulkRolloverVaults(vaultAddresses, maxProcessCount, {
       ...(await this._gasStation.getGasOraclePrices()),
       ...(await getOverridesWithEstimatedGasLimit(
         cegaEntry,
