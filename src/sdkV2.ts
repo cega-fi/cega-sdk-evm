@@ -1345,7 +1345,7 @@ export default class CegaEvmSDKV2 {
       ...(await getOverridesWithEstimatedGasLimit(
         cegaEntry,
         'dcsBulkRolloverVaults',
-        [vaultAddresses],
+        [vaultAddresses, maxProcessCount],
         this._signer,
         overrides,
       )),
