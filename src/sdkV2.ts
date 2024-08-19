@@ -603,7 +603,7 @@ export default class CegaEvmSDKV2 {
         [productId, amount, await this._signer.getAddress()],
         this._signer,
         overrides,
-        50,
+        80,
       )),
       value: asset === ethers.constants.AddressZero ? amount : 0,
     });
@@ -1335,16 +1335,17 @@ export default class CegaEvmSDKV2 {
 
   async dcsBulkRolloverVaults(
     vaultAddresses: EvmAddress[],
+    maxProcessCount: number,
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = await this.loadCegaEntry();
 
-    return cegaEntry.dcsBulkRolloverVaults(vaultAddresses, {
+    return cegaEntry.dcsBulkRolloverVaults(vaultAddresses, maxProcessCount, {
       ...(await this._gasStation.getGasOraclePrices()),
       ...(await getOverridesWithEstimatedGasLimit(
         cegaEntry,
         'dcsBulkRolloverVaults',
-        [vaultAddresses],
+        [vaultAddresses, maxProcessCount],
         this._signer,
         overrides,
       )),
