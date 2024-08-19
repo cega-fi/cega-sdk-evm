@@ -2184,9 +2184,10 @@ export default class CegaEvmSDKV2 {
     return cegaEntry.sfnCalculateVaultFinalPayoff(vaultAddress);
   }
 
-  async sfnCalculateVaultSettlementAmount(vaultAddress: EvmAddress): Promise<ethers.BigNumber> {
-    const cegaEntry = await this.loadCegaEntry();
-    return cegaEntry.sfnCalculateVaultSettlementAmount(vaultAddress);
+  static sfnCalculateVaultSettlementAmount(vaultAddress: EvmAddress): ethers.BigNumberish {
+    // The SC method is returning a wrong value for this method, where it should have been return 0.
+    // This is a temporary fix until the SC is fixed.
+    return 0;
   }
 
   async sfnCreateVault(
