@@ -765,26 +765,26 @@ export default class CegaEvmSDKV2 {
     productId: ethers.BigNumberish,
     amount: ethers.BigNumber,
     rotationStrategyParams: Array<{
-      productId: number;
-      rotationStrategy: { nextProductId: number };
+      productId: ethers.BigNumberish;
+      rotationStrategy: { nextProductId: ethers.BigNumberish };
     }>,
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     if (!this._signer) {
       throw new Error('Signer not defined');
     }
+
     const proxyEntry = await this.loadCegaWrappingProxy();
-    return proxyEntry.dcsAddToDepositQueueAndSetRotationStrategies(
+    return proxyEntry.wrapAndAddToDepositQueueAndSetRotationStrategies(
       productId,
       amount,
-      this._signer.getAddress(),
       rotationStrategyParams,
       {
         ...(await this._gasStation.getGasOraclePrices()),
         ...(await getOverridesWithEstimatedGasLimit(
           proxyEntry,
-          'dcsAddToDepositQueueAndSetRotationStrategies',
-          [productId, amount, await this._signer.getAddress(), rotationStrategyParams],
+          'wrapAndAddToDepositQueueAndSetRotationStrategies',
+          [productId, amount, rotationStrategyParams],
           this._signer,
           overrides,
         )),
@@ -1335,7 +1335,7 @@ export default class CegaEvmSDKV2 {
 
   async dcsBulkRolloverVaults(
     vaultAddresses: EvmAddress[],
-    maxProcessCount: number,
+    maxProcessCount: ethers.BigNumberish,
     overrides: TxOverrides = {},
   ): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = await this.loadCegaEntry();

@@ -57,11 +57,6 @@
           "type": "uint128"
         },
         {
-          "internalType": "address",
-          "name": "receiver",
-          "type": "address"
-        },
-        {
           "components": [
             {
               "internalType": "uint32",
