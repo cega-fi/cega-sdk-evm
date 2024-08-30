@@ -148,6 +148,10 @@ export default class CegaEvmSDKV2 {
    * COMMON GETTER METHODS
    */
 
+  isSignerSet(): boolean {
+    return !!this._signer;
+  }
+
   async getIsProtocolPaused(): Promise<boolean> {
     const cegaEntry = await this.loadCegaEntry();
     return cegaEntry.getIsProtocolPaused();
