@@ -817,6 +817,7 @@ export default class CegaEvmSDKV2 {
         [vaultAddress, sharesAmount, nextProductId],
         this._signer,
         overrides,
+        50,
       )),
     });
   }
