@@ -425,37 +425,7 @@ export default class CegaEvmSDKV2 {
    * USER FACING METHODS
    */
 
-  // ====== LpCega Offramp (Vault Token Market) code starts here
-
-  async fillOrder({ order, swapMakingAmount }: FillOrderParams): Promise<FillOrderResponse> {
-    const cegaEntry = await this.loadCegaEntry();
-    const makerSig = await this.signOrder(
-      cegaEntry,
-      order,
-      (
-        await this._provider.getNetwork()
-      ).chainId,
-    );
-    const response: [ethers.BigNumber, string] = cegaEntry.fillOrder(
-      order,
-      makerSig,
-      swapMakingAmount,
-      {
-        ...(await this._gasStation.getGasOraclePrices()),
-        ...(await getOverridesWithEstimatedGasLimit(
-          cegaEntry,
-          'fillOrder',
-          [order, makerSig, swapMakingAmount],
-          this._signer,
-        )),
-      },
-    );
-
-    return {
-      swapTakingAmount: response[0],
-      orderHash: response[1],
-    };
-  }
+  // ====== lpCega Offramp (Vault Token Market) code starts here
 
   async getOfframpFeeBps(): Promise<number> {
     const cegaEntry = await this.loadCegaEntry();
@@ -497,7 +467,32 @@ export default class CegaEvmSDKV2 {
     );
   }
 
-  // ======= LpCega Offramp (Vault Token Market) code ends here
+  async fillOrder({ order, swapMakingAmount }: FillOrderParams): Promise<FillOrderResponse> {
+    const cegaEntry = await this.loadCegaEntry();
+    const network = await this._provider.getNetwork();
+    const makerSig = await this.signOrder(cegaEntry, order, network.chainId);
+    const response: [ethers.BigNumber, string] = cegaEntry.fillOrder(
+      order,
+      makerSig,
+      swapMakingAmount,
+      {
+        ...(await this._gasStation.getGasOraclePrices()),
+        ...(await getOverridesWithEstimatedGasLimit(
+          cegaEntry,
+          'fillOrder',
+          [order, makerSig, swapMakingAmount],
+          this._signer,
+        )),
+      },
+    );
+
+    return {
+      swapTakingAmount: response[0],
+      orderHash: response[1],
+    };
+  }
+
+  // ======= lpCega Offramp (Vault Token Market) code ends here
 
   async getAssetAllowanceToCega(
     asset: EvmAddress,
