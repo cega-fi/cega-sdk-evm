@@ -209,3 +209,29 @@ export interface SFNEndAuctionParam {
 export interface SFNEndAuctionParamForContract extends Omit<SFNEndAuctionParam, 'tradeStartDate'> {
   tradeStartDate: ethers.BigNumberish;
 }
+
+export type LpCegaOfframpOrder = {
+  salt: ethers.BigNumber;
+  makingAmount: ethers.BigNumber;
+  takingAmount: ethers.BigNumber;
+  maker: EvmAddress;
+  makerAsset: EvmAddress;
+  takerAsset: EvmAddress;
+  expiry: ethers.BigNumber;
+  makerTraits: ethers.BigNumber;
+};
+
+export type FillOrderParams = {
+  order: LpCegaOfframpOrder;
+  swapMakingAmount: ethers.BigNumber;
+};
+
+export type FillOrderResponse = {
+  swapTakingAmount?: ethers.BigNumber;
+  orderHash?: string;
+};
+
+export type GetOrderDataResponse = {
+  filledAmount?: ethers.BigNumber;
+  cancelled?: boolean;
+};
