@@ -471,7 +471,7 @@ export default class CegaEvmSDKV2 {
     const cegaEntry = await this.loadCegaEntry();
     const network = await this._provider.getNetwork();
     const makerSig = await this.signOrder(cegaEntry, order, network.chainId);
-    const response: [ethers.BigNumber, string] = cegaEntry.fillOrder(
+    const response: [ethers.BigNumber, string] = await cegaEntry.fillOrder(
       order,
       makerSig,
       swapMakingAmount,

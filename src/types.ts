@@ -227,11 +227,11 @@ export type FillOrderParams = {
 };
 
 export type FillOrderResponse = {
-  swapTakingAmount?: ethers.BigNumber;
-  orderHash?: string;
+  swapTakingAmount: ethers.BigNumber;
+  orderHash: string;
 };
 
 export type GetOrderDataResponse = {
-  filledAmount?: ethers.BigNumber;
-  cancelled?: boolean;
+  filledAmount: ethers.BigNumber;
+  cancelled: boolean;
 };
