@@ -442,7 +442,8 @@ export default class CegaEvmSDKV2 {
     return cegaEntry.hashOrder(order);
   }
 
-  async signOrder(cegaEntry: ethers.Contract, order: LpCegaOfframpOrder): Promise<string> {
+  async getSignatureForOfframpOrder(order: LpCegaOfframpOrder): Promise<string> {
+    const cegaEntry = await this.loadCegaEntry();
     const signer = this._signer;
     const network = await this._provider.getNetwork();
 
@@ -465,11 +466,11 @@ export default class CegaEvmSDKV2 {
   }
 
   async fillOrder({
+    makerSig,
     order,
     swapMakingAmount,
   }: FillOrderParams): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = await this.loadCegaEntry();
-    const makerSig = await this.signOrder(cegaEntry, order);
     return cegaEntry.fillOrder(order, makerSig, swapMakingAmount, {
       ...(await this._gasStation.getGasOraclePrices()),
       ...(await getOverridesWithEstimatedGasLimit(
@@ -481,7 +482,7 @@ export default class CegaEvmSDKV2 {
     });
   }
 
-  async cancelOrder(orderHash: string) {
+  async cancelOrder(orderHash: string): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = await this.loadCegaEntry();
     return cegaEntry.cancelOrder(orderHash, {
       ...(await this._gasStation.getGasOraclePrices()),

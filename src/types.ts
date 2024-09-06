@@ -222,6 +222,7 @@ export type LpCegaOfframpOrder = {
 };
 
 export type FillOrderParams = {
+  makerSig: string;
   order: LpCegaOfframpOrder;
   swapMakingAmount: ethers.BigNumber;
 };
