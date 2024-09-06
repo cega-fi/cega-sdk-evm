@@ -442,12 +442,9 @@ export default class CegaEvmSDKV2 {
     return cegaEntry.hashOrder(order);
   }
 
-  async signOrder(
-    cegaEntry: ethers.Contract,
-    order: LpCegaOfframpOrder,
-    chainId: number,
-  ): Promise<string> {
+  async signOrder(cegaEntry: ethers.Contract, order: LpCegaOfframpOrder): Promise<string> {
     const signer = this._signer;
+    const network = await this._provider.getNetwork();
 
     if (!signer) {
       throw new Error('Signer not defined');
@@ -456,7 +453,7 @@ export default class CegaEvmSDKV2 {
     const domain = {
       name: 'Cega Offramp Entry',
       version: '1',
-      chainId,
+      chainId: network.chainId,
       verifyingContract: cegaEntry.address,
     };
 
@@ -467,29 +464,34 @@ export default class CegaEvmSDKV2 {
     );
   }
 
-  async fillOrder({ order, swapMakingAmount }: FillOrderParams): Promise<FillOrderResponse> {
+  async fillOrder({
+    order,
+    swapMakingAmount,
+  }: FillOrderParams): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = await this.loadCegaEntry();
-    const network = await this._provider.getNetwork();
-    const makerSig = await this.signOrder(cegaEntry, order, network.chainId);
-    const response: [ethers.BigNumber, string] = await cegaEntry.fillOrder(
-      order,
-      makerSig,
-      swapMakingAmount,
-      {
-        ...(await this._gasStation.getGasOraclePrices()),
-        ...(await getOverridesWithEstimatedGasLimit(
-          cegaEntry,
-          'fillOrder',
-          [order, makerSig, swapMakingAmount],
-          this._signer,
-        )),
-      },
-    );
+    const makerSig = await this.signOrder(cegaEntry, order);
+    return cegaEntry.fillOrder(order, makerSig, swapMakingAmount, {
+      ...(await this._gasStation.getGasOraclePrices()),
+      ...(await getOverridesWithEstimatedGasLimit(
+        cegaEntry,
+        'fillOrder',
+        [order, makerSig, swapMakingAmount],
+        this._signer,
+      )),
+    });
+  }
 
-    return {
-      swapTakingAmount: response[0],
-      orderHash: response[1],
-    };
+  async cancelOrder(orderHash: string) {
+    const cegaEntry = await this.loadCegaEntry();
+    return cegaEntry.cancelOrder(orderHash, {
+      ...(await this._gasStation.getGasOraclePrices()),
+      ...(await getOverridesWithEstimatedGasLimit(
+        cegaEntry,
+        'cancelOrder',
+        [orderHash],
+        this._signer,
+      )),
+    });
   }
 
   // ======= lpCega Offramp (Vault Token Market) code ends here
