@@ -1,6 +1,10 @@
 import { BigNumberish, ethers } from 'ethers';
 import {
   EvmAddress,
+  FillOrderParams,
+  FillOrderResponse,
+  GetOrderDataResponse,
+  LpCegaOfframpOrder,
   OracleDataSource,
   SFNEndAuctionParam,
   SFNEndAuctionParamForContract,
@@ -18,6 +22,7 @@ import PythAdapterAbi from './abiV2/PythAdapter.json';
 import PendleAdapter from './abiV2/PendleAdapter.json';
 import Chains, { IChainConfig, isValidChain } from './config/chains';
 import { dateToSeconds, getOverridesWithEstimatedGasLimit } from './utils';
+import { TYPES_OFFRAMP_ORDER } from './config';
 
 export default class CegaEvmSDKV2 {
   private _provider: ethers.providers.Provider;
@@ -407,6 +412,82 @@ export default class CegaEvmSDKV2 {
   /**
    * USER FACING METHODS
    */
+
+  // ====== lpCega Offramp (Vault Token Market) code starts here
+
+  async getDomain() {
+    const cegaEntry = await this.loadCegaEntry();
+
+    return {
+      name: 'Cega Offramp Entry',
+      version: '1',
+      chainId: cegaEntry.chainId,
+      verifyingContract: cegaEntry.address,
+    };
+  }
+
+  async getOfframpFeeBps(): Promise<number> {
+    const cegaEntry = await this.loadCegaEntry();
+    return cegaEntry.getOfframpFeeBps();
+  }
+
+  async getOrderData(maker: EvmAddress, orderHash: string): Promise<GetOrderDataResponse> {
+    const cegaEntry = await this.loadCegaEntry();
+    return cegaEntry.getOrderData(maker, orderHash);
+  }
+
+  async hashOrder(order: LpCegaOfframpOrder): Promise<string> {
+    const cegaEntry = await this.loadCegaEntry();
+    return cegaEntry.hashOrder(order);
+  }
+
+  async getSignatureForOfframpOrder(order: LpCegaOfframpOrder): Promise<string> {
+    const signer = this._signer;
+
+    if (!signer) {
+      throw new Error('Signer not defined');
+    }
+
+    const domain = await this.getDomain();
+
+    return (signer as ethers.providers.JsonRpcSigner)._signTypedData(
+      domain,
+      TYPES_OFFRAMP_ORDER,
+      order,
+    );
+  }
+
+  async fillOrder({
+    makerSig,
+    order,
+    swapMakingAmount,
+  }: FillOrderParams): Promise<ethers.providers.TransactionResponse> {
+    const cegaEntry = await this.loadCegaEntry();
+    return cegaEntry.fillOrder(order, makerSig, swapMakingAmount, {
+      ...(await this._gasStation.getGasOraclePrices()),
+      ...(await getOverridesWithEstimatedGasLimit(
+        cegaEntry,
+        'fillOrder',
+        [order, makerSig, swapMakingAmount],
+        this._signer,
+      )),
+    });
+  }
+
+  async cancelOrder(orderHash: string): Promise<ethers.providers.TransactionResponse> {
+    const cegaEntry = await this.loadCegaEntry();
+    return cegaEntry.cancelOrder(orderHash, {
+      ...(await this._gasStation.getGasOraclePrices()),
+      ...(await getOverridesWithEstimatedGasLimit(
+        cegaEntry,
+        'cancelOrder',
+        [orderHash],
+        this._signer,
+      )),
+    });
+  }
+
+  // ======= lpCega Offramp (Vault Token Market) code ends here
 
   async getAssetAllowanceToCega(
     asset: EvmAddress,
