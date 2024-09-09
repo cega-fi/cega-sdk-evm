@@ -22,19 +22,7 @@ import PythAdapterAbi from './abiV2/PythAdapter.json';
 import PendleAdapter from './abiV2/PendleAdapter.json';
 import Chains, { IChainConfig, isValidChain } from './config/chains';
 import { dateToSeconds, getOverridesWithEstimatedGasLimit } from './utils';
-
-const TYPES_OFFRAMP_ORDER = {
-  Order: [
-    { name: 'salt', type: 'uint256' },
-    { name: 'makingAmount', type: 'uint256' },
-    { name: 'takingAmount', type: 'uint256' },
-    { name: 'maker', type: 'address' },
-    { name: 'makerAsset', type: 'address' },
-    { name: 'takerAsset', type: 'address' },
-    { name: 'expiry', type: 'uint256' },
-    { name: 'makerTraits', type: 'uint256' },
-  ],
-};
+import { TYPES_OFFRAMP_ORDER } from './config';
 
 export default class CegaEvmSDKV2 {
   private _provider: ethers.providers.Provider;
@@ -427,6 +415,17 @@ export default class CegaEvmSDKV2 {
 
   // ====== lpCega Offramp (Vault Token Market) code starts here
 
+  async getDomain() {
+    const cegaEntry = await this.loadCegaEntry();
+
+    return {
+      name: 'Cega Offramp Entry',
+      version: '1',
+      chainId: cegaEntry.chainId,
+      verifyingContract: cegaEntry.address,
+    };
+  }
+
   async getOfframpFeeBps(): Promise<number> {
     const cegaEntry = await this.loadCegaEntry();
     return cegaEntry.getOfframpFeeBps();
@@ -443,20 +442,13 @@ export default class CegaEvmSDKV2 {
   }
 
   async getSignatureForOfframpOrder(order: LpCegaOfframpOrder): Promise<string> {
-    const cegaEntry = await this.loadCegaEntry();
     const signer = this._signer;
-    const network = await this._provider.getNetwork();
 
     if (!signer) {
       throw new Error('Signer not defined');
     }
 
-    const domain = {
-      name: 'Cega Offramp Entry',
-      version: '1',
-      chainId: network.chainId,
-      verifyingContract: cegaEntry.address,
-    };
+    const domain = await this.getDomain();
 
     return (signer as ethers.providers.JsonRpcSigner)._signTypedData(
       domain,

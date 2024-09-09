@@ -10,6 +10,7 @@ import {
   ArbitrumAlchemyGasStation,
   ArbitrumInfuraGasStation,
 } from './GasStation';
+import { TYPES_OFFRAMP_ORDER } from './config';
 
 import * as types from './types';
 
@@ -25,4 +26,5 @@ export {
   types,
   CegaEvmSDKV2,
   PendleSdk,
+  TYPES_OFFRAMP_ORDER,
 };
