@@ -415,13 +415,14 @@ export default class CegaEvmSDKV2 {
 
   // ====== lpCega Offramp (Vault Token Market) code starts here
 
-  async getDomain() {
+  async getDomain(): Promise<ethers.TypedDataDomain> {
     const cegaEntry = await this.loadCegaEntry();
+    const { chainId } = await this._provider.getNetwork();
 
     return {
       name: 'Cega Offramp Entry',
       version: '1',
-      chainId: cegaEntry.chainId,
+      chainId,
       verifyingContract: cegaEntry.address,
     };
   }
