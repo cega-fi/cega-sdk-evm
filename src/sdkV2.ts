@@ -5,6 +5,7 @@ import {
   FillOrderResponse,
   GetOrderDataResponse,
   LpCegaOfframpOrder,
+  LpCegaOfframpOrderStringified,
   OracleDataSource,
   SFNEndAuctionParam,
   SFNEndAuctionParamForContract,
@@ -442,7 +443,7 @@ export default class CegaEvmSDKV2 {
     return cegaEntry.hashOrder(order);
   }
 
-  async getSignatureForOfframpOrder(order: LpCegaOfframpOrder): Promise<string> {
+  async getSignatureForOfframpOrder(order: LpCegaOfframpOrderStringified): Promise<string> {
     const signer = this._signer;
 
     if (!signer) {
@@ -462,6 +463,7 @@ export default class CegaEvmSDKV2 {
     makerSig,
     order,
     swapMakingAmount,
+    overrides = {},
   }: FillOrderParams): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = await this.loadCegaEntry();
     return cegaEntry.fillOrder(order, makerSig, swapMakingAmount, {
@@ -471,11 +473,15 @@ export default class CegaEvmSDKV2 {
         'fillOrder',
         [order, makerSig, swapMakingAmount],
         this._signer,
+        overrides,
       )),
     });
   }
 
-  async cancelOrder(orderHash: string): Promise<ethers.providers.TransactionResponse> {
+  async cancelOrder(
+    orderHash: string,
+    overrides: TxOverrides = {},
+  ): Promise<ethers.providers.TransactionResponse> {
     const cegaEntry = await this.loadCegaEntry();
     return cegaEntry.cancelOrder(orderHash, {
       ...(await this._gasStation.getGasOraclePrices()),
@@ -484,6 +490,7 @@ export default class CegaEvmSDKV2 {
         'cancelOrder',
         [orderHash],
         this._signer,
+        overrides,
       )),
     });
   }
