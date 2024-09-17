@@ -234,9 +234,9 @@ export type LpCegaOfframpOrderStringified = {
 
 export type FillOrderParams = {
   makerSig: string;
-  order: LpCegaOfframpOrder;
+  order: LpCegaOfframpOrderStringified;
   swapMakingAmount: ethers.BigNumber;
-  overrides: TxOverrides;
+  overrides?: TxOverrides;
 };
 
 export type FillOrderResponse = {
