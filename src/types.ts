@@ -221,10 +221,22 @@ export type LpCegaOfframpOrder = {
   makerTraits: ethers.BigNumber;
 };
 
+export type LpCegaOfframpOrderStringified = {
+  salt: string;
+  makingAmount: string;
+  takingAmount: string;
+  maker: EvmAddress;
+  makerAsset: EvmAddress;
+  takerAsset: EvmAddress;
+  expiry: string;
+  makerTraits: string;
+};
+
 export type FillOrderParams = {
   makerSig: string;
   order: LpCegaOfframpOrder;
   swapMakingAmount: ethers.BigNumber;
+  overrides: TxOverrides;
 };
 
 export type FillOrderResponse = {
