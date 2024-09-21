@@ -2,7 +2,6 @@ import { BigNumberish, ethers } from 'ethers';
 import {
   EvmAddress,
   FillOrderParams,
-  FillOrderResponse,
   GetOrderDataResponse,
   LpCegaOfframpOrder,
   LpCegaOfframpOrderStringified,
@@ -475,6 +474,7 @@ export default class CegaEvmSDKV2 {
         this._signer,
         overrides,
       )),
+      value: order.takerAsset === ethers.constants.AddressZero ? order.takingAmount : 0,
     });
   }
 

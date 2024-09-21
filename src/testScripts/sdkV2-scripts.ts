@@ -3,7 +3,7 @@
 import * as dotenv from 'dotenv';
 import fs from 'fs';
 
-import { ethers } from 'ethers';
+import { BigNumber, ethers } from 'ethers';
 import { CegaEvmSDKV2, EthereumAlchemyGasStation, types, GasStation } from '..';
 import { EvmAddress } from '../types';
 
@@ -58,14 +58,14 @@ const CURRENT_NETWORK: Network = Network.arbitrum;
 function loadSettings(network: Network) {
   const config = CONFIGS[network];
   const provider = new ethers.providers.JsonRpcProvider(config.RPC_URL);
-  // const userSigner = new ethers.Wallet(ADMIN_ACCOUNTS.programAdminPk, provider);
+  const userSigner = new ethers.Wallet(ADMIN_ACCOUNTS.programAdminPk, provider);
 
   const sdk = new CegaEvmSDKV2(
     config.addressManager,
     config.treasuryAddress,
     config.gasStation,
     provider,
-    // userSigner,
+    userSigner,
   );
   return { sdk };
 }
@@ -275,6 +275,29 @@ async function getVaults(network: Network, vaultAddresses: EvmAddress[]) {
   }
 }
 
+async function fillOrder() {
+  const { sdk } = loadSettings(CURRENT_NETWORK);
+  const order = {
+    swapMakingAmount: BigNumber.from('500000000000000'),
+    order: {
+      salt: '888',
+      makingAmount: '500000000000000',
+      takingAmount: '396400000000000',
+      maker: '' as EvmAddress, // add maker address
+      makerAsset: '' as EvmAddress, // add maker asset
+      takerAsset: '0x0000000000000000000000000000000000000000' as EvmAddress,
+      expiry: '1726942743',
+      makerTraits: '0',
+    },
+    makerSig: '', // add signature
+  };
+  const txResponse = await sdk.fillOrder(order);
+  console.log('TxResponse:', txResponse);
+  txResponse.wait();
+  console.log('Order Filled', order);
+  console.log('TxHash:', txResponse);
+}
+
 async function main() {
   // const { columns: productColumns, data: productData } = await getProducts(
   //   Network.ethereum,
@@ -288,6 +311,7 @@ async function main() {
   // await addDeposits(CURRENT_NETWORK);
   // await bulkActions(CURRENT_NETWORK);
   // await depositUsingESTGasLimit();
+  // await fillOrder();
 }
 
 main();
