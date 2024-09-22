@@ -293,9 +293,9 @@ async function fillOrder() {
   };
   const txResponse = await sdk.fillOrder(order);
   console.log('TxResponse:', txResponse);
-  txResponse.wait();
+  await txResponse.wait();
   console.log('Order Filled', order);
-  console.log('TxHash:', txResponse);
+  console.log('TxHash:', txResponse.hash);
 }
 
 async function main() {
