@@ -1,3 +1,8 @@
+export enum NetworkNameEvm {
+  EthereumMainnet = 'ethereum-mainnet',
+  ArbitrumOneMainnet = 'arbitrum-one-mainnet',
+}
+
 export interface IChainConfig {
   id: number;
   name: string;
@@ -7,7 +12,7 @@ export interface IChainConfig {
 const Chains: Record<number, IChainConfig> = {
   1: {
     id: 1,
-    name: 'ethereum-mainnet',
+    name: NetworkNameEvm.EthereumMainnet,
     tokens: {
       stETH: '0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84',
       USDT: '0xdAC17F958D2ee523a2206206994597C13D831ec7',
@@ -16,7 +21,7 @@ const Chains: Record<number, IChainConfig> = {
   },
   42161: {
     id: 42161,
-    name: 'arbitrum-one-mainnet',
+    name: NetworkNameEvm.ArbitrumOneMainnet,
     tokens: {
       USDT: '0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9',
       wBTC: '0x2f2a2543b76a4166549f7aab2e75bef0aefc5b0f',
