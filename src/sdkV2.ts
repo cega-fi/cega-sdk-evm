@@ -20,7 +20,7 @@ import IWrappingProxyAbi from './abiV2/IWrappingProxy.json';
 import OracleEntryAbi from './abiV2/OracleEntry.json';
 import PythAdapterAbi from './abiV2/PythAdapter.json';
 import PendleAdapter from './abiV2/PendleAdapter.json';
-import Chains, { IChainConfig, isValidChain, NetworkNameEvm } from './config/chains';
+import Chains, { IChainConfig, isValidChain, NetworkName } from './config/chains';
 import { dateToSeconds, getOverridesWithEstimatedGasLimit } from './utils';
 import { TYPES_OFFRAMP_ORDER } from './config';
 
@@ -509,7 +509,7 @@ export default class CegaEvmSDKV2 {
     const erc20Contract = new ethers.Contract(asset, Erc20Abi.abi, this._provider);
 
     const chainConfig = await this.getChainConfig();
-    if (chainConfig.name === NetworkNameEvm.EthereumMainnet && asset === chainConfig.tokens.stETH) {
+    if (chainConfig.name === NetworkName.EthereumMainnet && asset === chainConfig.tokens.stETH) {
       const cegaWrappingProxy = await this.loadCegaWrappingProxy();
       return erc20Contract.allowance(ownerAddr, cegaWrappingProxy.address);
     }
@@ -528,7 +528,7 @@ export default class CegaEvmSDKV2 {
     }
 
     const chainConfig = await this.getChainConfig();
-    if (chainConfig.name === NetworkNameEvm.EthereumMainnet && asset === chainConfig.tokens.stETH) {
+    if (chainConfig.name === NetworkName.EthereumMainnet && asset === chainConfig.tokens.stETH) {
       return this.approveErc20ForCegaProxy(amount, asset, overrides);
     }
     return this.approveErc20ForCegaEntry(amount, asset, overrides);
@@ -568,7 +568,7 @@ export default class CegaEvmSDKV2 {
     }
 
     const chainConfig = await this.getChainConfig();
-    if (chainConfig.name === NetworkNameEvm.EthereumMainnet && asset === chainConfig.tokens.stETH) {
+    if (chainConfig.name === NetworkName.EthereumMainnet && asset === chainConfig.tokens.stETH) {
       return this.increaseAllowanceErc20ForCegaProxy(amount, asset, overrides);
     }
     // TODO: Once we have some deposits with USDT, we can move from increaseAllowance
@@ -682,7 +682,7 @@ export default class CegaEvmSDKV2 {
     }
 
     const chainConfig = await this.getChainConfig();
-    if (chainConfig.name === NetworkNameEvm.EthereumMainnet && asset === chainConfig.tokens.stETH) {
+    if (chainConfig.name === NetworkName.EthereumMainnet && asset === chainConfig.tokens.stETH) {
       return this.addToDepositQueueProxy(productId, amount, overrides);
     }
 
@@ -742,7 +742,7 @@ export default class CegaEvmSDKV2 {
     }
 
     const chainConfig = await this.getChainConfig();
-    if (chainConfig.name === NetworkNameEvm.EthereumMainnet && asset === chainConfig.tokens.stETH) {
+    if (chainConfig.name === NetworkName.EthereumMainnet && asset === chainConfig.tokens.stETH) {
       return this.dcsAddToDepositQueueAndSetRotationStrategiesProxy(
         productId,
         amount,
@@ -752,7 +752,7 @@ export default class CegaEvmSDKV2 {
     }
 
     const gasLimitEstimationBufferPercentage =
-      chainConfig.name === NetworkNameEvm.EthereumMainnet ? 80 : 100;
+      chainConfig.name === NetworkName.EthereumMainnet ? 80 : 100;
 
     const cegaEntry = await this.loadCegaEntry();
 
@@ -790,7 +790,7 @@ export default class CegaEvmSDKV2 {
     }
 
     const chainConfig = await this.getChainConfig();
-    if (chainConfig.name === NetworkNameEvm.EthereumMainnet && asset === chainConfig.tokens.stETH) {
+    if (chainConfig.name === NetworkName.EthereumMainnet && asset === chainConfig.tokens.stETH) {
       return this.dcsAddToDepositQueueProxy(productId, amount, overrides);
     }
 
@@ -903,7 +903,7 @@ export default class CegaEvmSDKV2 {
 
     const chainConfig = await this.getChainConfig();
     const gasLimitEstimationBufferPercentage =
-      chainConfig.name === NetworkNameEvm.EthereumMainnet ? 50 : 75;
+      chainConfig.name === NetworkName.EthereumMainnet ? 50 : 75;
 
     return cegaEntry.addToWithdrawalQueue(vaultAddress, sharesAmount, nextProductId, {
       ...(await this._gasStation.getGasOraclePrices()),
