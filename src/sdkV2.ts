@@ -1144,6 +1144,10 @@ export default class CegaEvmSDKV2 {
       Math.floor(tradeStartDate.getTime() / 1000),
     );
 
+    const chainConfig = await this.getChainConfig();
+    const gasLimitEstimationBufferPercentage =
+    chainConfig.name === NetworkName.EthereumMainnet ? 50 : 100;
+
     return cegaEntry.dcsBulkEndAuctions(
       vaultAddresses,
       auctionWinners,
@@ -1157,6 +1161,7 @@ export default class CegaEvmSDKV2 {
           [vaultAddresses, auctionWinners, tradesStartInSeconds, aprBpsList, oracleDataSources],
           this._signer,
           overrides,
+          gasLimitEstimationBufferPercentage
         )),
       },
     );
@@ -1175,6 +1180,10 @@ export default class CegaEvmSDKV2 {
       Math.floor(tradeStartDate.getTime() / 1000),
     );
 
+    const chainConfig = await this.getChainConfig();
+    const gasLimitEstimationBufferPercentage =
+    chainConfig.name === NetworkName.EthereumMainnet ? 50 : 100;
+
     return cegaEntry.fcnBulkEndAuctions(
       vaultAddresses,
       auctionWinners,
@@ -1188,6 +1197,7 @@ export default class CegaEvmSDKV2 {
           [vaultAddresses, auctionWinners, tradesStartInSeconds, aprBpsList, oracleDataSources],
           this._signer,
           overrides,
+          gasLimitEstimationBufferPercentage
         )),
       },
     );
@@ -1204,6 +1214,10 @@ export default class CegaEvmSDKV2 {
     const cegaEntry = await this.loadCegaEntry();
     const tradeStartInSeconds = Math.floor(tradeStartDate.getTime() / 1000);
 
+    const chainConfig = await this.getChainConfig();
+    const gasLimitEstimationBufferPercentage =
+    chainConfig.name === NetworkName.EthereumMainnet ? 50 : 100;
+
     return cegaEntry.dcsEndAuction(
       vaultAddress,
       auctionWinner,
@@ -1217,6 +1231,7 @@ export default class CegaEvmSDKV2 {
           [vaultAddress, auctionWinner, tradeStartInSeconds, aprBps, oracleDataSource],
           this._signer,
           overrides,
+          gasLimitEstimationBufferPercentage
         )),
       },
     );
@@ -1233,6 +1248,10 @@ export default class CegaEvmSDKV2 {
     const cegaEntry = await this.loadCegaEntry();
     const tradeStartInSeconds = Math.floor(tradeStartDate.getTime() / 1000);
 
+    const chainConfig = await this.getChainConfig();
+    const gasLimitEstimationBufferPercentage =
+    chainConfig.name === NetworkName.EthereumMainnet ? 50 : 100;
+
     return cegaEntry.fcnEndAuction(
       vaultAddress,
       auctionWinner,
@@ -1246,6 +1265,7 @@ export default class CegaEvmSDKV2 {
           [vaultAddress, auctionWinner, tradeStartInSeconds, aprBps, oracleDataSources],
           this._signer,
           overrides,
+          gasLimitEstimationBufferPercentage
         )),
       },
     );
@@ -2169,6 +2189,10 @@ export default class CegaEvmSDKV2 {
       tradeStartDate: Math.floor(param.tradeStartDate.getTime() / 1000),
     }));
 
+    const chainConfig = await this.getChainConfig();
+    const gasLimitEstimationBufferPercentage =
+    chainConfig.name === NetworkName.EthereumMainnet ? 50 : 100;
+
     return cegaEntry.sfnBulkEndAuctions(params, {
       ...(await getOverridesWithEstimatedGasLimit(
         cegaEntry,
@@ -2176,6 +2200,7 @@ export default class CegaEvmSDKV2 {
         [params],
         this._signer,
         overrides,
+        gasLimitEstimationBufferPercentage,
       )),
     });
   }
