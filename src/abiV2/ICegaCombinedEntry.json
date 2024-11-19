@@ -1953,6 +1953,448 @@
           "type": "uint32"
         },
         {
+          "indexed": true,
+          "internalType": "address",
+          "name": "withdrawer",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "bool",
+          "name": "withProxy",
+          "type": "bool"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint32",
+          "name": "nextProductId",
+          "type": "uint32"
+        }
+      ],
+      "name": "SPBAddedToWithdrawalQueue",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "asset",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "bool",
+          "name": "whitelisted",
+          "type": "bool"
+        }
+      ],
+      "name": "SPBAssetWhitelistedUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "withdrawer",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint128",
+          "name": "assetAmount",
+          "type": "uint128"
+        }
+      ],
+      "name": "SPBCouponWithdrawn",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "indexed": false,
+          "internalType": "bool",
+          "name": "isConverted",
+          "type": "bool"
+        }
+      ],
+      "name": "SPBDCSIsConvertedUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint32",
+          "name": "managementFeeBps",
+          "type": "uint32"
+        }
+      ],
+      "name": "SPBDefaultManagementFeeUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint32",
+          "name": "yieldFeeBps",
+          "type": "uint32"
+        }
+      ],
+      "name": "SPBDefaultYieldFeeUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "components": [
+            {
+              "internalType": "address",
+              "name": "asset",
+              "type": "address"
+            },
+            {
+              "internalType": "uint40",
+              "name": "timestamp",
+              "type": "uint40"
+            },
+            {
+              "internalType": "uint128",
+              "name": "price",
+              "type": "uint128"
+            }
+          ],
+          "indexed": false,
+          "internalType": "struct PriceOverride[]",
+          "name": "overrides",
+          "type": "tuple[]"
+        }
+      ],
+      "name": "SPBDisputeResolved",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "disputor",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint40[]",
+          "name": "timestamps",
+          "type": "uint40[]"
+        }
+      ],
+      "name": "SPBDisputeSubmitted",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "components": [
+            {
+              "internalType": "address",
+              "name": "auctionWinner",
+              "type": "address"
+            },
+            {
+              "internalType": "uint40",
+              "name": "tradeStartDate",
+              "type": "uint40"
+            },
+            {
+              "internalType": "uint16",
+              "name": "aprBps",
+              "type": "uint16"
+            }
+          ],
+          "indexed": false,
+          "internalType": "struct SPBEndAuctionParams",
+          "name": "endAuctionParams",
+          "type": "tuple"
+        }
+      ],
+      "name": "SPBEndAuctionParamsUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "indexed": false,
+          "internalType": "bool",
+          "name": "isKnockedIn",
+          "type": "bool"
+        }
+      ],
+      "name": "SPBFCNIsKnockedInUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint128",
+          "name": "totalFees",
+          "type": "uint128"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint128",
+          "name": "managementFee",
+          "type": "uint128"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint128",
+          "name": "yieldFee",
+          "type": "uint128"
+        }
+      ],
+      "name": "SPBFeesCollected",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint128",
+          "name": "lateFee",
+          "type": "uint128"
+        }
+      ],
+      "name": "SPBLateFeePaid",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "productCreator",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint32",
+          "name": "strategyId",
+          "type": "uint32"
+        }
+      ],
+      "name": "SPBProductCreated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "auctionWinner",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint128",
+          "name": "notionalAmount",
+          "type": "uint128"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint128",
+          "name": "yieldAmount",
+          "type": "uint128"
+        }
+      ],
+      "name": "SPBTradeStarted",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "indexed": false,
+          "internalType": "enum SPBTradeStatus",
+          "name": "tradeStatus",
+          "type": "uint8"
+        }
+      ],
+      "name": "SPBTradeStatusUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "indexed": false,
+          "internalType": "bool",
+          "name": "isKnockedIn",
+          "type": "bool"
+        }
+      ],
+      "name": "SPBVANIsKnockedInUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "indexed": false,
+          "internalType": "bool",
+          "name": "isKnockedOut",
+          "type": "bool"
+        }
+      ],
+      "name": "SPBVANIsKnockedOutUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "withdrawer",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint128",
+          "name": "assetAmount",
+          "type": "uint128"
+        },
+        {
+          "indexed": false,
+          "internalType": "bool",
+          "name": "withProxy",
+          "type": "bool"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint32",
+          "name": "nextProductId",
+          "type": "uint32"
+        }
+      ],
+      "name": "SPBWithdrawalExecuted",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
           "indexed": false,
           "internalType": "string",
           "name": "imageUrl",
@@ -6959,6 +7401,1256 @@
         }
       ],
       "name": "sfnSubmitDispute",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "internalType": "bool",
+          "name": "withProxy",
+          "type": "bool"
+        },
+        {
+          "internalType": "uint32",
+          "name": "nextProductId",
+          "type": "uint32"
+        }
+      ],
+      "name": "spbAddToWithdrawalQueue",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "components": [
+            {
+              "internalType": "address",
+              "name": "owner",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "depositAsset",
+              "type": "address"
+            },
+            {
+              "internalType": "uint128",
+              "name": "notional",
+              "type": "uint128"
+            },
+            {
+              "internalType": "uint40",
+              "name": "tenorInSeconds",
+              "type": "uint40"
+            },
+            {
+              "components": [
+                {
+                  "internalType": "uint8",
+                  "name": "hoursToStartLateFees",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint8",
+                  "name": "hoursToStartSettlementDefault",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint8",
+                  "name": "disputePeriodInHours",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint8",
+                  "name": "disputeGraceDelayInHours",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint16",
+                  "name": "lateFeeBps",
+                  "type": "uint16"
+                },
+                {
+                  "internalType": "uint8",
+                  "name": "hoursToStartDisputeDefault",
+                  "type": "uint8"
+                }
+              ],
+              "internalType": "struct SPBExtraParams",
+              "name": "extraParams",
+              "type": "tuple"
+            },
+            {
+              "internalType": "string",
+              "name": "name",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "symbol",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "tradeWinnerNftImage",
+              "type": "string"
+            },
+            {
+              "components": [
+                {
+                  "internalType": "bool",
+                  "name": "withdrawAutomatically",
+                  "type": "bool"
+                },
+                {
+                  "internalType": "bool",
+                  "name": "withProxy",
+                  "type": "bool"
+                },
+                {
+                  "internalType": "uint32",
+                  "name": "nextProductId",
+                  "type": "uint32"
+                }
+              ],
+              "internalType": "struct SPBWithdrawalCreationParams",
+              "name": "withdrawalParams",
+              "type": "tuple"
+            }
+          ],
+          "internalType": "struct SPBProductCreationParams",
+          "name": "creationParams",
+          "type": "tuple"
+        },
+        {
+          "components": [
+            {
+              "internalType": "address",
+              "name": "conversionAsset",
+              "type": "address"
+            },
+            {
+              "internalType": "enum DCSOptionType",
+              "name": "dcsOptionType",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint16",
+              "name": "strikeBarrierBps",
+              "type": "uint16"
+            },
+            {
+              "internalType": "enum IOracleEntry.DataSource",
+              "name": "dataSource",
+              "type": "uint8"
+            }
+          ],
+          "internalType": "struct DCSSpecificProductCreationParams",
+          "name": "dcsParams",
+          "type": "tuple"
+        },
+        {
+          "components": [
+            {
+              "internalType": "address",
+              "name": "auctionWinner",
+              "type": "address"
+            },
+            {
+              "internalType": "uint40",
+              "name": "tradeStartDate",
+              "type": "uint40"
+            },
+            {
+              "internalType": "uint16",
+              "name": "aprBps",
+              "type": "uint16"
+            }
+          ],
+          "internalType": "struct SPBEndAuctionParams",
+          "name": "endAuctionParams",
+          "type": "tuple"
+        }
+      ],
+      "name": "spbCreateDCSProduct",
+      "outputs": [],
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "components": [
+            {
+              "internalType": "address",
+              "name": "owner",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "depositAsset",
+              "type": "address"
+            },
+            {
+              "internalType": "uint128",
+              "name": "notional",
+              "type": "uint128"
+            },
+            {
+              "internalType": "uint40",
+              "name": "tenorInSeconds",
+              "type": "uint40"
+            },
+            {
+              "components": [
+                {
+                  "internalType": "uint8",
+                  "name": "hoursToStartLateFees",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint8",
+                  "name": "hoursToStartSettlementDefault",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint8",
+                  "name": "disputePeriodInHours",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint8",
+                  "name": "disputeGraceDelayInHours",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint16",
+                  "name": "lateFeeBps",
+                  "type": "uint16"
+                },
+                {
+                  "internalType": "uint8",
+                  "name": "hoursToStartDisputeDefault",
+                  "type": "uint8"
+                }
+              ],
+              "internalType": "struct SPBExtraParams",
+              "name": "extraParams",
+              "type": "tuple"
+            },
+            {
+              "internalType": "string",
+              "name": "name",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "symbol",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "tradeWinnerNftImage",
+              "type": "string"
+            },
+            {
+              "components": [
+                {
+                  "internalType": "bool",
+                  "name": "withdrawAutomatically",
+                  "type": "bool"
+                },
+                {
+                  "internalType": "bool",
+                  "name": "withProxy",
+                  "type": "bool"
+                },
+                {
+                  "internalType": "uint32",
+                  "name": "nextProductId",
+                  "type": "uint32"
+                }
+              ],
+              "internalType": "struct SPBWithdrawalCreationParams",
+              "name": "withdrawalParams",
+              "type": "tuple"
+            }
+          ],
+          "internalType": "struct SPBProductCreationParams",
+          "name": "creationParams",
+          "type": "tuple"
+        },
+        {
+          "components": [
+            {
+              "internalType": "uint64",
+              "name": "leverage",
+              "type": "uint64"
+            },
+            {
+              "internalType": "uint24",
+              "name": "observationIntervalInSeconds",
+              "type": "uint24"
+            },
+            {
+              "components": [
+                {
+                  "internalType": "address",
+                  "name": "asset",
+                  "type": "address"
+                },
+                {
+                  "internalType": "uint16",
+                  "name": "barrierBps",
+                  "type": "uint16"
+                },
+                {
+                  "internalType": "enum IOracleEntry.DataSource",
+                  "name": "dataSource",
+                  "type": "uint8"
+                }
+              ],
+              "internalType": "struct SPBFCNOptionBarrier[]",
+              "name": "optionBarriers",
+              "type": "tuple[]"
+            }
+          ],
+          "internalType": "struct FCNSpecificProductCreationParams",
+          "name": "fcnParams",
+          "type": "tuple"
+        },
+        {
+          "components": [
+            {
+              "internalType": "address",
+              "name": "auctionWinner",
+              "type": "address"
+            },
+            {
+              "internalType": "uint40",
+              "name": "tradeStartDate",
+              "type": "uint40"
+            },
+            {
+              "internalType": "uint16",
+              "name": "aprBps",
+              "type": "uint16"
+            }
+          ],
+          "internalType": "struct SPBEndAuctionParams",
+          "name": "endAuctionParams",
+          "type": "tuple"
+        }
+      ],
+      "name": "spbCreateFCNProduct",
+      "outputs": [],
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "components": [
+            {
+              "internalType": "address",
+              "name": "owner",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "depositAsset",
+              "type": "address"
+            },
+            {
+              "internalType": "uint128",
+              "name": "notional",
+              "type": "uint128"
+            },
+            {
+              "internalType": "uint40",
+              "name": "tenorInSeconds",
+              "type": "uint40"
+            },
+            {
+              "components": [
+                {
+                  "internalType": "uint8",
+                  "name": "hoursToStartLateFees",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint8",
+                  "name": "hoursToStartSettlementDefault",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint8",
+                  "name": "disputePeriodInHours",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint8",
+                  "name": "disputeGraceDelayInHours",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint16",
+                  "name": "lateFeeBps",
+                  "type": "uint16"
+                },
+                {
+                  "internalType": "uint8",
+                  "name": "hoursToStartDisputeDefault",
+                  "type": "uint8"
+                }
+              ],
+              "internalType": "struct SPBExtraParams",
+              "name": "extraParams",
+              "type": "tuple"
+            },
+            {
+              "internalType": "string",
+              "name": "name",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "symbol",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "tradeWinnerNftImage",
+              "type": "string"
+            },
+            {
+              "components": [
+                {
+                  "internalType": "bool",
+                  "name": "withdrawAutomatically",
+                  "type": "bool"
+                },
+                {
+                  "internalType": "bool",
+                  "name": "withProxy",
+                  "type": "bool"
+                },
+                {
+                  "internalType": "uint32",
+                  "name": "nextProductId",
+                  "type": "uint32"
+                }
+              ],
+              "internalType": "struct SPBWithdrawalCreationParams",
+              "name": "withdrawalParams",
+              "type": "tuple"
+            }
+          ],
+          "internalType": "struct SPBProductCreationParams",
+          "name": "creationParams",
+          "type": "tuple"
+        },
+        {
+          "components": [
+            {
+              "internalType": "address",
+              "name": "underlyingAsset",
+              "type": "address"
+            },
+            {
+              "internalType": "enum VANOptionType",
+              "name": "vanOptionType",
+              "type": "uint8"
+            },
+            {
+              "internalType": "enum IOracleEntry.DataSource",
+              "name": "dataSource",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint16",
+              "name": "strikeBps",
+              "type": "uint16"
+            },
+            {
+              "internalType": "uint16",
+              "name": "knockInBps",
+              "type": "uint16"
+            },
+            {
+              "internalType": "uint16",
+              "name": "knockOutBps",
+              "type": "uint16"
+            },
+            {
+              "internalType": "uint24",
+              "name": "observationIntervalInSeconds",
+              "type": "uint24"
+            }
+          ],
+          "internalType": "struct VANSpecificProductCreationParams",
+          "name": "vanParams",
+          "type": "tuple"
+        },
+        {
+          "components": [
+            {
+              "internalType": "address",
+              "name": "auctionWinner",
+              "type": "address"
+            },
+            {
+              "internalType": "uint40",
+              "name": "tradeStartDate",
+              "type": "uint40"
+            },
+            {
+              "internalType": "uint16",
+              "name": "aprBps",
+              "type": "uint16"
+            }
+          ],
+          "internalType": "struct SPBEndAuctionParams",
+          "name": "endAuctionParams",
+          "type": "tuple"
+        }
+      ],
+      "name": "spbCreateVANProduct",
+      "outputs": [],
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        }
+      ],
+      "name": "spbGetDCSProduct",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "address",
+              "name": "conversionAsset",
+              "type": "address"
+            },
+            {
+              "internalType": "enum DCSOptionType",
+              "name": "dcsOptionType",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint16",
+              "name": "strikeBarrierBps",
+              "type": "uint16"
+            },
+            {
+              "internalType": "enum IOracleEntry.DataSource",
+              "name": "dataSource",
+              "type": "uint8"
+            },
+            {
+              "internalType": "bool",
+              "name": "isConverted",
+              "type": "bool"
+            },
+            {
+              "internalType": "uint128",
+              "name": "initialSpotPrice",
+              "type": "uint128"
+            }
+          ],
+          "internalType": "struct DCSSpecificProductParams",
+          "name": "",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "spbGetDefaults",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "uint16",
+              "name": "yieldFeeBps",
+              "type": "uint16"
+            },
+            {
+              "internalType": "uint16",
+              "name": "managementFeeBps",
+              "type": "uint16"
+            }
+          ],
+          "internalType": "struct SPBDefaultConfig",
+          "name": "",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        }
+      ],
+      "name": "spbGetFCNProduct",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "uint64",
+              "name": "leverage",
+              "type": "uint64"
+            },
+            {
+              "internalType": "uint24",
+              "name": "observationIntervalInSeconds",
+              "type": "uint24"
+            },
+            {
+              "components": [
+                {
+                  "internalType": "address",
+                  "name": "asset",
+                  "type": "address"
+                },
+                {
+                  "internalType": "uint16",
+                  "name": "barrierBps",
+                  "type": "uint16"
+                },
+                {
+                  "internalType": "enum IOracleEntry.DataSource",
+                  "name": "dataSource",
+                  "type": "uint8"
+                }
+              ],
+              "internalType": "struct SPBFCNOptionBarrier[]",
+              "name": "optionBarriers",
+              "type": "tuple[]"
+            },
+            {
+              "internalType": "uint128[]",
+              "name": "initialSpotPrices",
+              "type": "uint128[]"
+            },
+            {
+              "internalType": "bool",
+              "name": "isKnockedIn",
+              "type": "bool"
+            }
+          ],
+          "internalType": "struct FCNSpecificProductParams",
+          "name": "",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "spbGetLatestProductId",
+      "outputs": [
+        {
+          "internalType": "uint32",
+          "name": "",
+          "type": "uint32"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        }
+      ],
+      "name": "spbGetProduct",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "uint32",
+              "name": "strategyId",
+              "type": "uint32"
+            },
+            {
+              "internalType": "address",
+              "name": "depositAsset",
+              "type": "address"
+            },
+            {
+              "internalType": "uint128",
+              "name": "notional",
+              "type": "uint128"
+            },
+            {
+              "internalType": "uint40",
+              "name": "tenorInSeconds",
+              "type": "uint40"
+            },
+            {
+              "components": [
+                {
+                  "internalType": "uint8",
+                  "name": "hoursToStartLateFees",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint8",
+                  "name": "hoursToStartSettlementDefault",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint8",
+                  "name": "disputePeriodInHours",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint8",
+                  "name": "disputeGraceDelayInHours",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint16",
+                  "name": "lateFeeBps",
+                  "type": "uint16"
+                },
+                {
+                  "internalType": "uint8",
+                  "name": "hoursToStartDisputeDefault",
+                  "type": "uint8"
+                }
+              ],
+              "internalType": "struct SPBExtraParams",
+              "name": "extraParams",
+              "type": "tuple"
+            },
+            {
+              "internalType": "string",
+              "name": "name",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "tradeWinnerNftImage",
+              "type": "string"
+            },
+            {
+              "components": [
+                {
+                  "internalType": "address",
+                  "name": "withdrawer",
+                  "type": "address"
+                },
+                {
+                  "internalType": "bool",
+                  "name": "withProxy",
+                  "type": "bool"
+                },
+                {
+                  "internalType": "uint32",
+                  "name": "nextProductId",
+                  "type": "uint32"
+                }
+              ],
+              "internalType": "struct SPBWithdrawalParams",
+              "name": "withdrawalParams",
+              "type": "tuple"
+            },
+            {
+              "internalType": "uint128",
+              "name": "totalAssets",
+              "type": "uint128"
+            },
+            {
+              "internalType": "uint128",
+              "name": "totalYield",
+              "type": "uint128"
+            },
+            {
+              "internalType": "uint40",
+              "name": "tradeStartDate",
+              "type": "uint40"
+            },
+            {
+              "internalType": "uint16",
+              "name": "aprBps",
+              "type": "uint16"
+            },
+            {
+              "internalType": "uint64",
+              "name": "auctionWinnerTokenId",
+              "type": "uint64"
+            },
+            {
+              "internalType": "uint16",
+              "name": "yieldFeeBps",
+              "type": "uint16"
+            },
+            {
+              "internalType": "uint16",
+              "name": "managementFeeBps",
+              "type": "uint16"
+            },
+            {
+              "internalType": "address",
+              "name": "auctionWinner",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "vaultAddress",
+              "type": "address"
+            },
+            {
+              "internalType": "enum SPBTradeStatus",
+              "name": "tradeStatus",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint40",
+              "name": "disputeStartedAt",
+              "type": "uint40"
+            }
+          ],
+          "internalType": "struct SPBProductParams",
+          "name": "",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vaultAddress",
+          "type": "address"
+        }
+      ],
+      "name": "spbGetProductOfVault",
+      "outputs": [
+        {
+          "internalType": "uint32",
+          "name": "",
+          "type": "uint32"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        }
+      ],
+      "name": "spbGetStartTradeAmounts",
+      "outputs": [
+        {
+          "internalType": "uint128",
+          "name": "total",
+          "type": "uint128"
+        },
+        {
+          "internalType": "uint128",
+          "name": "coupon",
+          "type": "uint128"
+        },
+        {
+          "internalType": "uint128",
+          "name": "lateFees",
+          "type": "uint128"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        }
+      ],
+      "name": "spbGetVANProduct",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "address",
+              "name": "underlyingAsset",
+              "type": "address"
+            },
+            {
+              "internalType": "enum VANOptionType",
+              "name": "vanOptionType",
+              "type": "uint8"
+            },
+            {
+              "internalType": "enum IOracleEntry.DataSource",
+              "name": "dataSource",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint16",
+              "name": "strikeBps",
+              "type": "uint16"
+            },
+            {
+              "internalType": "uint16",
+              "name": "knockInBps",
+              "type": "uint16"
+            },
+            {
+              "internalType": "uint16",
+              "name": "knockOutBps",
+              "type": "uint16"
+            },
+            {
+              "internalType": "uint24",
+              "name": "observationIntervalInSeconds",
+              "type": "uint24"
+            },
+            {
+              "internalType": "uint128",
+              "name": "initialSpotPrice",
+              "type": "uint128"
+            },
+            {
+              "internalType": "bool",
+              "name": "isKnockedIn",
+              "type": "bool"
+            },
+            {
+              "internalType": "bool",
+              "name": "isKnockedOut",
+              "type": "bool"
+            }
+          ],
+          "internalType": "struct VANSpecificProductParams",
+          "name": "",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "components": [
+            {
+              "internalType": "uint40",
+              "name": "timestamp",
+              "type": "uint40"
+            },
+            {
+              "internalType": "address[]",
+              "name": "assets",
+              "type": "address[]"
+            },
+            {
+              "internalType": "bytes[]",
+              "name": "updateDatas",
+              "type": "bytes[]"
+            },
+            {
+              "internalType": "uint256",
+              "name": "updateFee",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct PythUpdate[]",
+          "name": "pythUpdates",
+          "type": "tuple[]"
+        }
+      ],
+      "name": "spbGetVaultSettlementAmount",
+      "outputs": [
+        {
+          "internalType": "uint128",
+          "name": "",
+          "type": "uint128"
+        }
+      ],
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "asset",
+          "type": "address"
+        }
+      ],
+      "name": "spbIsAssetWhitelisted",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "components": [
+            {
+              "internalType": "address",
+              "name": "asset",
+              "type": "address"
+            },
+            {
+              "internalType": "uint40",
+              "name": "timestamp",
+              "type": "uint40"
+            },
+            {
+              "internalType": "uint128",
+              "name": "price",
+              "type": "uint128"
+            }
+          ],
+          "internalType": "struct PriceOverride[]",
+          "name": "overrides",
+          "type": "tuple[]"
+        }
+      ],
+      "name": "spbResolveDispute",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address[]",
+          "name": "assets",
+          "type": "address[]"
+        },
+        {
+          "internalType": "bool",
+          "name": "whitelisted",
+          "type": "bool"
+        }
+      ],
+      "name": "spbSetAssetsWhitelisted",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint16",
+          "name": "managementFeeBps",
+          "type": "uint16"
+        }
+      ],
+      "name": "spbSetDefaultManagementFee",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint16",
+          "name": "yieldFeeBps",
+          "type": "uint16"
+        }
+      ],
+      "name": "spbSetDefaultYieldFee",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "components": [
+            {
+              "internalType": "uint40",
+              "name": "timestamp",
+              "type": "uint40"
+            },
+            {
+              "internalType": "address[]",
+              "name": "assets",
+              "type": "address[]"
+            },
+            {
+              "internalType": "bytes[]",
+              "name": "updateDatas",
+              "type": "bytes[]"
+            },
+            {
+              "internalType": "uint256",
+              "name": "updateFee",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct PythUpdate[]",
+          "name": "pythUpdates",
+          "type": "tuple[]"
+        }
+      ],
+      "name": "spbSettleTrade",
+      "outputs": [],
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "components": [
+            {
+              "internalType": "uint40",
+              "name": "timestamp",
+              "type": "uint40"
+            },
+            {
+              "internalType": "address[]",
+              "name": "assets",
+              "type": "address[]"
+            },
+            {
+              "internalType": "bytes[]",
+              "name": "updateDatas",
+              "type": "bytes[]"
+            },
+            {
+              "internalType": "uint256",
+              "name": "updateFee",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct PythUpdate[]",
+          "name": "pythUpdates",
+          "type": "tuple[]"
+        }
+      ],
+      "name": "spbStartTrade",
+      "outputs": [],
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "internalType": "uint40[]",
+          "name": "timestamps",
+          "type": "uint40[]"
+        }
+      ],
+      "name": "spbSubmitDispute",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "components": [
+            {
+              "internalType": "address",
+              "name": "auctionWinner",
+              "type": "address"
+            },
+            {
+              "internalType": "uint40",
+              "name": "tradeStartDate",
+              "type": "uint40"
+            },
+            {
+              "internalType": "uint16",
+              "name": "aprBps",
+              "type": "uint16"
+            }
+          ],
+          "internalType": "struct SPBEndAuctionParams",
+          "name": "endAuctionParams",
+          "type": "tuple"
+        }
+      ],
+      "name": "spbUpdateEndAuctionParams",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "productId",
+          "type": "uint32"
+        }
+      ],
+      "name": "spbWithdrawCoupon",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
