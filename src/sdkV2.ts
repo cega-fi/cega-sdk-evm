@@ -413,6 +413,235 @@ export default class CegaEvmSDKV2 {
    * USER FACING METHODS
    */
 
+  // ====== Cega Escrow code starts here
+
+  async spbCreateDCSProduct(
+    creationParams: {
+      owner: EvmAddress;
+      depositAsset: EvmAddress;
+      notional: ethers.BigNumberish;
+      tenorInSeconds: ethers.BigNumberish;
+      extraParams: {
+        hoursToStartLateFees: number;
+        hoursToStartSettlementDefault: number;
+        disputePeriodInHours: number;
+        disputeGraceDelayInHours: number;
+        lateFeeBps: number;
+        hoursToStartDisputeDefault: number;
+      };
+      name: string;
+      symbol: string;
+      tradeWinnerNftImage: string;
+      withdrawalParams: {
+        withdrawAutomatically: boolean;
+        withProxy: boolean;
+        nextProductId: ethers.BigNumberish;
+      };
+    },
+    dcsParams: {
+      conversionAsset: EvmAddress;
+      dcsOptionType: number;
+      strikeBarrierBps: number;
+      dataSource: number;
+    },
+    endAuctionParams: {
+      auctionWinner: EvmAddress;
+      tradeStartDate: Date;
+      aprBps: number;
+    },
+    overrides: TxOverrides = {},
+  ): Promise<ethers.providers.TransactionResponse> {
+    if (!this._signer) {
+      throw new Error('Signer not defined');
+    }
+
+    const cegaEntry = await this.loadCegaEntry();
+
+    return cegaEntry.spbCreateDCSProduct(
+      creationParams,
+      dcsParams,
+      {
+        ...endAuctionParams,
+        tradeStartDate: Math.floor(endAuctionParams.tradeStartDate.getTime() / 1000),
+      },
+      {
+        ...(await this._gasStation.getGasOraclePrices()),
+        ...(await getOverridesWithEstimatedGasLimit(
+          cegaEntry,
+          'spbCreateDCSProduct',
+          [
+            creationParams,
+            dcsParams,
+            {
+              ...endAuctionParams,
+              tradeStartDate: Math.floor(endAuctionParams.tradeStartDate.getTime() / 1000),
+            },
+          ],
+          this._signer,
+          overrides,
+        )),
+        value:
+          creationParams.depositAsset === ethers.constants.AddressZero
+            ? creationParams.notional
+            : 0,
+      },
+    );
+  }
+
+  async spbCreateFCNProduct(
+    creationParams: {
+      owner: EvmAddress;
+      depositAsset: EvmAddress;
+      notional: ethers.BigNumberish;
+      tenorInSeconds: ethers.BigNumberish;
+      extraParams: {
+        hoursToStartLateFees: number;
+        hoursToStartSettlementDefault: number;
+        disputePeriodInHours: number;
+        disputeGraceDelayInHours: number;
+        lateFeeBps: number;
+        hoursToStartDisputeDefault: number;
+      };
+      name: string;
+      symbol: string;
+      tradeWinnerNftImage: string;
+      withdrawalParams: {
+        withdrawAutomatically: boolean;
+        withProxy: boolean;
+        nextProductId: ethers.BigNumberish;
+      };
+    },
+    fcnParams: {
+      leverage: ethers.BigNumberish;
+      observationIntervalInSeconds: ethers.BigNumberish;
+      optionBarriers: Array<{
+        asset: EvmAddress;
+        barrierBps: number;
+        dataSource: number;
+      }>;
+    },
+    endAuctionParams: {
+      auctionWinner: EvmAddress;
+      tradeStartDate: Date;
+      aprBps: number;
+    },
+    overrides: TxOverrides = {},
+  ): Promise<ethers.providers.TransactionResponse> {
+    if (!this._signer) {
+      throw new Error('Signer not defined');
+    }
+
+    const cegaEntry = await this.loadCegaEntry();
+
+    return cegaEntry.spbCreateFCNProduct(
+      creationParams,
+      fcnParams,
+      {
+        ...endAuctionParams,
+        tradeStartDate: Math.floor(endAuctionParams.tradeStartDate.getTime() / 1000),
+      },
+      {
+        ...(await this._gasStation.getGasOraclePrices()),
+        ...(await getOverridesWithEstimatedGasLimit(
+          cegaEntry,
+          'spbCreateFCNProduct',
+          [
+            creationParams,
+            fcnParams,
+            {
+              ...endAuctionParams,
+              tradeStartDate: Math.floor(endAuctionParams.tradeStartDate.getTime() / 1000),
+            },
+          ],
+          this._signer,
+          overrides,
+        )),
+        value:
+          creationParams.depositAsset === ethers.constants.AddressZero
+            ? creationParams.notional
+            : 0,
+      },
+    );
+  }
+
+  async spbCreateVANProduct(
+    creationParams: {
+      owner: EvmAddress;
+      depositAsset: EvmAddress;
+      notional: ethers.BigNumberish;
+      tenorInSeconds: ethers.BigNumberish;
+      extraParams: {
+        hoursToStartLateFees: number;
+        hoursToStartSettlementDefault: number;
+        disputePeriodInHours: number;
+        disputeGraceDelayInHours: number;
+        lateFeeBps: number;
+        hoursToStartDisputeDefault: number;
+      };
+      name: string;
+      symbol: string;
+      tradeWinnerNftImage: string;
+      withdrawalParams: {
+        withdrawAutomatically: boolean;
+        withProxy: boolean;
+        nextProductId: ethers.BigNumberish;
+      };
+    },
+    vanParams: {
+      underlyingAsset: EvmAddress;
+      vanOptionType: number;
+      dataSource: number;
+      strikeBps: number;
+      knockInBps: number;
+      knockOutBps: number;
+      observationIntervalInSeconds: ethers.BigNumberish;
+    },
+    endAuctionParams: {
+      auctionWinner: EvmAddress;
+      tradeStartDate: Date;
+      aprBps: number;
+    },
+    overrides: TxOverrides = {},
+  ): Promise<ethers.providers.TransactionResponse> {
+    if (!this._signer) {
+      throw new Error('Signer not defined');
+    }
+
+    const cegaEntry = await this.loadCegaEntry();
+
+    return cegaEntry.spbCreateVANProduct(
+      creationParams,
+      vanParams,
+      {
+        ...endAuctionParams,
+        tradeStartDate: Math.floor(endAuctionParams.tradeStartDate.getTime() / 1000),
+      },
+      {
+        ...(await this._gasStation.getGasOraclePrices()),
+        ...(await getOverridesWithEstimatedGasLimit(
+          cegaEntry,
+          'spbCreateVANProduct',
+          [
+            creationParams,
+            vanParams,
+            {
+              ...endAuctionParams,
+              tradeStartDate: Math.floor(endAuctionParams.tradeStartDate.getTime() / 1000),
+            },
+          ],
+          this._signer,
+          overrides,
+        )),
+        value:
+          creationParams.depositAsset === ethers.constants.AddressZero
+            ? creationParams.notional
+            : 0,
+      },
+    );
+  }
+
+  // ====== Cega Escrow code ends here
+
   // ====== lpCega Offramp (Vault Token Market) code starts here
 
   async getDomain(): Promise<ethers.TypedDataDomain> {
@@ -1146,7 +1375,7 @@ export default class CegaEvmSDKV2 {
 
     const chainConfig = await this.getChainConfig();
     const gasLimitEstimationBufferPercentage =
-    chainConfig.name === NetworkName.EthereumMainnet ? 50 : 100;
+      chainConfig.name === NetworkName.EthereumMainnet ? 50 : 100;
 
     return cegaEntry.dcsBulkEndAuctions(
       vaultAddresses,
@@ -1161,7 +1390,7 @@ export default class CegaEvmSDKV2 {
           [vaultAddresses, auctionWinners, tradesStartInSeconds, aprBpsList, oracleDataSources],
           this._signer,
           overrides,
-          gasLimitEstimationBufferPercentage
+          gasLimitEstimationBufferPercentage,
         )),
       },
     );
@@ -1182,7 +1411,7 @@ export default class CegaEvmSDKV2 {
 
     const chainConfig = await this.getChainConfig();
     const gasLimitEstimationBufferPercentage =
-    chainConfig.name === NetworkName.EthereumMainnet ? 50 : 100;
+      chainConfig.name === NetworkName.EthereumMainnet ? 50 : 100;
 
     return cegaEntry.fcnBulkEndAuctions(
       vaultAddresses,
@@ -1197,7 +1426,7 @@ export default class CegaEvmSDKV2 {
           [vaultAddresses, auctionWinners, tradesStartInSeconds, aprBpsList, oracleDataSources],
           this._signer,
           overrides,
-          gasLimitEstimationBufferPercentage
+          gasLimitEstimationBufferPercentage,
         )),
       },
     );
@@ -1216,7 +1445,7 @@ export default class CegaEvmSDKV2 {
 
     const chainConfig = await this.getChainConfig();
     const gasLimitEstimationBufferPercentage =
-    chainConfig.name === NetworkName.EthereumMainnet ? 50 : 100;
+      chainConfig.name === NetworkName.EthereumMainnet ? 50 : 100;
 
     return cegaEntry.dcsEndAuction(
       vaultAddress,
@@ -1231,7 +1460,7 @@ export default class CegaEvmSDKV2 {
           [vaultAddress, auctionWinner, tradeStartInSeconds, aprBps, oracleDataSource],
           this._signer,
           overrides,
-          gasLimitEstimationBufferPercentage
+          gasLimitEstimationBufferPercentage,
         )),
       },
     );
@@ -1250,7 +1479,7 @@ export default class CegaEvmSDKV2 {
 
     const chainConfig = await this.getChainConfig();
     const gasLimitEstimationBufferPercentage =
-    chainConfig.name === NetworkName.EthereumMainnet ? 50 : 100;
+      chainConfig.name === NetworkName.EthereumMainnet ? 50 : 100;
 
     return cegaEntry.fcnEndAuction(
       vaultAddress,
@@ -1265,7 +1494,7 @@ export default class CegaEvmSDKV2 {
           [vaultAddress, auctionWinner, tradeStartInSeconds, aprBps, oracleDataSources],
           this._signer,
           overrides,
-          gasLimitEstimationBufferPercentage
+          gasLimitEstimationBufferPercentage,
         )),
       },
     );
@@ -2191,7 +2420,7 @@ export default class CegaEvmSDKV2 {
 
     const chainConfig = await this.getChainConfig();
     const gasLimitEstimationBufferPercentage =
-    chainConfig.name === NetworkName.EthereumMainnet ? 50 : 100;
+      chainConfig.name === NetworkName.EthereumMainnet ? 50 : 100;
 
     return cegaEntry.sfnBulkEndAuctions(params, {
       ...(await getOverridesWithEstimatedGasLimit(
